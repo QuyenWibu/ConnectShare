@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="40dp"
+    tools:context=".loginActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:gravity="center"
+        android:textSize="38sp"
+        android:layout_marginBottom="40dp"
+        android:textStyle="bold"/>
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/email"
+        android:hint="email"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/password"
+        android:hint="password"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"/>
+
+
+    <Button
+        android:id="@+id/btnlog"
+        android:text="Login"
+        android:textSize="36sp"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:text="Bạn quên mật khẩu?"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="70dp"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="40dp"
+            android:id="@+id/btnfb"
+            android:layout_height="80dp"
+            android:background="@drawable/Facebook"/>
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="40dp"
+            android:layout_height="80dp"
+            android:id="@+id/btngg"
+            android:layout_marginStart="80dp"
+            android:background="@drawable/google"/>
+    </RelativeLayout>
+</LinearLayout>
