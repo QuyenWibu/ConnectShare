@@ -59,6 +59,7 @@ public class registerActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
+                            assert user != null;
                             String email = user.getEmail();
                             String uid = user.getUid();
 

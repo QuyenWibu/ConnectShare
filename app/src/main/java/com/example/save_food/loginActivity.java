@@ -27,7 +27,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mikhaellopez.circularimageview.CircularImageView;
+
+import java.util.HashMap;
 
 public class loginActivity extends AppCompatActivity {
     EditText edtemail, edtpass;
@@ -113,6 +117,19 @@ public class loginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = auth.getCurrentUser();
+                    assert user != null;
+                    String email = user.getEmail();
+                    String uid = user.getUid();
+
+
+                    HashMap<Object, String> hashMap = new HashMap<>();
+                    hashMap.put("email", email);
+                    hashMap.put("uid", uid);
+
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference reference = database.getReference("Users");
+
+                    reference.child(uid).setValue(hashMap);
                     Toast.makeText(loginActivity.this, "Login",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(loginActivity.this, MainActivity.class));
                 } else {
