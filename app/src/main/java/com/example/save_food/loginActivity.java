@@ -53,7 +53,10 @@ public class loginActivity extends AppCompatActivity {
         edtpass   = findViewById(R.id.password);
         btnLog   = findViewById(R.id.btnlog);
         mgg   = findViewById(R.id.btngg);
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
         gsc = GoogleSignIn.getClient(this, gso);
         btnLog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +120,6 @@ public class loginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = auth.getCurrentUser();
-                    assert user != null;
                     String email = user.getEmail();
                     String uid = user.getUid();
 
