@@ -42,23 +42,15 @@
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
         android:text="Bạn quên mật khẩu?"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_marginTop="70dp"
-        android:gravity="center"
-        android:layout_height="wrap_content">
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="80dp"
-            android:background="@drawable/facebook"
+        <com.facebook.login.widget.LoginButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/btnfb"/>
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/google"
+        <com.google.android.gms.common.SignInButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/btngg"/>
-    </RelativeLayout>
 </LinearLayout>
