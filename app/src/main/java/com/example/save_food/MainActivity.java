@@ -1,5 +1,7 @@
 package com.example.save_food;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     Button upload;
 
+
+public class MainActivity extends AppCompatActivity {
+    Button showMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,5 +38,15 @@ public class MainActivity extends AppCompatActivity {
     //ánh xạ
     public void AnhXa(){
         upload = findViewById(R.id.upload);
+
+        showMap = findViewById(R.id.showMap);
+
+        showMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MapsActivity.class));
+            }
+        });
+
     }
 }

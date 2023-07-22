@@ -8,44 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:192141282741:android:06ce9eb264ae7ea4b99dfc",
-        "android_client_info": {
-          "package_name": "com.example.app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "192141282741-na8v0103964ufah7bmaho9fbdivob7nu.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.app",
-            "certificate_hash": "8652e68569d68d08051ec9bf5e8525b94ba66772"
-          }
-        },
-        {
-          "client_id": "192141282741-j4ca98h2ufifv67r1b9sgbpkv5jrp3sl.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBYf1Bl09yABZn7SDs68fBj_LkWnJId7Lc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "192141282741-aprb7kvdhjci69mrl9t04rcun0qog8cf.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:192141282741:android:f2a2d18229e04e43b99dfc",
+        "mobilesdk_app_id": "1:192141282741:android:91f9e1d24c743bb7b99dfc",
         "android_client_info": {
           "package_name": "com.example.save_food"
         }
