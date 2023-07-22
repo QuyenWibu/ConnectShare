@@ -28,16 +28,25 @@ public class registerActivity extends AppCompatActivity {
     EditText edtemail, edtpass;
     FirebaseAuth auth;
     Button btnLog;
+    Button acc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        acc = findViewById(R.id.acc);
         edtemail   = findViewById(R.id.email);
         edtpass   = findViewById(R.id.password);
         btnLog   = findViewById(R.id.btnlog);
 
+        acc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(registerActivity.this, loginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnLog.setOnClickListener(new View.OnClickListener() {
             @Override
