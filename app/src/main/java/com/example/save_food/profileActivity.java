@@ -69,11 +69,6 @@ public class profileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("");
-
         editname = findViewById(R.id.name);
         set = findViewById(R.id.img_avatar);
         updateProfile = findViewById(R.id.updateButton);
@@ -121,7 +116,7 @@ public class profileActivity extends AppCompatActivity {
     }
 
     private void showEditProfileDialog() {
-        String options[] = {"Chỉnh sửa ảnh", "Chỉnh sửa tên", "chỉnh sửa lớp trực"};
+        String options[] = {"Chỉnh sửa ảnh", "Chỉnh sửa tên"};
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setTitle("Chọn sự thay đổi");
         b.setItems(options, new DialogInterface.OnClickListener() {

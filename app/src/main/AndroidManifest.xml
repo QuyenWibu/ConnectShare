@@ -54,6 +54,7 @@
             android:exported="false" />
         <activity
             android:name=".registerActivity"
+            android:theme="@style/ThemeNo"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -61,6 +62,7 @@
 
         <activity
             android:name=".loginActivity"
+            android:theme="@style/ThemeNo"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

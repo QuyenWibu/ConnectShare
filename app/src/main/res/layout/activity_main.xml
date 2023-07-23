@@ -1,60 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/drawer_layout"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/showMap"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="149dp"
-        android:layout_marginTop="281dp"
-        android:text="showMap"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/purple_500"
+            android:theme="@style/ThemeOverlay.AppCompat.Light" />
+        <!--                app:layout_constraintTop_toTopOf="@+id/Toolbar"-->
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
-    <Button
+
+
+    <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/showMap"
-        android:layout_alignTop="@+id/showMap"
-        android:layout_alignEnd="@+id/showMap"
-        android:layout_marginStart="3dp"
-        android:id="@+id/signout"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="4dp"
-        android:text="Sign out" />
+        android:layout_height="match_parent"
+        android:id="@+id/Nav_view"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/layout_header_nav"
+        app:menu="@menu/menu_nav"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:src="@drawable/add"
-        android:id="@+id/upload"
-        android:background="@color/purple_500"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="31dp"
-        android:layout_marginEnd="31dp" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:src="@drawable/person"
-        android:id="@+id/profile"
-        android:background="@color/purple_500"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp"/>
-
-</RelativeLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
