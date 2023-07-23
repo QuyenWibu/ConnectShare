@@ -1,4 +1,4 @@
-package com.example.save_food;
+package com.example.save_food.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.save_food.R;
 
 import java.util.ArrayList;
 
