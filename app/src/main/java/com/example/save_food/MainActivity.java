@@ -7,10 +7,11 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
 public class MainActivity extends AppCompatActivity {
+
     Button showMap;
     Button upload;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,8 +20,9 @@ public class MainActivity extends AppCompatActivity {
         btn();
 
     }
+
     //khi người dùng ấn vào dấu "+"
-    public void btn(){
+    public void btn() {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //ánh xạ
-    public void AnhXa(){
+    public void AnhXa() {
         upload = findViewById(R.id.upload);
 
         showMap = findViewById(R.id.showMap);
