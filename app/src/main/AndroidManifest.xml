@@ -50,6 +50,9 @@
             android:name=".profileActivity"
             android:exported="false" />
         <activity
+            android:name=".forgetPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".registerActivity"
             android:exported="false" />
         <activity

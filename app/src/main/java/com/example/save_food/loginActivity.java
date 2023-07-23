@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -44,6 +45,7 @@ public class loginActivity extends AppCompatActivity {
     EditText edtemail, edtpass;
     FirebaseAuth auth;
     Button btnLog;
+    LinearLayout OpenForgetPass, backSignup;
 
     LoginButton mfb;
     SignInButton mgg;
@@ -62,6 +64,8 @@ public class loginActivity extends AppCompatActivity {
         edtpass   = findViewById(R.id.password);
         btnLog   = findViewById(R.id.btnlog);
         mgg   = findViewById(R.id.btngg);
+        backSignup   = findViewById(R.id.backSignup);
+        OpenForgetPass = findViewById(R.id.linerlayoutforgetpass);
         LoginButton loginButton = findViewById(R.id.btnfb);
         FacebookSdk.sdkInitialize(getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
@@ -99,6 +103,18 @@ public class loginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent signInIntent = gsc.getSignInIntent();
                 startActivityForResult(signInIntent, 100);
+            }
+        });
+        OpenForgetPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(loginActivity.this, forgetPasswordActivity.class));
+            }
+        });
+        backSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(loginActivity.this, registerActivity.class));
             }
         });
     }
@@ -158,6 +174,8 @@ public class loginActivity extends AppCompatActivity {
                     HashMap<Object, String> hashMap = new HashMap<>();
                     hashMap.put("email", email);
                     hashMap.put("uid", uid);
+                    hashMap.put("name", "");
+                    hashMap.put("image", "");
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference reference = database.getReference("Users");
@@ -197,6 +215,7 @@ public class loginActivity extends AppCompatActivity {
                             hashMap.put("email", email);
                             hashMap.put("uid", uid);
                             hashMap.put("name", name);
+                            hashMap.put("image", "");
 
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference reference = database.getReference("Users");
@@ -212,4 +231,5 @@ public class loginActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }

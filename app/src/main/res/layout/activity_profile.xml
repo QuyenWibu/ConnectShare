@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="70dp"
+    tools:context=".profileActivity"
     android:layout_height="match_parent">
 
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/person"
+        android:id="@+id/img_avatar"
+        android:contentDescription="TODO" />
+
+    <TextView
+        android:id="@+id/name"
+        android:drawableLeft="@drawable/person"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:hint="Tên của bạn"
+        android:minHeight="48dp"
+        android:padding="10dp"
+        android:textColor="@color/black" />
+
+
+    <Button
+        android:layout_marginTop="40dp"
+        android:text="Cập nhật Profile"
+        android:id="@+id/updateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
