@@ -9,7 +9,7 @@
     android:layout_height="match_parent">
 
 
-    <com.mikhaellopez.circularimageview.CircularImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:src="@drawable/person"

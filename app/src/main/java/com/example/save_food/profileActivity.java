@@ -39,8 +39,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class profileActivity extends AppCompatActivity {
 
@@ -52,7 +55,7 @@ public class profileActivity extends AppCompatActivity {
     String storagepath = "Users_Profile_Cover_image/";
     String uid;
     ActionBar actionBar;
-    ImageView set;
+    CircleImageView set;
     TextView editname,edtClass;
     ProgressDialog pd;
     private static final int CAMERA_REQUEST = 100;
