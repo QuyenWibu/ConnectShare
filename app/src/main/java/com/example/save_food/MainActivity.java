@@ -71,26 +71,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
         query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String name = "" + ds.child("name").getValue();
-                    String image = "" + ds.child("image").getValue();
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                                String name = "" + ds.child("name").getValue();
+                                                String image = "" + ds.child("image").getValue();
 
-                }
+                                            }
 
-            }
-
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MainActivity.this, profileActivity.class));
-                //finish();
-
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+                                        }
+                                    });
         fragmentManager = getSupportFragmentManager();
         openFragment(new homeFragment());
     }
