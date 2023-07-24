@@ -1,4 +1,4 @@
-package com.example.save_food.adapter;
+package com.example.save_food.modal;
 
 public class ThongTin_UpLoadClass{
     public String TenDonHang;

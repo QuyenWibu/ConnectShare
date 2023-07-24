@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -71,16 +72,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
         query.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                                String name = "" + ds.child("name").getValue();
-                                                String image = "" + ds.child("image").getValue();
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String name = "" + ds.child("name").getValue();
+                    String image = "" + ds.child("image").getValue();
 
-                                            }
+                    tvname.setText(name);
+                    try {
+                        Glide.with(MainActivity.this).load(image).placeholder(R.drawable.person).into(imgAvatar);
 
-                                        }
-                                    });
+                    } catch (Exception e) {
+                        Picasso.get().load(R.drawable.person).into(imgAvatar);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         fragmentManager = getSupportFragmentManager();
         openFragment(new homeFragment());
     }
