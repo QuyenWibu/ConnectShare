@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="list_nganhhang">
+        <item>---</item>
+        <item>Đồ ăn nhanh</item>
+        <item>Đồ ăn đóng gói</item>
+        <item>Đồ ăn tươi sống/đông lạnh</item>
+        <item>Đồ ăn đã qua chế biến</item>
+    </string-array>
+</resources>

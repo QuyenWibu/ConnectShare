@@ -74,21 +74,44 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/Ten_Don_Hang_Upload"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Tên món hàng: " />
             <EditText
+                android:id="@+id/Don_Gia_Upload"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:hint="Giá cả: " />
             <EditText
+                android:id="@+id/DiaChi_Upload"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Địa chỉ: " />
+                android:hint="Địa chỉ: "
+                />
             <EditText
+                android:id="@+id/ThoiGianHetHan_Upload"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Thời gian sử dụng còn lại:" />
+                android:hint="Thời gian sử dụng còn lại:"
+                />
+            <TextView
+                android:textSize="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ngành hàng:"
+                android:textColor="#AF9999"
+                android:paddingLeft="6dp"
+                />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/list_item_nganhhang"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                />
+
             <Button
                 android:id="@+id/btn_upload_complete"
                 android:layout_width="match_parent"
