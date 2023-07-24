@@ -26,6 +26,14 @@
         android:theme="@style/Theme.Save_Food"
         tools:targetApi="31">
         <activity
+            android:name=".chat"
+            android:exported="false"
+            android:theme="@style/AppThemeNo">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".UploadActivity"
             android:exported="false" />
         <activity
