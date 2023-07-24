@@ -82,6 +82,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(MainActivity.this, profileActivity.class));
+                //finish();
+
             public void onCancelled(@NonNull DatabaseError error) {
 
             }

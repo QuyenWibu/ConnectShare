@@ -23,14 +23,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-map = findViewById(R.id.map);
+        map = findViewById(R.id.map);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-            this.gMap = googleMap;
+        this.gMap = googleMap;
 
         LatLng mapVN = new LatLng( 9.1767, 105.1500);
         this.gMap.addMarker(new MarkerOptions().position(mapVN).title("vietnam"));

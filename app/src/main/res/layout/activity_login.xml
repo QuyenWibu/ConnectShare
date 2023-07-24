@@ -44,10 +44,10 @@
         android:layout_marginBottom="30dp"
         android:id="@+id/linerlayoutforgetpass"
         android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Bạn quên mật khẩu?"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bạn quên mật khẩu?"/>
     </LinearLayout>
 
     <LinearLayout
@@ -61,12 +61,12 @@
             android:text="Bạn không có tài khoản?"/>
     </LinearLayout>
 
-        <com.facebook.login.widget.LoginButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnfb"/>
-        <com.google.android.gms.common.SignInButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btngg"/>
+    <com.facebook.login.widget.LoginButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnfb"/>
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btngg"/>
 </LinearLayout>

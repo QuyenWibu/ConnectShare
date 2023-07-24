@@ -7,8 +7,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,15 +21,24 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.save_food.adapter.HinhAnh_Upload;
 import com.example.save_food.adapter.RecyclerApdapter;
+import com.example.save_food.adapter.ThongTin_UpLoadClass;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -33,42 +46,93 @@ import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class UploadActivity extends AppCompatActivity implements RecyclerApdapter.CountOfImagesWhenRemoved, RecyclerApdapter.itemClickListener {
+public class UploadActivity extends AppCompatActivity implements RecyclerApdapter.CountOfImagesWhenRemoved, RecyclerApdapter.itemClickListener, AdapterView.OnItemSelectedListener {
 
     RecyclerView recyclerView;
     Button btn_upload, btn_upload_complete;
 
     ArrayList<Uri> uri = new ArrayList<>();
     RecyclerApdapter adapter;
+    private long childCount;
+    private ArrayList<String> imageUrls = new ArrayList<>();
 
+    private Spinner spinner;
     private static final int Read_Permission = 101;
     private Uri imageuri;
     private int x;
-
+    private String valueFromSpinner;
     StorageReference  storageReference;
 
     ActivityResultLauncher<Intent> activityResultLauncher;
+    DatabaseReference mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
+        EditText TenDonHang_Upload, DonGia_Upload, ThoiGianHetHan_Upload, DiaChi_Upload;
+
+        TenDonHang_Upload = findViewById(R.id.Ten_Don_Hang_Upload);
+        DonGia_Upload = findViewById(R.id.Don_Gia_Upload);
+        ThoiGianHetHan_Upload = findViewById(R.id.ThoiGianHetHan_Upload);
+        DiaChi_Upload = findViewById(R.id.ThoiGianHetHan_Upload);
+
+
+        spinner = findViewById(R.id.list_item_nganhhang);
         recyclerView = findViewById(R.id.recyclerView_Images);
         btn_upload = findViewById(R.id.btn_upload);
         btn_upload_complete = findViewById(R.id.btn_upload_complete);
 
+        mData = FirebaseDatabase.getInstance().getReference();
+
+        String[] list_nganhhang = getResources().getStringArray(R.array.list_nganhhang);
+        ArrayAdapter adapter_list = new ArrayAdapter(this, android.R.layout.simple_spinner_item,list_nganhhang);
+        adapter_list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter_list);
+        spinner.setOnItemSelectedListener(this);
+
         adapter = new RecyclerApdapter(uri, getApplicationContext(), this, this);
 
+        //Khi người dùng ấn vào nút "đăng tải" -> Dữ liệu sẽ được gửi lên firebase.
         btn_upload_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(uri.size()>0){
                     Intent intent = new Intent(UploadActivity.this, MainActivity.class);
                     startActivity(intent);
+
+                    // Lấy tham chiếu đến "ThongTin_UpLoad"
+                    DatabaseReference thongtin_upload = mData.child("ThongTin_UpLoad");
+                    // Lấy dữ liệu từ "ThongTin_UpLoad" bằng phương thức get()
+                    thongtin_upload.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                //String downloadUrl = task.getResult().getDownloadUrl().toString();
+                                // Lấy số lượng nút con trong "ThongTin_UpLoad"
+                                childCount = task.getResult().getChildrenCount();
+                                //đưa dữ liệu lên firebase khi upload
+                                ThongTin_UpLoadClass thongTin_upLoadClass = new ThongTin_UpLoadClass(
+                                        TenDonHang_Upload.getText().toString(),
+                                        Integer.parseInt(DonGia_Upload.getText().toString()),
+                                        DiaChi_Upload.getText().toString(),
+                                        valueFromSpinner,
+                                        ThoiGianHetHan_Upload.getText().toString());
+                                mData.child("ThongTin_UpLoad").child("người: " + (childCount + 1)).push().setValue(thongTin_upLoadClass);
+                                // ...
+                            } else {
+                                // Xử lý lỗi
+                                Toast.makeText(UploadActivity.this, "Lỗi!!!", Toast.LENGTH_SHORT).show();
+                                // ...
+                            }
+                        }
+                    });
                     for(int i=0;i<uri.size();i++){
-                        uploadToFirebase(i);
+                        uploadToFirebase(uri.get(i));
                     }
+
+                    Toast.makeText(UploadActivity.this, "Đã đăng tải thành công!", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(UploadActivity.this, "Bạn chưa chọn ảnh nào!", Toast.LENGTH_SHORT).show();
@@ -128,22 +192,64 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
         });
     }
 
-    private void uploadToFirebase(int i) {
+
+    private void uploadToFirebase(Uri imageUri) {
         final String randomName = UUID.randomUUID().toString();
         // Create a reference to "images_upload/"
         storageReference = FirebaseStorage.getInstance().getReference().child("images_upload/" + randomName);
-        storageReference.putFile(uri.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(UploadActivity.this, "Images Uploaded", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(UploadActivity.this, "Uploading failed", Toast.LENGTH_SHORT).show();
-            }
-        });
+        storageReference.putFile(imageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        taskSnapshot.getStorage().getDownloadUrl()
+                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri downloadUrl) {
+                                        HinhAnh_Upload hinhAnh_upload = new HinhAnh_Upload(downloadUrl.toString());
+                                        mData.child("ThongTin_UpLoad")
+                                                .child("người: " + (childCount + 1))
+                                                .child("Ảnh").push().setValue(hinhAnh_upload, new DatabaseReference.CompletionListener() {
+                                                    @Override
+                                                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                                        if (error == null) {
+                                                            Toast.makeText(UploadActivity.this, "Lưu dữ liệu thành công!", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(UploadActivity.this, "Lỗi!!!", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+                                        Toast.makeText(UploadActivity.this, "Images Uploaded", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(UploadActivity.this, "Uploading failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        Toast.makeText(UploadActivity.this, "Đã đăng tải thành công!", Toast.LENGTH_SHORT).show();
     }
+
+//    private void GetUrlImageUpload(String randomName){
+//        // Lấy đường dẫn URL của ảnh đã tải lên
+//
+//        storageReference.child("images_upload/" + randomName).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            @Override
+//            public void onSuccess(Uri downloadUrl) {
+//                // Lưu trữ thông tin ảnh vào Realtime Database
+//                String HinhAnh_UpLoad = downloadUrl.toString();
+//                // Tạo tham chiếu đến thư mục "images" trong "ThongTin_UpLoad"
+//                DatabaseReference imagesRef = FirebaseDatabase.getInstance().getReference().child("ThongTin_UpLoad").
+//                        child("người: " + (childCount + 1))
+//                        .child("Ảnh:");
+//                // Đẩy một nút con mới dưới "images" và lưu trữ URL hình ảnh
+//                imagesRef.push().setValue(HinhAnh_UpLoad);
+//            }
+//        });
+//    }
 
     @Override
     public void clicked(int getSize) {
@@ -169,5 +275,16 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
             }
         });
         dialog.show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        valueFromSpinner = parent.getItemAtPosition(position).toString();
+        Toast.makeText(UploadActivity.this, valueFromSpinner, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
