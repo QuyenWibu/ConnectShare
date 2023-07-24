@@ -39,8 +39,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.HashMap;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class profileActivity extends AppCompatActivity {
 
@@ -52,7 +55,7 @@ public class profileActivity extends AppCompatActivity {
     String storagepath = "Users_Profile_Cover_image/";
     String uid;
     ActionBar actionBar;
-    ImageView set;
+    CircleImageView set;
     TextView editname,edtClass;
     ProgressDialog pd;
     private static final int CAMERA_REQUEST = 100;
@@ -68,11 +71,6 @@ public class profileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("");
 
         editname = findViewById(R.id.name);
         set = findViewById(R.id.img_avatar);
@@ -121,7 +119,7 @@ public class profileActivity extends AppCompatActivity {
     }
 
     private void showEditProfileDialog() {
-        String options[] = {"Chỉnh sửa ảnh", "Chỉnh sửa tên", "chỉnh sửa lớp trực"};
+        String options[] = {"Chỉnh sửa ảnh", "Chỉnh sửa tên"};
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setTitle("Chọn sự thay đổi");
         b.setItems(options, new DialogInterface.OnClickListener() {
