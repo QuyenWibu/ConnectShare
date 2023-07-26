@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
@@ -60,14 +61,15 @@ public class profileActivity extends AppCompatActivity {
     StorageReference storageReference;
     String storagepath = "Users_Profile_Cover_image/";
     String uid;
-    ActionBar actionBar;
     CircleImageView set;
-    TextView editname,edtClass;
+    TextView editname;
     ProgressDialog pd;
     private static final int CAMERA_REQUEST = 100;
     private static final int STORAGE_REQUEST = 200;
     private static final int IMAGEPICK_GALLERY_REQUEST = 300;
     private static final int IMAGE_PICKCAMERA_REQUEST = 400;
+
+    private  int storagePermisson = 1;
     String cameraPermission[];
     String storagePermission[];
     Uri imageuri;
@@ -89,7 +91,7 @@ public class profileActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference = firebaseDatabase.getReference("Users");
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        storagePermission = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -277,22 +279,41 @@ public class profileActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 // if access is not given then we will request for permission
                 if (which == 0) {
+                    checkCameraPermission();
+                } else if (which == 1) {
 
-                    pickFromCamera();
-                }
-                else if (which == 1) {
+                    checkGalleryPermission();
 
-                    pickFromGallery();
                 }
             }
         });
         builder.create().show();
     }
+    private void checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST);
+        } else {
+            pickFromCamera();
+            // Permission already granted
+            // Perform required camera-related operations here
+        }
+    }
+    private void checkGalleryPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, IMAGEPICK_GALLERY_REQUEST);
+        } else {
+            pickFromGallery();
+            // Permission already granted
+            // Perform required gallery-related operations here
+        }
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == IMAGEPICK_GALLERY_REQUEST) {
+                assert data != null;
                 imageuri = data.getData();
                 uploadProfileCoverPhoto(imageuri);
             }
@@ -305,7 +326,6 @@ public class profileActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case CAMERA_REQUEST: {
                 if (grantResults.length > 0) {
@@ -331,6 +351,7 @@ public class profileActivity extends AppCompatActivity {
             }
             break;
         }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     // Here we will click a photo and then go to startactivityforresult for updating data
