@@ -16,6 +16,7 @@ public class ModelUser {
         this.uid = uid;
     }
 
+
     public String getName(){
         return name;
     }

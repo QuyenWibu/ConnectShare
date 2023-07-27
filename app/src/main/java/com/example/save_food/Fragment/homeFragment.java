@@ -7,14 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.save_food.MapsActivity;
+import com.example.save_food.notification.MapsActivity;
 import com.example.save_food.R;
-import com.example.save_food.UploadActivity;
+import com.example.save_food.notification.UploadActivity;
 
 import androidx.fragment.app.Fragment;
 
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 

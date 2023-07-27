@@ -24,7 +24,7 @@
         android:theme="@style/Theme.Save_Food"
         tools:targetApi="31">
         <activity
-            android:name=".chat"
+            android:name=".notification.chat"
             android:exported="false"
             android:theme="@style/AppThemeNo">
             <meta-data
@@ -32,10 +32,10 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".UploadActivity"
+            android:name=".notification.UploadActivity"
             android:exported="false" />
         <activity
-            android:name=".MapsActivity"
+            android:name=".notification.MapsActivity"
             android:exported="false"
             android:label="AIzaSyAacOO7yRwLHKGkPSoWri-5_rYdbagJTEA" />
         <!--
@@ -54,24 +54,24 @@
             android:value="AIzaSyAacOO7yRwLHKGkPSoWri-5_rYdbagJTEA" />
 
         <activity
-            android:name=".profileActivity"
+            android:name=".notification.profileActivity"
             android:exported="false" />
         <activity
-            android:name=".UploadActivity"
+            android:name=".notification.UploadActivity"
             android:exported="false" />
         <activity
-            android:name=".forgetPasswordActivity"
+            android:name=".notification.forgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".registerActivity"
+            android:name=".notification.registerActivity"
             android:theme="@style/ThemeNo"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".notification.MainActivity"
             android:exported="false" />
 
         <activity
-            android:name=".loginActivity"
+            android:name=".notification.loginActivity"
             android:theme="@style/ThemeNo"
             android:exported="true">
             <intent-filter>

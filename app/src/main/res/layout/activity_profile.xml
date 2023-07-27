@@ -5,7 +5,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="70dp"
-    tools:context=".profileActivity"
+    tools:context=".notification.profileActivity"
     android:layout_height="match_parent">
 
 

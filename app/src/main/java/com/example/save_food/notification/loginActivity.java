@@ -1,4 +1,4 @@
-package com.example.save_food;
+package com.example.save_food.notification;
 
 import static android.content.ContentValues.TAG;
 
@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.save_food.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;

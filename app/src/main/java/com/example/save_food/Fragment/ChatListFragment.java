@@ -1,6 +1,9 @@
 package com.example.save_food.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +35,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -45,6 +51,7 @@ public class ChatListFragment extends Fragment {
     AdapterChatList adapterChatList;
     List<ModelChat> chatList;
 
+
     public ChatListFragment() {
         // Required empty public constructor
     }
@@ -54,14 +61,15 @@ public class ChatListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_chat_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_chat_list, container,false);
         firebaseAuth = FirebaseAuth.getInstance();
-
         // getting current user
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         recyclerView = view.findViewById(R.id.chatlistrecycle);
         chatListList = new ArrayList<>();
         chatList = new ArrayList<>();
+
         reference = FirebaseDatabase.getInstance().getReference("ChatList").child(firebaseUser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override

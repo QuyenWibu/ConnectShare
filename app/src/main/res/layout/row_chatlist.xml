@@ -18,7 +18,7 @@
             android:layout_height="70dp"
             android:src="@drawable/person" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/onlinestatus"
             android:layout_width="25dp"
             android:layout_height="25dp" />
@@ -46,22 +46,13 @@
             android:text="Last Message"
             android:textColor="@color/black" />
 
-        <ImageView
-            android:id="@+id/blocking"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_baseline_block_24" />
 
         <ImageView
             android:id="@+id/seen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/blocking"
             android:layout_alignParentEnd="true"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_baseline_block_24" />
+            android:layout_gravity="center_vertical"/>
 
     </RelativeLayout>
 

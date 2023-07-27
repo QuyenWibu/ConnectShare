@@ -1,4 +1,4 @@
-package com.example.save_food;
+package com.example.save_food.notification;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.save_food.R;
 import com.example.save_food.models.HinhAnh_Upload;
 import com.example.save_food.adapter.RecyclerApdapter;
 import com.example.save_food.models.ThongTin_UpLoadClass;

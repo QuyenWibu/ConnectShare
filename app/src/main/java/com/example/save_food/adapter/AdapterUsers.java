@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.save_food.R;
-import com.example.save_food.chat;
+import com.example.save_food.notification.chat;
 import com.example.save_food.models.ModelUser;
 import com.squareup.picasso.Picasso;
 
