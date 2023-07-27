@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.save_food.R;
 import com.example.save_food.adapter.AdapterChatList;
 import com.example.save_food.models.ModelChat;

@@ -57,9 +57,6 @@
             android:name=".notification.profileActivity"
             android:exported="false" />
         <activity
-            android:name=".notification.UploadActivity"
-            android:exported="false" />
-        <activity
             android:name=".notification.forgetPasswordActivity"
             android:exported="false" />
         <activity
