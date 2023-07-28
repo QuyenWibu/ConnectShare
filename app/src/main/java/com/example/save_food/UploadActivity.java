@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,10 +26,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.save_food.Fragment.BlankFragment;
 import com.example.save_food.adapter.RecyclerApdapter;
 import com.example.save_food.models.HinhAnh_Upload;
 import com.example.save_food.models.ThongTin_UpLoadClass;
@@ -41,6 +42,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -55,16 +57,16 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
     TextView tv_post;
     ArrayList<Uri> uri = new ArrayList<>();
     RecyclerApdapter adapter;
-    public long childCount;
+    private long childCount;
     private ArrayList<String> imageUrls = new ArrayList<>();
-
+    private String S="";
     private Spinner spinner;
     private static final int Read_Permission = 101;
     private Uri imageuri;
     private int x;
     private String valueFromSpinner;
     StorageReference  storageReference;
-
+    FragmentManager fragmentManager;
     ActivityResultLauncher<Intent> activityResultLauncher;
     DatabaseReference mData;
 
@@ -72,13 +74,12 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
-
+        tv_post = findViewById(R.id.tv_posttt);
         EditText TenDonHang_Upload, DonGia_Upload, ThoiGianHetHan_Upload, DiaChi_Upload;
-        tv_post = findViewById(R.id.tv_post);
         TenDonHang_Upload = findViewById(R.id.Ten_Don_Hang_Upload);
         DonGia_Upload = findViewById(R.id.Don_Gia_Upload);
         ThoiGianHetHan_Upload = findViewById(R.id.ThoiGianHetHan_Upload);
-        DiaChi_Upload = findViewById(R.id.ThoiGianHetHan_Upload);
+        DiaChi_Upload = findViewById(R.id.DiaChi_Upload);
 
 
         spinner = findViewById(R.id.list_item_nganhhang);
@@ -101,8 +102,8 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
             @Override
             public void onClick(View view) {
                 if(uri.size()>0){
-                    Intent intent = new Intent(UploadActivity.this, MainActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(UploadActivity.this, MainActivity.class);
+//                    startActivity(intent);
 
                     // Lấy tham chiếu đến "ThongTin_UpLoad"
                     DatabaseReference thongtin_upload = mData.child("ThongTin_UpLoad");
@@ -125,8 +126,11 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                         ThoiGianHetHan_Upload.getText().toString());
                                 mData.child("ThongTin_UpLoad").child(uid).child(childCount+1+"").setValue(thongTin_upLoadClass);
                               //  tv_post.setText(thongTin_upLoadClass.getTenDonHang());
-                                //GetDataFireBase();
-                                // ...
+                                GetDataFireBase();
+                                //truyền dữ liệu sang fragment_blank
+//                                fragmentManager = getSupportFragmentManager();
+//                                BlankFragment blankFragment = (BlankFragment) fragmentManager.findFragmentById(R.id.container);
+//                                blankFragment.tv_postt.setText(S);
                             } else {
                                 // Xử lý lỗi
                                 Toast.makeText(UploadActivity.this, "Lỗi!!!", Toast.LENGTH_SHORT).show();
@@ -138,8 +142,9 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                         uploadToFirebase(uri.get(i));
                     }
                     //lấy dữ liệu từ firebase về và đăng lên home
-                    BlankFragment blankFragment = new BlankFragment();
-                    blankFragment.GetDataFireBase(childCount+1);
+//                    BlankFragment blankFragment = new BlankFragment();
+//                    blankFragment.GetDataFireBase(childCount+1);
+                    //GetDataFireBase();
                     //tv_post.setText(ThongTin_UpLoadClass.getTenDonHang().toString());
                     Toast.makeText(UploadActivity.this, "Đã đăng tải thành công!", Toast.LENGTH_SHORT).show();
                 }
@@ -203,29 +208,31 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
 
     }
 
-//    public void GetDataFireBase(BlankFragment fragment, long childCount) {
-//        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("ThongTin_UpLoad/" + uid + "/" + childCount);
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                ThongTin_UpLoadClass thongTin_upLoadClass = snapshot.getValue(ThongTin_UpLoadClass.class);
-//                if(tv_post != null){
-//                    fragment.tv_post.setText(thongTin_upLoadClass.toString());
-//                }
-//                else{
-//                    Log.e("AAA", "Lỗi!!");
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//
-//    }
+    public void GetDataFireBase() {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("ThongTin_UpLoad/" + uid + "/" + String.valueOf(childCount+1));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    ThongTin_UpLoadClass thongTin_upLoadClass = snapshot.getValue(ThongTin_UpLoadClass.class);
+                    Log.d("AAA", thongTin_upLoadClass.getTenDonHang());
+                    Log.d("AAA", thongTin_upLoadClass.getDiaChi());
+                    S=thongTin_upLoadClass.toStringg();
+                    tv_post.setText(thongTin_upLoadClass.getTenDonHang() + " - " + thongTin_upLoadClass.getDiaChi() + " + " + thongTin_upLoadClass.getThoiGianHetHan());
+                    //Log.e("AAA", "Lỗi!!");
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 
 
     private void uploadToFirebase(Uri imageUri) {
@@ -244,7 +251,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                         HinhAnh_Upload hinhAnh_upload = new HinhAnh_Upload(downloadUrl.toString());
                                         mData.child("ThongTin_UpLoad")
                                                 .child(uid)
-                                                .child(childCount+"")
+                                                .child(childCount+1+"")
                                                 .child("Ảnh").push().setValue(hinhAnh_upload, new DatabaseReference.CompletionListener() {
                                                     @Override
                                                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {

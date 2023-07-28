@@ -1,74 +1,70 @@
 package com.example.save_food.models;
 
 public class ThongTin_UpLoadClass{
-    private String TenDonHang;
-    private int Don_Gia;
-    private String dia_chi;
-    private String NganhHang;
-    private String ThoiGianHetHan;
+    private String tenDonHang;
+    private int donGia;
+    private String diaChi;
+    private String nganhHang;
+    private String thoiGianHetHan;
 
-    // Constructor không đối số
     public ThongTin_UpLoadClass() {
-        // Khởi tạo giá trị mặc định cho các thuộc tính nếu cần
     }
 
-    // Constructor
-    public ThongTin_UpLoadClass(String tenDonHang, Integer donGia, String diaChi, String nganhHang, String thoiGianHetHan) {
-        this.TenDonHang = tenDonHang;
-        this.Don_Gia = donGia;
-        this.dia_chi = diaChi;
-        this.NganhHang = nganhHang;
-        this.ThoiGianHetHan = thoiGianHetHan;
+    public ThongTin_UpLoadClass(String tenDonHang, int donGia, String diaChi, String nganhHang, String thoiGianHetHan) {
+        this.tenDonHang = tenDonHang;
+        this.donGia = donGia;
+        this.diaChi = diaChi;
+        this.nganhHang = nganhHang;
+        this.thoiGianHetHan = thoiGianHetHan;
     }
 
-    // Getter và Setter cho TenDonHang
-    public  String getTenDonHang() {
-        return TenDonHang;
+    public String getTenDonHang() {
+        return tenDonHang;
     }
+
     public void setTenDonHang(String tenDonHang) {
-        this.TenDonHang = tenDonHang;
+        this.tenDonHang = tenDonHang;
     }
 
-    // Getter và Setter cho Don_Gia
-    public Integer getDonGia() {
-        return Don_Gia;
-    }
-    public void setDonGia(Integer donGia) {
-        this.Don_Gia = donGia;
+    public int getDonGia() {
+        return donGia;
     }
 
-    // Getter và Setter cho dia_chi
+    public void setDonGia(int donGia) {
+        this.donGia = donGia;
+    }
+
     public String getDiaChi() {
-        return dia_chi;
+        return diaChi;
     }
+
     public void setDiaChi(String diaChi) {
-        this.dia_chi = diaChi;
+        this.diaChi = diaChi;
     }
 
-    // Getter và Setter cho NganhHang
     public String getNganhHang() {
-        return NganhHang;
+        return nganhHang;
     }
+
     public void setNganhHang(String nganhHang) {
-        this.NganhHang = nganhHang;
+        this.nganhHang = nganhHang;
     }
 
-    // Getter và Setter cho ThoiGianHetHan
     public String getThoiGianHetHan() {
-        return ThoiGianHetHan;
-    }
-    public void setThoiGianHetHan(String thoiGianHetHan) {
-        this.ThoiGianHetHan = thoiGianHetHan;
+        return thoiGianHetHan;
     }
 
-    @Override
-    public String toString() {
+    public void setThoiGianHetHan(String thoiGianHetHan) {
+        this.thoiGianHetHan = thoiGianHetHan;
+    }
+
+    public String toStringg() {
         return "ThongTin_UpLoadClass{" +
-                "TenDonHang='" + TenDonHang + '\'' +
-                ", Don_Gia=" + Don_Gia +
-                ", dia_chi='" + dia_chi + '\'' +
-                ", NganhHang='" + NganhHang + '\'' +
-                ", ThoiGianHetHan='" + ThoiGianHetHan + '\'' +
+                "tenDonHang='" + tenDonHang + '\'' +
+                ", donGia=" + donGia +
+                ", diaChi='" + diaChi + '\'' +
+                ", nganhHang='" + nganhHang + '\'' +
+                ", thoiGianHetHan='" + thoiGianHetHan + '\'' +
                 '}';
     }
 }
