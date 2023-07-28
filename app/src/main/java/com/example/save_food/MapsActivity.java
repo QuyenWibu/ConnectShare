@@ -1,4 +1,4 @@
-package com.example.save_food.notification;
+package com.example.save_food;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;

@@ -1,4 +1,4 @@
-package com.example.save_food.notification;
+package com.example.save_food;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -22,7 +23,9 @@ import com.example.save_food.Fragment.UsersFragment;
 import com.example.save_food.Fragment.BlankFragment;
 import com.example.save_food.Fragment.homeFragment;
 
-import com.example.save_food.R;
+import com.example.save_food.notification.Token;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +36,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceIdReceiver;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
@@ -53,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FragmentManager fragmentManager;
 
     BottomNavigationView bottomNavigationView;
+    String mUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tvname = mNavigationView.getHeaderView(0).findViewById(R.id.tvName);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_draw_open, R.string.navigation_draw_close);
@@ -122,6 +130,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         fragmentManager = getSupportFragmentManager();
         openFragment(new homeFragment());
+
+        checkUserStatus();
+        updateToken(String.valueOf(FirebaseMessaging.getInstance().getToken()));
+    }
+
+    @Override
+    protected void onStart() {
+        checkUserStatus();
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        checkUserStatus();
+        super.onResume();
+    }
+
+    private void updateToken(String token){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token mToken = new Token(token);
+        ref.child(mUID).setValue(mToken);
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -153,4 +182,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         transaction.commit();
 
     }
+
+private void checkUserStatus(){
+    user = mAuth.getCurrentUser();
+    if (user != null){
+        mUID = user.getUid();
+        SharedPreferences sp = getSharedPreferences("SP_USER", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("Current_USERID", mUID);
+        editor.apply();
+    } else {
+
+    }
+
+}
 }

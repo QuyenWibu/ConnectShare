@@ -24,7 +24,7 @@
         android:theme="@style/Theme.Save_Food"
         tools:targetApi="31">
         <activity
-            android:name=".notification.chat"
+            android:name=".chat"
             android:exported="false"
             android:theme="@style/AppThemeNo">
             <meta-data
@@ -32,10 +32,10 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".notification.UploadActivity"
+            android:name=".UploadActivity"
             android:exported="false" />
         <activity
-            android:name=".notification.MapsActivity"
+            android:name=".MapsActivity"
             android:exported="false"
             android:label="AIzaSyAacOO7yRwLHKGkPSoWri-5_rYdbagJTEA" />
         <!--
@@ -54,21 +54,21 @@
             android:value="AIzaSyAacOO7yRwLHKGkPSoWri-5_rYdbagJTEA" />
 
         <activity
-            android:name=".notification.profileActivity"
+            android:name=".profileActivity"
             android:exported="false" />
         <activity
-            android:name=".notification.forgetPasswordActivity"
+            android:name=".forgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".notification.registerActivity"
+            android:name=".registerActivity"
             android:theme="@style/ThemeNo"
             android:exported="false" />
         <activity
-            android:name=".notification.MainActivity"
+            android:name=".MainActivity"
             android:exported="false" />
 
         <activity
-            android:name=".notification.loginActivity"
+            android:name=".loginActivity"
             android:theme="@style/ThemeNo"
             android:exported="true">
             <intent-filter>
@@ -94,6 +94,21 @@
 
             </intent-filter>
         </activity>
+        <service android:name=".notification.FirebaseMessaging"
+            android:enabled="true"
+            android:exported="true">
+        <intent-filter>
+            <action android:name="com.google.firebase.MESSAGING_EVENT" />
+        </intent-filter>
+        </service>
+        <service
+            android:name=".notification.FirebaseService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

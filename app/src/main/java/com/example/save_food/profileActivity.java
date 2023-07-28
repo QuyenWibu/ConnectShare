@@ -1,4 +1,4 @@
-package com.example.save_food.notification;
+package com.example.save_food;
 
 import android.Manifest;
 import android.app.Activity;
@@ -26,7 +26,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-import com.example.save_food.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;

@@ -1,4 +1,4 @@
-package com.example.save_food.notification;
+package com.example.save_food;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -32,9 +32,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.save_food.R;
 import com.example.save_food.adapter.AdapterChat;
 import com.example.save_food.models.ModelChat;
+import com.example.save_food.models.ModelUser;
+import com.example.save_food.notification.APIService;
+import com.example.save_food.notification.Client;
+import com.example.save_food.notification.Data;
+import com.example.save_food.notification.Response;
+import com.example.save_food.notification.Sender;
+import com.example.save_food.notification.Token;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -57,6 +63,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 public class chat extends AppCompatActivity {
     Toolbar toolbar;
     RecyclerView recyclerView;
@@ -70,7 +79,7 @@ public class chat extends AppCompatActivity {
     ValueEventListener valueEventListener;
     List<ModelChat> chatList;
     AdapterChat adapterChat;
-
+    APIService apiService;
     private static final int IMAGEPICK_GALLERY_REQUEST = 300;
     private static final int IMAGE_PICKCAMERA_REQUEST = 400;
     private static final int CAMERA_REQUEST = 100;
@@ -103,6 +112,8 @@ public class chat extends AppCompatActivity {
         recyclerView = findViewById(R.id.chatrecycle);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
+        apiService = Client.getRetrofit("https://fcm.googleapis.com").create(APIService.class);
+        Intent intent = getIntent();
         hisUid = getIntent().getStringExtra("hisUid");
 
         // getting uid of another user using intent
@@ -481,7 +492,57 @@ public class chat extends AppCompatActivity {
 
             }
         });
+        String msg = message;
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(myuid);
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ModelUser user = snapshot.getValue(ModelUser.class);
+                if(notify){
+                    sendNotification(hisUid, user.getName(), message);
+                }
+                notify = false;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
+
+    private void sendNotification(String hisUid, String name, String message) {
+        DatabaseReference allTokens= FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = allTokens.orderByKey().equalTo(hisUid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds: snapshot.getChildren()){
+                    Token token = ds.getValue(Token.class);
+                    Data data = new Data(myuid, name+":"+message,"tin nhắn mới",hisUid,R.drawable.person);
+                    Sender sender = new Sender(data, token.getToken());
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<Response>() {
+                                @Override
+                                public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                                    Toast.makeText(chat.this, ""+response.message(), Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onFailure(Call<Response> call, Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void checkUserStatus() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="40dp"
-    tools:context=".notification.registerActivity">
+    tools:context=".registerActivity">
 
     <TextView
         android:layout_width="match_parent"
