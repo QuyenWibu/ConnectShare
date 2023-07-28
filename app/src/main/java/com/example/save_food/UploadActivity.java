@@ -125,7 +125,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                         valueFromSpinner,
                                         ThoiGianHetHan_Upload.getText().toString());
                                 mData.child("ThongTin_UpLoad").child(uid).child(childCount+1+"").setValue(thongTin_upLoadClass);
-                              //  tv_post.setText(thongTin_upLoadClass.getTenDonHang());
+                                //  tv_post.setText(thongTin_upLoadClass.getTenDonHang());
                                 GetDataFireBase();
                                 //truyền dữ liệu sang fragment_blank
 //                                fragmentManager = getSupportFragmentManager();
@@ -160,21 +160,21 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
 
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     if (result.getData().getClipData() != null) {
-                            x = result.getData().getClipData().getItemCount();
+                        x = result.getData().getClipData().getItemCount();
                         for (int i = 0; i < x; i++) {
                             imageuri = result.getData().getClipData().getItemAt(i).getUri();
                             uri.add(imageuri);
                             //uploadToFirebase();
                         }
-                                Toast.makeText(UploadActivity.this, "Bạn đã chọn ảnh thành công!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UploadActivity.this, "Bạn đã chọn ảnh thành công!", Toast.LENGTH_SHORT).show();
                         adapter.notifyDataSetChanged();
 
                     } else {
-                            imageuri = result.getData().getData();
-                            uri.add(imageuri);
-                           // uploadToFirebase();
-                            Toast.makeText(UploadActivity.this, "Bạn đã chọn ảnh thành công!", Toast.LENGTH_SHORT).show();
-                        }
+                        imageuri = result.getData().getData();
+                        uri.add(imageuri);
+                        // uploadToFirebase();
+                        Toast.makeText(UploadActivity.this, "Bạn đã chọn ảnh thành công!", Toast.LENGTH_SHORT).show();
+                    }
                     adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(UploadActivity.this, "Bạn không chọn ảnh nào!", Toast.LENGTH_SHORT).show();
@@ -183,7 +183,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
 
 
                 recyclerView.setLayoutManager(new GridLayoutManager(UploadActivity.this, 1, GridLayoutManager.HORIZONTAL, false));
- //               recyclerView.setLayoutManager(new LinearLayoutManager(UploadActivity.this));
+                //               recyclerView.setLayoutManager(new LinearLayoutManager(UploadActivity.this));
                 recyclerView.setAdapter(adapter);
 
             }
