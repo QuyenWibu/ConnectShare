@@ -3,14 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/container"
     tools:context=".Fragment.BlankFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/tv_postt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/tv_post"
         android:gravity="center"
+        android:textSize="20dp"
         />
 
 </FrameLayout>
