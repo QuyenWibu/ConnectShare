@@ -1,4 +1,4 @@
-package com.example.save_food;
+package com.example.save_food.notification;
 
 import static android.content.ContentValues.TAG;
 
@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.save_food.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

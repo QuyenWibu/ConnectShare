@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.save_food.R;
-import com.example.save_food.chat;
+import com.example.save_food.notification.chat;
 import com.example.save_food.models.ModelUser;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,12 +26,15 @@ public class AdapterChatList extends RecyclerView.Adapter<AdapterChatList.Myhold
 
 	Context context;
 	FirebaseAuth firebaseAuth;
+	DatabaseReference usersRef;
+	FirebaseDatabase firebaseDatabase;
 	String uid;
 
 	public AdapterChatList(Context context, List<ModelUser> users) {
 		this.context = context;
 		this.usersList = users;
 		lastMessageMap = new HashMap<>();
+
 		firebaseAuth = FirebaseAuth.getInstance();
 		uid = firebaseAuth.getUid();
 	}
@@ -46,14 +51,14 @@ public class AdapterChatList extends RecyclerView.Adapter<AdapterChatList.Myhold
 
 	@Override
 	public void onBindViewHolder(@NonNull Myholder holder, final int position) {
-
 		final String hisuid = usersList.get(position).getUid();
 		String strImage = usersList.get(position).getImage();
 		String strName = usersList.get(position).getName();
 		String lastmess = lastMessageMap.get(hisuid);
 		holder.name.setText(strName);
-		holder.block.setImageResource(R.drawable.ic_baseline_block_24);
-		
+
+
+
 		// if no last message then Hide the layout
 		if (lastmess == null || lastmess.equals("default")) {
 			holder.lastmessage.setVisibility(View.GONE);
@@ -92,7 +97,7 @@ public class AdapterChatList extends RecyclerView.Adapter<AdapterChatList.Myhold
 	}
 
 	static class Myholder extends RecyclerView.ViewHolder {
-		ImageView profile, status, block, seen;
+		ImageView profile, status, seen;
 		TextView name, lastmessage;
 
 		public Myholder(@NonNull View itemView) {
@@ -101,7 +106,6 @@ public class AdapterChatList extends RecyclerView.Adapter<AdapterChatList.Myhold
 			status = itemView.findViewById(R.id.onlinestatus);
 			name = itemView.findViewById(R.id.nameonline);
 			lastmessage = itemView.findViewById(R.id.lastmessge);
-			block = itemView.findViewById(R.id.blocking);
 			seen = itemView.findViewById(R.id.seen);
 		}
 	}
