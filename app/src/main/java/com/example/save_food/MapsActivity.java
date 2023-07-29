@@ -80,20 +80,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng mapVN = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
         this.gMap.addMarker(new MarkerOptions().position(mapVN).title("vietnam"));
         this.gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapVN, 16));
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        FirebaseUser user = auth.getCurrentUser();
-//        String email = user.getEmail();
-//
-//
-//        HashMap<Object, Double> hashMap = new HashMap<>();
-//        hashMap.put("Latitude", Double.valueOf(currentLocation.getLatitude()));
-//        hashMap.put("Longitude",  Double.valueOf(currentLocation.getLongitude()));
-//
-//
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference reference = database.getReference("Users");
-//
-//        reference.child(email).setValue(hashMap);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("Latitude", Double.valueOf(currentLocation.getLatitude()));
+        hashMap.put("Longitude",  Double.valueOf(currentLocation.getLongitude()));
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference("Users");;
+        databaseReference.child(user.getUid()).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Toast.makeText(getApplicationContext(), "Cập nhật....", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
