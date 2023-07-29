@@ -18,30 +18,45 @@ import androidx.core.app.NotificationCompat;
 import com.example.save_food.chat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class FirebaseMessaging extends FirebaseMessagingService {
-
     @Override
-    public void onMessageReceived(@NonNull RemoteMessage messsage) {
-        super.onMessageReceived(messsage);
-        SharedPreferences sp = getSharedPreferences("SP_USER", MODE_PRIVATE);
-        String saveCurrentUser = sp.getString("Current_USERID", "None");
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            updateToken(token);
+        }
+    }
+    private void updateToken(String token){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token token1 = new Token(token);
+        reference.child(user.getUid()).setValue(token1);
+    }
+    @Override
+public void onMessageReceived(@NonNull RemoteMessage messsage) {
+    super.onMessageReceived(messsage);
+    SharedPreferences sp = getSharedPreferences("SP_USER", MODE_PRIVATE);
+    String saveCurrentUser = sp.getString("Current_USERID", "None");
 
-        String sent = messsage.getData().get("sent");
-        String user = messsage.getData().get("user");
-        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(fUser!=null && sent.equals(fUser.getUid())){
-            if(!saveCurrentUser.equals(user)){
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                    sendOAndAboveNotification(messsage);
-                } else {
-                    sendNormalNotification(messsage);
-                }
+    String sent = messsage.getData().get("sent");
+    String user = messsage.getData().get("user");
+    FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+    if(fUser!=null && sent.equals(fUser.getUid())){
+        if(!saveCurrentUser.equals(user)){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                sendOAndAboveNotification(messsage);
+            } else {
+                sendNormalNotification(messsage);
             }
         }
     }
+}
     private void sendOAndAboveNotification(RemoteMessage message){
         String user = message.getData().get("user");
         String icon = message.getData().get("icon");

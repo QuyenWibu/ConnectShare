@@ -50,6 +50,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'lib', includes: ['*.jar'])
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
     implementation 'androidx.navigation:navigation-ui:2.5.3'
     implementation 'androidx.activity:activity:1.3.0'
     implementation 'com.mikhaellopez:circularimageview:4.3.1'

@@ -60,6 +60,7 @@ public class profileActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 100;
     private static final int STORAGE_REQUEST = 200;
     private static final int IMAGEPICK_GALLERY_REQUEST = 300;
+    private static final int PICK_IMAGE_REQUEST = 1;
     private static final int IMAGE_PICKCAMERA_REQUEST = 400;
 
     private  int storagePermisson = 1;
@@ -295,7 +296,7 @@ public class profileActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, IMAGEPICK_GALLERY_REQUEST);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PICK_IMAGE_REQUEST);
         } else {
             pickFromGallery();
             // Permission already granted
@@ -305,7 +306,7 @@ public class profileActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == IMAGEPICK_GALLERY_REQUEST) {
+            if (requestCode == PICK_IMAGE_REQUEST) {
                 assert data != null;
                 imageuri = data.getData();
                 uploadProfileCoverPhoto(imageuri);
@@ -319,33 +320,20 @@ public class profileActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case CAMERA_REQUEST: {
-                if (grantResults.length > 0) {
-                    boolean camera_accepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    boolean writeStorageaccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    if (camera_accepted && writeStorageaccepted) {
-                        pickFromCamera();
-                    } else {
-                        Toast.makeText(this, "Please Enable Camera and Storage Permissions", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-            break;
-            case STORAGE_REQUEST: {
-                if (grantResults.length > 0) {
-                    boolean writeStorageaccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (writeStorageaccepted) {
-                        pickFromGallery();
-                    } else {
-                        Toast.makeText(this, "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-            break;
-        }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
+                if (requestCode == IMAGEPICK_GALLERY_REQUEST) {
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        // Quyền truy cập vào bộ nhớ đã được cấp
+                        pickFromGallery();
+                        // Thực hiện các hoạt động liên quan đến gallery ở đây
+                    } else {
+                        // Quyền truy cập vào bộ nhớ bị từ chối
+                        // Xử lý trường hợp không có quyền truy cập vào gallery
+                    }
+            }
+        }
+
+
 
     // Here we will click a photo and then go to startactivityforresult for updating data
     private void pickFromCamera() {
@@ -360,9 +348,9 @@ public class profileActivity extends AppCompatActivity {
 
     // We will select an image from gallery
     private void pickFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent, IMAGEPICK_GALLERY_REQUEST);
+        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST);
     }
 
     // We will upload the image from here.
