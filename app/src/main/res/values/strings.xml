@@ -1,4 +1,5 @@
 <resources>
+    <string name="Map_API_KEY">AIzaSyAacOO7yRwLHKGkPSoWri-5_rYdbagJTEA</string>
     <string name="app_name">Save_Food</string>
     <string name="facebook_app_id">987879095692992</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
