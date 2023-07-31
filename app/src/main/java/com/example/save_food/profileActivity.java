@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -118,6 +119,9 @@ public class profileActivity extends AppCompatActivity {
                 showEditProfileDialog();
             }
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkPermissions();
+        }
     }
 
     private void showEditProfileDialog() {
@@ -138,6 +142,25 @@ public class profileActivity extends AppCompatActivity {
             }
         });
         b.create().show();
+    }
+    private void checkPermissions(){
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    },
+                    1052);
+
+        }
+
     }
 
     @Override
@@ -276,13 +299,14 @@ public class profileActivity extends AppCompatActivity {
                     checkCameraPermission();
                 } else if (which == 1) {
 
-                    checkGalleryPermission();
+                    pickFromGallery();
 
                 }
             }
         });
         builder.create().show();
     }
+
     private void checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST);
@@ -290,17 +314,6 @@ public class profileActivity extends AppCompatActivity {
             pickFromCamera();
             // Permission already granted
             // Perform required camera-related operations here
-        }
-    }
-    private void checkGalleryPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PICK_IMAGE_REQUEST);
-        } else {
-            pickFromGallery();
-            // Permission already granted
-            // Perform required gallery-related operations here
         }
     }
     @Override
@@ -321,17 +334,39 @@ public class profileActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-                if (requestCode == IMAGEPICK_GALLERY_REQUEST) {
-                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        // Quyền truy cập vào bộ nhớ đã được cấp
-                        pickFromGallery();
-                        // Thực hiện các hoạt động liên quan đến gallery ở đây
+        switch (requestCode) {
+            case CAMERA_REQUEST: {
+                if (grantResults.length > 0) {
+                    boolean camera_accepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean writeStorageaccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    if (camera_accepted && writeStorageaccepted) {
+                        pickFromCamera();
                     } else {
-                        // Quyền truy cập vào bộ nhớ bị từ chối
-                        // Xử lý trường hợp không có quyền truy cập vào gallery
+                        Toast.makeText(this, "Please Enable Camera and Storage Permissions", Toast.LENGTH_LONG).show();
                     }
+                }
             }
+            break;
+            case STORAGE_REQUEST: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+
+                    // permission was granted.
+                    pickFromGallery();
+                } else {
+
+
+                    // Permission denied - Show a message to inform the user that this app only works
+                    // with these permissions granted
+
+                }
+                }
+            break;
+            }
+
         }
+
 
 
 

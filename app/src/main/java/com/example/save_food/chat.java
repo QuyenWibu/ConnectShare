@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -90,7 +91,6 @@ public class chat extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
     boolean notify = false;
-    boolean isBlocked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,6 @@ public class chat extends AppCompatActivity {
         msg = findViewById(R.id.messaget);
         send = findViewById(R.id.sendmsg);
         attach = findViewById(R.id.attachbtn);
-//        block = findViewById(R.id.block);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
 
@@ -113,6 +112,7 @@ public class chat extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         apiService = Client.getRetrofit("https://fcm.googleapis.com/").create(APIService.class);
+        apiService = Client.getRetrofit("https://fcm.googleapis.com/fcm/send").create(APIService.class);
         Intent intent = getIntent();
         hisUid = getIntent().getStringExtra("hisUid");
 
@@ -187,9 +187,30 @@ public class chat extends AppCompatActivity {
             }
         });
         readMessages();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            checkPermissions();
+        }
     }
 
+    private void checkPermissions(){
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    },
+                    1052);
+
+        }
+
+    }
     @Override
     protected void onPause() {
         super.onPause();
@@ -279,7 +300,7 @@ public class chat extends AppCompatActivity {
                     }
                  else if (which == 1) {
 
-                    checkGalleryPermission(); // if already access granted then pick
+                    pickFromGallery(); // if already access granted then pick
                     }
                 }
         });
@@ -323,13 +344,18 @@ public class chat extends AppCompatActivity {
             }
             break;
             case STORAGE_REQUEST: {
-                if (grantResults.length > 0) {
-                    boolean writeStorageaccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (writeStorageaccepted) {
-                        pickFromGallery(); // if access granted then pick
-                    } else {
-                        Toast.makeText(this, "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
-                    }
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+
+                    // permission was granted.
+                    pickFromGallery();
+                } else {
+
+
+                    // Permission denied - Show a message to inform the user that this app only works
+                    // with these permissions granted
+
                 }
             }
             break;
@@ -492,8 +518,7 @@ public class chat extends AppCompatActivity {
 
             }
         });
-        String msg = message;
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(myuid);
+        final DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(myuid);
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -511,7 +536,7 @@ public class chat extends AppCompatActivity {
         });
     }
 
-    private void sendNotification(String hisUid, String name, String message) {
+    private void sendNotification(final String hisUid,final String name,final String message) {
         DatabaseReference allTokens= FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = allTokens.orderByKey().equalTo(hisUid);
         query.addValueEventListener(new ValueEventListener() {
