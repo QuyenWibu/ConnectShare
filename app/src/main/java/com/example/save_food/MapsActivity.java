@@ -1,8 +1,18 @@
 package com.example.save_food;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.save_food.models.UserLocation;
@@ -20,6 +31,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,10 +41,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -40,7 +57,9 @@ import java.util.HashMap;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
 
-
+    FirebaseAuth auth;
+    FirebaseUser user;
+    BitmapDescriptor defaultIcon;
     ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
     GoogleMap gMap, mMap;
     FrameLayout map;
@@ -55,9 +74,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
         map = findViewById(R.id.map);
-        String hisUid = getIntent().getStringExtra("hisUid");
-
-
 //        Intent intent = getIntent();
 //        if (intent != null) {
 //            Bundle bundle = intent.getExtras();
@@ -86,6 +102,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     private void getLastLocation(){
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
@@ -149,7 +169,67 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(getApplicationContext(), "Cập nhật....", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        DatabaseReference imageRef = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("image");
+        imageRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String image = snapshot.getValue(String.class);
+
+                    // Sử dụng thư viện Picasso để tải và hiển thị ảnh từ URL
+                    Picasso.get().load(image).into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            int width = 120;
+                            int height = 120;
+                            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+
+                            Bitmap circularBitmap = Bitmap.createBitmap(scaledBitmap.getWidth(), scaledBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+                            Canvas canvas = new Canvas(circularBitmap);
+                            Paint paint = new Paint();
+                            paint.setAntiAlias(true);
+                            Rect rect = new Rect(0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight());
+                            RectF rectF = new RectF(rect);
+                            canvas.drawOval(rectF, paint);
+                            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                            canvas.drawBitmap(scaledBitmap, rect, rect, paint);
+                            // Biến đổi Bitmap thành BitmapDescriptor
+                            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(circularBitmap);
+
+                            // Thiết lập biểu tượng của marker
+                            gMap.addMarker(new MarkerOptions()
+                                    .position(mapVN)
+                                    .icon(icon));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                            // Xử lý khi không thể tải hình ảnh từ URL
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                            // Xử lý khi chuẩn bị tải hình ảnh từ URL
+                        }
+                    });
+                } else {
+                    // Nếu không có ảnh trong Realtime Database, sử dụng biểu tượng mặc định
+                    gMap.addMarker(new MarkerOptions()
+                            .position(mapVN)
+                            .icon(defaultIcon));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Xử lý khi có lỗi xảy ra trong quá trình lấy dữ liệu từ Database
+            }
+        });
     }
+
+
 
     private void getUserLocationsFromIntent() {
         Intent intent = getIntent();
