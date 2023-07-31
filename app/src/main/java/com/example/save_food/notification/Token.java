@@ -1,6 +1,6 @@
 package com.example.save_food.notification;
 
-public class Token {
+public class    Token {
     String token;
     public Token() {
         // Constructor không đối số
