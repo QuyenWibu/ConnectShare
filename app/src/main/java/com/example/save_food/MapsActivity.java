@@ -249,28 +249,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Use the userLocations list here
                     for (UserLocation location : userLocations) {
                         LatLng uploadmaps = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
-                        String image = location.getImage();
-
-// Tạo đối tượng Marker với hình ảnh là hình tròn
-                        Glide.with(this)
-                                .asBitmap()
-                                .load(image)
-                                .fitCenter()
-                                .transform(new CircleCrop())
-                                .override(120, 120)
-                                .into(new CustomTarget<Bitmap>() {
+                        Picasso.get()
+                                .load(location.getImage())
+                                .resize(120, 120)
+                                .into(new Target() {
                                     @Override
-                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                        // Tạo đối tượng BitmapDescriptor từ hình ảnh đã tải xuống
-                                        BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(resource);
-
-                                        // Tạo marker
+                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                        BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(bitmap);
                                         gMap.addMarker(new MarkerOptions().position(uploadmaps).icon(markerIcon));
                                     }
 
                                     @Override
-                                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                                        // Xử lý sau khi xóa hình ảnh đã tải xuống
+                                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                        // Xử lý khi tải bitmap không thành công
+                                    }
+
+                                    @Override
+                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                        // Xử lý trước khi bắt đầu tải bitmap
                                     }
                                 });
                         arrayList.add(uploadmaps);
