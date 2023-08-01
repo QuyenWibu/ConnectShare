@@ -130,64 +130,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(getApplicationContext(), "Cập nhật....", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-        DatabaseReference imageRef = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("image");
-        imageRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String image = snapshot.getValue(String.class);
-
-                    // Sử dụng thư viện Picasso để tải và hiển thị ảnh từ URL
-                    Picasso.get().load(image).into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            int width = 120;
-                            int height = 120;
-                            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-
-                            Bitmap circularBitmap = Bitmap.createBitmap(scaledBitmap.getWidth(), scaledBitmap.getHeight(), Bitmap.Config.ARGB_8888);
-                            Canvas canvas = new Canvas(circularBitmap);
-                            Paint paint = new Paint();
-                            paint.setAntiAlias(true);
-                            Rect rect = new Rect(0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight());
-                            RectF rectF = new RectF(rect);
-                            canvas.drawOval(rectF, paint);
-                            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-                            canvas.drawBitmap(scaledBitmap, rect, rect, paint);
-                            // Biến đổi Bitmap thành BitmapDescriptor
-                            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(circularBitmap);
-
-                            // Thiết lập biểu tượng của marker
-                            gMap.addMarker(new MarkerOptions()
-                                    .position(mapVN)
-                                    .icon(icon)).showInfoWindow();
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                            // Xử lý khi không thể tải hình ảnh từ URL
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-                            // Xử lý khi chuẩn bị tải hình ảnh từ URL
-                        }
-                    });
-                } else {
-                    // Nếu không có ảnh trong Realtime Database, sử dụng biểu tượng mặc định
-                    gMap.addMarker(new MarkerOptions()
-                            .position(mapVN)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.person2))).showInfoWindow();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Xử lý khi có lỗi xảy ra trong quá trình lấy dữ liệu từ Database
-            }
-        });
     }
 
 
@@ -217,26 +159,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Log.d("gMap", "gMap is null");
                         }
                         double khoangcach = Math.sqrt(Math.pow(location.getLatitude() - currentLocation.getLatitude(), 2) + Math.pow(location.getLongitude() - currentLocation.getLongitude(), 2));
-                        Picasso.get()
-                                .load(location.getImage())
-                                .resize(120, 120)
-                                .into(new Target() {
-                                    @Override
-                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                        BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(bitmap);
-                                        gMap.addMarker(new MarkerOptions().position(uploadmaps).icon(markerIcon)).showInfoWindow();
-                                    }
+                        Picasso.get().load(location.getImage()).into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                int width = 120;
+                                int height = 120;
+                                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
 
-                                    @Override
-                                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                                        // Xử lý khi tải bitmap không thành công
-                                    }
+                                Bitmap circularBitmap = Bitmap.createBitmap(scaledBitmap.getWidth(), scaledBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+                                Canvas canvas = new Canvas(circularBitmap);
+                                Paint paint = new Paint();
+                                paint.setAntiAlias(true);
+                                Rect rect = new Rect(0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight());
+                                RectF rectF = new RectF(rect);
+                                canvas.drawOval(rectF, paint);
+                                paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+                                canvas.drawBitmap(scaledBitmap, rect, rect, paint);
+                                // Biến đổi Bitmap thành BitmapDescriptor
+                                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(circularBitmap);
 
-                                    @Override
-                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                        // Xử lý trước khi bắt đầu tải bitmap
-                                    }
-                                });
+                                // Thiết lập biểu tượng của marker
+                                gMap.addMarker(new MarkerOptions()
+                                        .position(uploadmaps)
+                                        .icon(icon));
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                // Xử lý khi không thể tải hình ảnh từ URL
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                // Xử lý khi chuẩn bị tải hình ảnh từ URL
+                            }
+                        });
                         arrayList.add(uploadmaps);
                         khoangCachLocationList.add(new KhoangCachLocation(khoangcach, location.getUid()));
                         //Log.d("Khoangcach", khoangcach + " - " + location.getUid());
