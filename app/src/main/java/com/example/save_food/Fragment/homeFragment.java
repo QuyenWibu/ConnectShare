@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class homeFragment extends Fragment {
     UserLocation userLocation;
     ArrayList<UserLocation> userLocations = new ArrayList<>();
-    ;
+
     FirebaseAuth firebaseAuth;
     Button showmap,post;
 
@@ -44,6 +44,7 @@ public class homeFragment extends Fragment {
         showmap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                userLocations.clear();
                 GetSumUID();
 
 
@@ -105,6 +106,8 @@ public class homeFragment extends Fragment {
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Xử lý lỗi
                             Log.d("CCC", "không có nút " + uidList.get(userid));
+
+
                         }
                     });
                 }
@@ -141,6 +144,8 @@ public class homeFragment extends Fragment {
                     }
                     else {
                         Log.d("CCC", "Lỗi!!!!");
+                        Intent intent = new Intent(getActivity(), MapsActivity.class);
+                        startActivity(intent);
                     }
 
                 }
