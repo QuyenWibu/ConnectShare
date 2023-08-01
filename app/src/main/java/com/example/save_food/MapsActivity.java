@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.save_food.models.KhoangCachLocation;
 import com.example.save_food.models.UserLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -59,6 +61,7 @@ import com.squareup.picasso.Target;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -67,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FirebaseUser user;
     BitmapDescriptor defaultIcon;
     ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
+    List<KhoangCachLocation> khoangCachLocationList = new ArrayList<>();
     GoogleMap gMap, mMap;
     FrameLayout map;
     private final int FINE_PERMISSION_CODE = 1;
@@ -80,6 +84,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
         map = findViewById(R.id.map);
+        arrayList.clear();
+        khoangCachLocationList.clear();
 //        Intent intent = getIntent();
 //        if (intent != null) {
 //            Bundle bundle = intent.getExtras();
@@ -249,6 +255,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Use the userLocations list here
                     for (UserLocation location : userLocations) {
                         LatLng uploadmaps = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
+                        if (gMap != null) {
+                            Marker marker = gMap.addMarker(new MarkerOptions().position(uploadmaps).icon(defaultIcon));
+                            marker.showInfoWindow();
+
+                            if (marker == null) {
+                                Log.d("Marker", "Marker is null");
+                            } else {
+                                Log.d("Marker", "Marker is not null");
+                            }
+                        } else {
+                            Log.d("gMap", "gMap is null");
+                        }
+                        double khoangcach = Math.sqrt(Math.pow(location.getLatitude() - currentLocation.getLatitude(), 2) + Math.pow(location.getLongitude() - currentLocation.getLongitude(), 2));
                         Picasso.get()
                                 .load(location.getImage())
                                 .resize(120, 120)
@@ -270,7 +289,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     }
                                 });
                         arrayList.add(uploadmaps);
+                        khoangCachLocationList.add(new KhoangCachLocation(khoangcach, location.getUid()));
+                        //Log.d("Khoangcach", khoangcach + " - " + location.getUid());
                         Log.d("AAA" + " ", location.getLatitude() + " - " + location.getLongitude() + " - " + location.getUid());
+                    }
+                    for(int i=0;i<khoangCachLocationList.size();i++){
+                        Log.d("khoangcach", khoangCachLocationList.get(i).getDistance() + " - " + khoangCachLocationList.get(i).getUid() );
                     }
                 }
             }
