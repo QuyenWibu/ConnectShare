@@ -19,11 +19,17 @@ import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.Transformation;
+import com.bumptech.glide.request.target.CustomTarget;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.save_food.models.UserLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -218,7 +224,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Nếu không có ảnh trong Realtime Database, sử dụng biểu tượng mặc định
                     gMap.addMarker(new MarkerOptions()
                             .position(mapVN)
-                            .icon(defaultIcon));
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.person2)));
                 }
             }
 
@@ -243,7 +249,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Use the userLocations list here
                     for (UserLocation location : userLocations) {
                         LatLng uploadmaps = new LatLng(Double.valueOf(location.getLatitude()), Double.valueOf(location.getLongitude()));
-                        gMap.addMarker(new MarkerOptions().position(uploadmaps));
+                        String image = location.getImage();
+
+// Tạo đối tượng Marker với hình ảnh là hình tròn
+                        Glide.with(this)
+                                .asBitmap()
+                                .load(image)
+                                .fitCenter()
+                                .transform(new CircleCrop())
+                                .override(120, 120)
+                                .into(new CustomTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        // Tạo đối tượng BitmapDescriptor từ hình ảnh đã tải xuống
+                                        BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(resource);
+
+                                        // Tạo marker
+                                        gMap.addMarker(new MarkerOptions().position(uploadmaps).icon(markerIcon));
+                                    }
+
+                                    @Override
+                                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                                        // Xử lý sau khi xóa hình ảnh đã tải xuống
+                                    }
+                                });
                         arrayList.add(uploadmaps);
                         Log.d("AAA" + " ", location.getLatitude() + " - " + location.getLongitude() + " - " + location.getUid());
                     }

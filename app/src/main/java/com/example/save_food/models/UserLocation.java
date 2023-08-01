@@ -10,7 +10,7 @@ public class UserLocation {
         this.uid = uid;
         this.latitude = latitude;
         this.longitude = longitude;
-//        this.image = image;
+        this.image = image;
     }
 
     public String getUid() {
@@ -25,7 +25,7 @@ public class UserLocation {
         return longitude;
     }
 
-//public String getImage(){
-//        return image;
-//}
+public String getImage(){
+        return image;
+}
 }
