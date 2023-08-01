@@ -132,7 +132,8 @@ public class homeFragment extends Fragment {
                     if (dataSnapshot.exists() && dataSnapshot.hasChild("Latitude") && dataSnapshot.hasChild("Longitude")) {
                         double latitude = dataSnapshot.child("Latitude").getValue(Double.class);
                         double longitude = dataSnapshot.child("Longitude").getValue(Double.class);
-                        userLocation = new UserLocation(uidListupload.get(uiduser), latitude, longitude);
+                        String url = dataSnapshot.child("image").getValue(String.class);
+                        userLocation = new UserLocation(uidListupload.get(uiduser), latitude, longitude, url);
                         userLocations.add(userLocation);
                         userLocationsCopy.add(userLocation);
                         if(uiduser == uidListupload.size()-1){

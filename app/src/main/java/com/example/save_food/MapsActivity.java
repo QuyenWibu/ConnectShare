@@ -1,9 +1,7 @@
 package com.example.save_food;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -19,17 +17,10 @@ import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.Transformation;
-import com.bumptech.glide.request.target.CustomTarget;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.request.transition.Transition;
 import com.example.save_food.models.KhoangCachLocation;
 import com.example.save_food.models.UserLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -47,7 +38,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -86,30 +76,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map = findViewById(R.id.map);
         arrayList.clear();
         khoangCachLocationList.clear();
-//        Intent intent = getIntent();
-//        if (intent != null) {
-//            Bundle bundle = intent.getExtras();
-//            if (bundle != null) {
-//                ArrayList<? extends Parcelable> parcelableList = bundle.getParcelableArrayList("userLocations");
-//                if (parcelableList != null) {
-//                    ArrayList<UserLocation> userLocations = new ArrayList<>();
-//                    for (Parcelable parcelable : parcelableList) {
-//                        if (parcelable instanceof UserLocation) {
-//                            userLocations.add((UserLocation) parcelable);
-//                        }
-//                    }
-//
-//                    // Sử dụng danh sách userLocations ở đây
-//                    for (int i = 0; i < userLocations.size(); i++) {
-//                        UserLocation location = userLocations.get(i);
-//                        // Do something with each user location
-//
-//                        Log.d("AAA" + i + " ", location.getLatitude() + " - " + location.getLongitude() + " - " + location.getUid());
-//                    }
-//                }
-//            }
-//        }
-
 
 
     }
@@ -141,29 +107,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-//        // clear all elements in uidList
-//        uidList.clear();
-//        // clear all elements in userLocations
-//        userLocations.clear();
-//        // clear all elements in latLngs
-//        latLngs.clear();
-        //lấy tất cả UID trong firebase
-
-        //lấy giá trị kinh độ và vĩ độ của từng UID
 
         this.gMap = googleMap;
         this.mMap = googleMap;
-        //thêm marker vào những user đã upload
-//        arrayList.add(mapVN);
-        //this.gMap.addMarker(new MarkerOptions().position(mapVN).title("vietnam"));
-//        LatLng mapp = new LatLng(37.4219983, -122.084);
-//        this.mMap.addMarker(new MarkerOptions().position(mapp));
+
         getUserLocationsFromIntent();
-//        for (int i = 0; i < arrayList.size(); i++) {
-//            LatLng latLng = arrayList.get(i);
-//                this.gMap.addMarker(new MarkerOptions().position(latLng));
-//
-//        }
+
         Log.d("gMapSize", String.valueOf(arrayList.size()));
         LatLng mapVN = new LatLng( currentLocation.getLatitude(), currentLocation.getLongitude());
         this.gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapVN, 16));
@@ -213,7 +162,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             // Thiết lập biểu tượng của marker
                             gMap.addMarker(new MarkerOptions()
                                     .position(mapVN)
-                                    .icon(icon));
+                                    .icon(icon)).showInfoWindow();
                         }
 
                         @Override
@@ -230,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Nếu không có ảnh trong Realtime Database, sử dụng biểu tượng mặc định
                     gMap.addMarker(new MarkerOptions()
                             .position(mapVN)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.person2)));
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.person2))).showInfoWindow();
                 }
             }
 
@@ -275,7 +224,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     @Override
                                     public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                                         BitmapDescriptor markerIcon = BitmapDescriptorFactory.fromBitmap(bitmap);
-                                        gMap.addMarker(new MarkerOptions().position(uploadmaps).icon(markerIcon));
+                                        gMap.addMarker(new MarkerOptions().position(uploadmaps).icon(markerIcon)).showInfoWindow();
                                     }
 
                                     @Override
