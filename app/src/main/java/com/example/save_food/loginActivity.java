@@ -2,7 +2,11 @@ package com.example.save_food;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +24,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -30,6 +35,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -39,8 +45,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class loginActivity extends AppCompatActivity {
     EditText edtemail, edtpass;
@@ -53,6 +67,7 @@ public class loginActivity extends AppCompatActivity {
     GoogleSignInClient gsc;
     GoogleSignInOptions gso;
     CallbackManager mCallbackManager;
+    ProgressDialog progressDialog;
 
 
 
@@ -68,8 +83,11 @@ public class loginActivity extends AppCompatActivity {
         backSignup   = findViewById(R.id.backSignup);
         OpenForgetPass = findViewById(R.id.linerlayoutforgetpass);
         LoginButton loginButton = findViewById(R.id.btnfb);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading....");
         FacebookSdk.sdkInitialize(getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
+
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -121,6 +139,7 @@ public class loginActivity extends AppCompatActivity {
     }
 
     private void log(){
+        progressDialog.show();
         String email = edtemail.getText().toString().trim();
         String password = edtpass.getText().toString().trim();
 
@@ -129,11 +148,13 @@ public class loginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            progressDialog.dismiss();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
                             startActivity(new Intent(loginActivity.this, MainActivity.class));
                         } else {
+                            progressDialog.dismiss();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(loginActivity.this, "Authentication failed.",
@@ -162,11 +183,13 @@ public class loginActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        progressDialog.show();
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         auth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    progressDialog.dismiss();
                     FirebaseUser user = auth.getCurrentUser();
                     String email = user.getEmail();
                     String uid = user.getUid();
@@ -185,6 +208,7 @@ public class loginActivity extends AppCompatActivity {
                     Toast.makeText(loginActivity.this, "Login",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(loginActivity.this, MainActivity.class));
                 } else {
+                    progressDialog.dismiss();
                     Toast.makeText(loginActivity.this, "error",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -197,13 +221,14 @@ public class loginActivity extends AppCompatActivity {
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
+        progressDialog.show();
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
+                            progressDialog.dismiss();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = auth.getCurrentUser();
@@ -224,6 +249,7 @@ public class loginActivity extends AppCompatActivity {
                             startActivity(new Intent(loginActivity.this, MainActivity.class));
 
                         } else {
+                            progressDialog.dismiss();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(loginActivity.this, "Authentication failed.",

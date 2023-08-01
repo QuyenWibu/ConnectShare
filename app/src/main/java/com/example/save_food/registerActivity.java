@@ -2,6 +2,7 @@ package com.example.save_food;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,7 @@ public class registerActivity extends AppCompatActivity {
     FirebaseAuth auth;
     Button btnLog;
     Button acc;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,8 @@ public class registerActivity extends AppCompatActivity {
         edtemail   = findViewById(R.id.email);
         edtpass   = findViewById(R.id.password);
         btnLog   = findViewById(R.id.btnlog);
-
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading....");
         acc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,6 +60,7 @@ public class registerActivity extends AppCompatActivity {
     }
 
     private void Reg(){
+        dialog.show();
         String email = edtemail.getText().toString().trim();
         String password = edtpass.getText().toString().trim();
         auth = FirebaseAuth.getInstance();
@@ -65,6 +69,7 @@ public class registerActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            dialog.dismiss();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
@@ -86,6 +91,7 @@ public class registerActivity extends AppCompatActivity {
 
                             startActivity(new Intent(registerActivity.this, loginActivity.class));
                         } else {
+                            dialog.dismiss();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(registerActivity.this, "Authentication failed.",

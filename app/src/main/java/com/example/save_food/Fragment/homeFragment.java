@@ -1,5 +1,6 @@
 package com.example.save_food.Fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class homeFragment extends Fragment {
 
     FirebaseAuth firebaseAuth;
     Button showmap,post;
+    ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

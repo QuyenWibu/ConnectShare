@@ -3,6 +3,7 @@ package com.example.save_food;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +21,7 @@ public class forgetPasswordActivity extends AppCompatActivity {
     private String email;
     private EditText Foremail;
     private FirebaseAuth mAuth;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,8 @@ public class forgetPasswordActivity extends AppCompatActivity {
         Foremail = findViewById(R.id.Foremail);
         btnForgetpass = findViewById(R.id.btnForgetpass);
         Opensignup = findViewById(R.id.Opensignup);
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading....");
         Opensignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,14 +64,17 @@ public class forgetPasswordActivity extends AppCompatActivity {
     }
 
     private void forgetpass() {
+        progressDialog.show();
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
+                    progressDialog.dismiss();
                     Toast.makeText(forgetPasswordActivity.this, "Hãy kiểm tra Email của bạn", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(forgetPasswordActivity.this, loginActivity.class));
                     finish();
                 } else {
+                    progressDialog.dismiss();
                     Toast.makeText(forgetPasswordActivity.this, "Lỗi:"+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
