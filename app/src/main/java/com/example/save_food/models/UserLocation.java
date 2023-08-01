@@ -6,11 +6,17 @@ public class UserLocation {
     private double longitude;
     private String image;
 
-    public UserLocation(String uid, double latitude, double longitude) {
+    public UserLocation(String uid, double latitude, double longitude, String image) {
         this.uid = uid;
         this.latitude = latitude;
         this.longitude = longitude;
         this.image = image;
+    }
+
+    public UserLocation(String uid, double latitude, double longitude ){
+        this.uid = uid;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getUid() {
