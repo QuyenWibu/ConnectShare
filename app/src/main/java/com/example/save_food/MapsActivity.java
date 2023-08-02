@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.save_food.models.KhoangCachLocaitonSort;
 import com.example.save_food.models.KhoangCachLocation;
 import com.example.save_food.models.UserLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,11 +39,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -50,6 +48,8 @@ import com.squareup.picasso.Target;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,6 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     BitmapDescriptor defaultIcon;
     ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
     List<KhoangCachLocation> khoangCachLocationList = new ArrayList<>();
+    public List<KhoangCachLocaitonSort> khoangCachLocaitonSorts = new ArrayList<>();
     GoogleMap gMap, mMap;
     FrameLayout map;
     private final int FINE_PERMISSION_CODE = 1;
@@ -202,6 +203,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     for(int i=0;i<khoangCachLocationList.size();i++){
                         Log.d("khoangcach", khoangCachLocationList.get(i).getDistance() + " - " + khoangCachLocationList.get(i).getUid() );
                     }
+                    Collections.sort(khoangCachLocationList, new Comparator<KhoangCachLocation>() {
+                        public int compare(KhoangCachLocation o1, KhoangCachLocation o2) {
+                            return Double.compare(o1.getDistance(), o2.getDistance());
+                        }
+                    });
+                    for (KhoangCachLocation khoangCachLocation : khoangCachLocationList) {
+                        double distance = khoangCachLocation.getDistance();
+                        String uid = khoangCachLocation.getUid();
+                        Log.d("khoangcachsapxep", distance + " - " + uid);
+                        KhoangCachLocaitonSort khoangCachLocaitonSort = new KhoangCachLocaitonSort(distance, uid);
+                        khoangCachLocaitonSorts.add(khoangCachLocaitonSort);
+                    }
+//                    for(int i=0;i<khoangCachLocaitonSorts.size();i++){
+//                        Log.d("khoangcach", khoangCachLocaitonSorts.get(i).getDistanceSort() + " - " + khoangCachLocaitonSorts.get(i).getUidSort() );
+//                    }
                 }
             }
         }
