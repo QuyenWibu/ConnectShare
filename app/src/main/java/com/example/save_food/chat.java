@@ -111,7 +111,7 @@ public class chat extends AppCompatActivity {
         recyclerView = findViewById(R.id.chatrecycle);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        apiService = Client.getRetrofit("https://fcm.googleapis.com/fcm/send").create(APIService.class);
+        apiService = Client.getRetrofit("https://fcm.googleapis.com/").create(APIService.class);
         Intent intent = getIntent();
         hisUid = getIntent().getStringExtra("hisUid");
 
