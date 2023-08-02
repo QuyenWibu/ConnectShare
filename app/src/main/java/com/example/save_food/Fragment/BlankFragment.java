@@ -25,26 +25,4 @@ public class BlankFragment extends Fragment {
 
         return view;
     }
-    //lấy dữ liệu từ firebase về và setText cho TextView trong Fragment
-//    public void GetDataFireBase(long childCount) {
-//        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("ThongTin_UpLoad/" + uid + "/" + String.valueOf(childCount));
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    ThongTin_UpLoadClass thongTin_upLoadClass = snapshot.getValue(ThongTin_UpLoadClass.class);
-//                   Log.d("AAA", thongTin_upLoadClass.getTenDonHang());
-//                    //tv_post.setText(thongTin_upLoadClass.toString());
-//                        //Log.e("AAA", "Lỗi!!");
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//
-//    }
 }

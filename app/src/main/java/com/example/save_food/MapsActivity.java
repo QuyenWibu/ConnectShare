@@ -48,8 +48,6 @@ import com.squareup.picasso.Target;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -108,7 +106,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-
+        khoangCachLocaitonSorts.clear();
         this.gMap = googleMap;
         this.mMap = googleMap;
 
@@ -159,7 +157,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         } else {
                             Log.d("gMap", "gMap is null");
                         }
-                        double khoangcach = Math.sqrt(Math.pow(location.getLatitude() - currentLocation.getLatitude(), 2) + Math.pow(location.getLongitude() - currentLocation.getLongitude(), 2));
+//                        double khoangcach = Math.sqrt(Math.pow(location.getLatitude() - currentLocation.getLatitude(), 2) + Math.pow(location.getLongitude() - currentLocation.getLongitude(), 2));
                         Picasso.get().load(location.getImage()).into(new Target() {
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -196,25 +194,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         });
                         arrayList.add(uploadmaps);
-                        khoangCachLocationList.add(new KhoangCachLocation(khoangcach, location.getUid()));
+                        //khoangCachLocationList.add(new KhoangCachLocation(khoangcach, location.getUid()));
                         //Log.d("Khoangcach", khoangcach + " - " + location.getUid());
-                        Log.d("AAA" + " ", location.getLatitude() + " - " + location.getLongitude() + " - " + location.getUid());
+                        ///Log.d("AAA" + " ", location.getLatitude() + " - " + location.getLongitude() + " - " + location.getUid());
                     }
-                    for(int i=0;i<khoangCachLocationList.size();i++){
-                        Log.d("khoangcach", khoangCachLocationList.get(i).getDistance() + " - " + khoangCachLocationList.get(i).getUid() );
-                    }
-                    Collections.sort(khoangCachLocationList, new Comparator<KhoangCachLocation>() {
-                        public int compare(KhoangCachLocation o1, KhoangCachLocation o2) {
-                            return Double.compare(o1.getDistance(), o2.getDistance());
-                        }
-                    });
-                    for (KhoangCachLocation khoangCachLocation : khoangCachLocationList) {
-                        double distance = khoangCachLocation.getDistance();
-                        String uid = khoangCachLocation.getUid();
-                        Log.d("khoangcachsapxep", distance + " - " + uid);
-                        KhoangCachLocaitonSort khoangCachLocaitonSort = new KhoangCachLocaitonSort(distance, uid);
-                        khoangCachLocaitonSorts.add(khoangCachLocaitonSort);
-                    }
+//                    for(int i=0;i<khoangCachLocationList.size();i++){
+//                        Log.d("khoangcach", khoangCachLocationList.get(i).getDistance() + " - " + khoangCachLocationList.get(i).getUid() );
+//                    }
+//                    Collections.sort(khoangCachLocationList, new Comparator<KhoangCachLocation>() {
+//                        public int compare(KhoangCachLocation o1, KhoangCachLocation o2) {
+//                            return Double.compare(o1.getDistance(), o2.getDistance());
+//                        }
+//                    });
+//                    for (KhoangCachLocation khoangCachLocation : khoangCachLocationList) {
+//                        double distance = khoangCachLocation.getDistance();
+//                        String uid = khoangCachLocation.getUid();
+//                        Log.d("khoangcachsapxep", distance + " - " + uid);
+//                        KhoangCachLocaitonSort khoangCachLocaitonSort = new KhoangCachLocaitonSort(distance, uid);
+//                        khoangCachLocaitonSorts.add(khoangCachLocaitonSort);
+//                    }
 //                    for(int i=0;i<khoangCachLocaitonSorts.size();i++){
 //                        Log.d("khoangcach", khoangCachLocaitonSorts.get(i).getDistanceSort() + " - " + khoangCachLocaitonSorts.get(i).getUidSort() );
 //                    }
