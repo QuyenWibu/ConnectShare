@@ -96,7 +96,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
         spinner.setOnItemSelectedListener(this);
 
         adapter = new RecyclerApdapter(uri, getApplicationContext(), this, this);
-
+        childCount=0;
         //Khi người dùng ấn vào nút "đăng tải" -> Dữ liệu sẽ được gửi lên firebase.
         btn_upload_complete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,9 +104,9 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                 if(uri.size()>0){
 //                    Intent intent = new Intent(UploadActivity.this, MainActivity.class);
 //                    startActivity(intent);
-
+                    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     // Lấy tham chiếu đến "ThongTin_UpLoad"
-                    DatabaseReference thongtin_upload = mData.child("ThongTin_UpLoad");
+                    DatabaseReference thongtin_upload = mData.child("ThongTin_UpLoad").child(uid);
                     // Lấy dữ liệu từ "ThongTin_UpLoad" bằng phương thức get()
                     thongtin_upload.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
@@ -114,9 +114,9 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                             if (task.isSuccessful()) {
                                 //String downloadUrl = task.getResult().getDownloadUrl().toString();
                                 // Lấy UID của người dùng hiện tại
-                                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                 // Lấy số lượng nút con trong "ThongTin_UpLoad"
                                 childCount = task.getResult().getChildrenCount();
+                                Log.d("Soluong", String.valueOf(childCount));
                                 //đưa dữ liệu lên firebase khi upload
                                 ThongTin_UpLoadClass thongTin_upLoadClass = new ThongTin_UpLoadClass(
                                         TenDonHang_Upload.getText().toString(),
@@ -151,6 +151,10 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                 else{
                     Toast.makeText(UploadActivity.this, "Bạn chưa chọn ảnh nào!", Toast.LENGTH_SHORT).show();
                 }
+//                Intent intent = new Intent(UploadActivity.this, homeFragment.class);
+//                startActivity(intent); finish();
+                childCount=0;
+                onBackPressed(); finish();
             }
         });
 

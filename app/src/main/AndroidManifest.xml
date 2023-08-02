@@ -29,6 +29,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Save_Food"
         tools:targetApi="31">
+
         <activity
             android:name=".chat"
             android:exported="false"
@@ -63,6 +64,7 @@
         <activity
             android:name=".profileActivity"
             android:exported="false" />
+
         <activity
             android:name=".forgetPasswordActivity"
             android:exported="false" />
