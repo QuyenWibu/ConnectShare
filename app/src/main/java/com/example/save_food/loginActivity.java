@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -68,9 +69,7 @@ public class loginActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     CallbackManager mCallbackManager;
     ProgressDialog progressDialog;
-
-
-
+    public static String SHARED_PREFS = "sharedPrefs";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +84,7 @@ public class loginActivity extends AppCompatActivity {
         LoginButton loginButton = findViewById(R.id.btnfb);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading....");
+        checkbox();
         FacebookSdk.sdkInitialize(getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
 
@@ -136,8 +136,17 @@ public class loginActivity extends AppCompatActivity {
                 startActivity(new Intent(loginActivity.this, registerActivity.class));
             }
         });
-    }
 
+    }
+    private void checkbox(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String check = sharedPreferences.getString("email", "");
+        if(check.equals("true")){
+            Toast.makeText(this, "Login succesfully", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
+    }
     private void log(){
         progressDialog.show();
         String email = edtemail.getText().toString().trim();
@@ -152,6 +161,10 @@ public class loginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
+                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("email", "true");
+                            editor.apply();
                             startActivity(new Intent(loginActivity.this, MainActivity.class));
                         } else {
                             progressDialog.dismiss();
@@ -193,13 +206,14 @@ public class loginActivity extends AppCompatActivity {
                     FirebaseUser user = auth.getCurrentUser();
                     String email = user.getEmail();
                     String uid = user.getUid();
+                    String name = user.getDisplayName();
 
 
                     HashMap<Object, String> hashMap = new HashMap<>();
                     hashMap.put("email", email);
                     hashMap.put("uid", uid);
-                    hashMap.put("name", "");
-                    hashMap.put("image", "");
+                    hashMap.put("name", name);
+                    hashMap.put("image", "https://firebasestorage.googleapis.com/v0/b/savefood-a697c.appspot.com/o/imagedef%2Fimage.png?alt=media");
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference reference = database.getReference("Users");
@@ -241,7 +255,7 @@ public class loginActivity extends AppCompatActivity {
                             hashMap.put("email", email);
                             hashMap.put("uid", uid);
                             hashMap.put("name", name);
-                            hashMap.put("image", "");
+                            hashMap.put("image", "https://firebasestorage.googleapis.com/v0/b/savefood-a697c.appspot.com/o/imagedef%2Fimage.png?alt=media");
 
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference reference = database.getReference("Users");

@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.save_food.Fragment.ChangePasswordFragment;
 import com.example.save_food.Fragment.ChatListFragment;
 import com.example.save_food.Fragment.UsersFragment;
 import com.example.save_food.Fragment.BlankFragment;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     BottomNavigationView bottomNavigationView;
     String mUID;
+    public static String SHARED_PREFS = "sharedPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,8 +161,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             openFragment(new homeFragment());
         } else if (itemId == R.id.nav_myprofile) {
             startActivity(new Intent(MainActivity.this, profileActivity.class));
-        } else if (itemId == R.id.logout) {
+        }else if (itemId == R.id.changepass) {
+            openFragment(new ChangePasswordFragment());
+        }
+        else if (itemId == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("email", "");
+            editor.apply();
             startActivity(new Intent(MainActivity.this, loginActivity.class));
             finish();
         }

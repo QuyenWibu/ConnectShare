@@ -13,6 +13,9 @@
             <item android:id="@+id/nav_myprofile"
                 android:title="Profile"
                 android:icon="@drawable/person"/>
+            <item android:id="@+id/changepass"
+                android:title="Đổi mật khẩu"
+                android:icon="@drawable/ic_change_pass"/>
             <item android:id="@+id/logout"
                 android:title="logout"
                 android:icon="@drawable/logout"/>
