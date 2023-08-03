@@ -1,11 +1,13 @@
 package com.example.save_food;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -60,11 +62,11 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
     private long childCount;
     private ArrayList<String> imageUrls = new ArrayList<>();
     private String S="";
-    private Spinner spinner;
+    private Spinner spinner, spinner2;
     private static final int Read_Permission = 101;
     private Uri imageuri;
     private int x;
-    private String valueFromSpinner;
+    private String valueFromSpinner, valueFromSpinner2;
     StorageReference  storageReference;
     FragmentManager fragmentManager;
     ActivityResultLauncher<Intent> activityResultLauncher;
@@ -81,7 +83,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
         ThoiGianHetHan_Upload = findViewById(R.id.ThoiGianHetHan_Upload);
         DiaChi_Upload = findViewById(R.id.DiaChi_Upload);
 
-
+        spinner2= findViewById(R.id.list_item_thoihan);
         spinner = findViewById(R.id.list_item_nganhhang);
         recyclerView = findViewById(R.id.recyclerView_Images);
         btn_upload = findViewById(R.id.btn_upload);
@@ -94,6 +96,25 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
         adapter_list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter_list);
         spinner.setOnItemSelectedListener(this);
+
+        String[] list_thoigian = getResources().getStringArray(R.array.list_thoigian);
+        ArrayAdapter adapter_list2 = new ArrayAdapter(this, android.R.layout.simple_spinner_item,list_thoigian);
+        adapter_list2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapter_list2);
+        spinner2.setOnItemSelectedListener(this);
+
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                valueFromSpinner2 = parent.getItemAtPosition(position).toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // không có gì được chọn
+            }
+        });
 
         adapter = new RecyclerApdapter(uri, getApplicationContext(), this, this);
         childCount=0;
@@ -118,15 +139,31 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                 childCount = task.getResult().getChildrenCount();
                                 Log.d("Soluong", String.valueOf(childCount));
                                 //đưa dữ liệu lên firebase khi upload
-                                ThongTin_UpLoadClass thongTin_upLoadClass = new ThongTin_UpLoadClass(
-                                        TenDonHang_Upload.getText().toString(),
-                                        Integer.parseInt(DonGia_Upload.getText().toString()),
-                                        DiaChi_Upload.getText().toString(),
-                                        valueFromSpinner,
-                                        ThoiGianHetHan_Upload.getText().toString());
-                                mData.child("ThongTin_UpLoad").child(uid).child(childCount+1+"").setValue(thongTin_upLoadClass);
-                                //  tv_post.setText(thongTin_upLoadClass.getTenDonHang());
-                                GetDataFireBase();
+                                if(!valueFromSpinner2.isEmpty() && !valueFromSpinner.isEmpty()
+                                        && !TenDonHang_Upload.getText().toString().isEmpty()
+                                        && !TextUtils.isEmpty(DonGia_Upload.getText().toString())
+                                        && !DiaChi_Upload.getText().toString().isEmpty()
+                                        && !ThoiGianHetHan_Upload.getText().toString().isEmpty() ){
+                                            ThongTin_UpLoadClass thongTin_upLoadClass = new ThongTin_UpLoadClass(
+                                                    TenDonHang_Upload.getText().toString(),
+                                                    Integer.parseInt(DonGia_Upload.getText().toString()),
+                                                    DiaChi_Upload.getText().toString(),
+                                                    valueFromSpinner,
+                                                    ThoiGianHetHan_Upload.getText().toString(), valueFromSpinner2);
+                                            mData.child("ThongTin_UpLoad").child(uid).child(childCount+1+"").setValue(thongTin_upLoadClass);
+                                    for(int i=0;i<uri.size();i++){
+                                        uploadToFirebase(uri.get(i));
+                                    }
+                                    onBackPressed(); finish();
+                                    GetDataFireBase();
+                                    Toast.makeText(UploadActivity.this, "Đã đăng tải thành công!", Toast.LENGTH_SHORT).show();
+
+                                }
+                                else{
+                                    Toast.makeText(UploadActivity.this, "Vui lòng thêm 1 ảnh và điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                                }
+                                    //  tv_post.setText(thongTin_upLoadClass.getTenDonHang());
+
                                 //truyền dữ liệu sang fragment_blank
 //                                fragmentManager = getSupportFragmentManager();
 //                                BlankFragment blankFragment = (BlankFragment) fragmentManager.findFragmentById(R.id.container);
@@ -138,23 +175,19 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                             }
                         }
                     });
-                    for(int i=0;i<uri.size();i++){
-                        uploadToFirebase(uri.get(i));
-                    }
+
                     //lấy dữ liệu từ firebase về và đăng lên home
 //                    BlankFragment blankFragment = new BlankFragment();
 //                    blankFragment.GetDataFireBase(childCount+1);
                     //GetDataFireBase();
                     //tv_post.setText(ThongTin_UpLoadClass.getTenDonHang().toString());
-                    Toast.makeText(UploadActivity.this, "Đã đăng tải thành công!", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(UploadActivity.this, "Bạn chưa chọn ảnh nào!", Toast.LENGTH_SHORT).show();
                 }
 //                Intent intent = new Intent(UploadActivity.this, homeFragment.class);
 //                startActivity(intent); finish();
-                childCount=0;
-                onBackPressed(); finish();
+
             }
         });
 
@@ -193,8 +226,8 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
             }
         });
 
-        if (ContextCompat.checkSelfPermission(UploadActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(UploadActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, Read_Permission);
+        if (ContextCompat.checkSelfPermission(UploadActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(UploadActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, Read_Permission);
         }
 
         btn_upload.setOnClickListener(new View.OnClickListener() {
@@ -224,7 +257,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                     Log.d("AAA", thongTin_upLoadClass.getTenDonHang());
                     Log.d("AAA", thongTin_upLoadClass.getDiaChi());
                     S=thongTin_upLoadClass.toStringg();
-                    tv_post.setText(thongTin_upLoadClass.getTenDonHang() + " - " + thongTin_upLoadClass.getDiaChi() + " + " + thongTin_upLoadClass.getThoiGianHetHan());
+                    //tv_post.setText(thongTin_upLoadClass.getTenDonHang() + " - " + thongTin_upLoadClass.getDiaChi() + " + " + thongTin_upLoadClass.getThoiGianHetHan());
                     //Log.e("AAA", "Lỗi!!");
 
                 }
@@ -243,7 +276,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
         final String randomName = UUID.randomUUID().toString();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Create a reference to "images_upload/"
-        storageReference = FirebaseStorage.getInstance().getReference().child("images_upload/" + randomName);
+        storageReference = FirebaseStorage.getInstance().getReference().child("images_upload/" + uid);
         storageReference.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -255,7 +288,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                         HinhAnh_Upload hinhAnh_upload = new HinhAnh_Upload(downloadUrl.toString());
                                         mData.child("ThongTin_UpLoad")
                                                 .child(uid)
-                                                .child(childCount+1+"")
+                                                .child(String.valueOf(childCount+1))
                                                 .child("Ảnh").push().setValue(hinhAnh_upload, new DatabaseReference.CompletionListener() {
                                                     @Override
                                                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
