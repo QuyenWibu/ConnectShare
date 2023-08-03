@@ -6,16 +6,26 @@ public class ThongTin_UpLoadClass{
     private String diaChi;
     private String nganhHang;
     private String thoiGianHetHan;
+    private String donViHetHan;
 
     public ThongTin_UpLoadClass() {
     }
 
-    public ThongTin_UpLoadClass(String tenDonHang, int donGia, String diaChi, String nganhHang, String thoiGianHetHan) {
+    public ThongTin_UpLoadClass(String tenDonHang, int donGia, String diaChi, String nganhHang, String thoiGianHetHan, String donViHetHan) {
         this.tenDonHang = tenDonHang;
         this.donGia = donGia;
         this.diaChi = diaChi;
         this.nganhHang = nganhHang;
         this.thoiGianHetHan = thoiGianHetHan;
+        this.donViHetHan = donViHetHan;
+    }
+
+    public String getDonViHetHan() {
+        return donViHetHan;
+    }
+
+    public void setDonViHetHan(String donViHetHan) {
+        this.donViHetHan = donViHetHan;
     }
 
     public String getTenDonHang() {
@@ -65,6 +75,7 @@ public class ThongTin_UpLoadClass{
                 ", diaChi='" + diaChi + '\'' +
                 ", nganhHang='" + nganhHang + '\'' +
                 ", thoiGianHetHan='" + thoiGianHetHan + '\'' +
+                ", donViHetHan='" + donViHetHan + '\'' +
                 '}';
     }
 }
