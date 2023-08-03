@@ -8,7 +8,7 @@ import retrofit2.http.POST;
 public interface APIService {
     @Headers({
             "Content-Type:application/json",
-            "Authorization: key=AAAALLyDTbU:APA91bFbDR_hahSqDCp_9pzI3QtoJySnM5aKj2-LsddkrGioOKtVsxjAVf42gyhwO7r811wWeae9_2hwsKCNIStWxY1Q0mIPXbvDzzcZjm9mTJObsZHFY1fVPm9yiIs3QtP8x-omPTox"
+            "Authorization: Bearer ya29.a0AfB_byAUAihFF_5NYdgmawpESzmd0MBhW9oDNDuGAayJ41fLtBdZlIRk74jehddbf0YrLVzXqE5IzRAFV5aqUcUffkZKAWS5OUGah_RlFxdXVpCzF-pPnAg46TWRhc2LW0PqWzlYkPhbBTnjc-F-baOOxUahaCgYKATgSARASFQHsvYlsSanQ1DFk_oYIfA-3BO6FZw0163"
     })
 
     @POST("fcm/send")
