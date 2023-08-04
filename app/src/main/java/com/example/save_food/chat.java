@@ -548,12 +548,12 @@ public class chat extends AppCompatActivity {
                     apiService.sendNotification(sender)
                             .enqueue(new Callback<Response>() {
                                 @Override
-                                public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+                                public void onResponse(@NonNull Call<Response> call, retrofit2.Response<Response> response) {
                                     Toast.makeText(chat.this, ""+response.message(), Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
-                                public void onFailure(Call<Response> call, Throwable t) {
+                                public void onFailure(@NonNull Call<Response> call, Throwable t) {
 
                                 }
                             });
