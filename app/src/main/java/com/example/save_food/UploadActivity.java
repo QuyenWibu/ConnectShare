@@ -292,7 +292,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                         mData.child("ThongTin_UpLoad")
                                                 .child(uid)
                                                 .child(String.valueOf(childCount+1))
-                                                .child("Ảnh" ).setValue(hinhAnh_upload, new DatabaseReference.CompletionListener() {
+                                                .child("Ảnh" ).push().setValue(hinhAnh_upload, new DatabaseReference.CompletionListener() {
                                                     @Override
                                                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                                         if (error == null) {
