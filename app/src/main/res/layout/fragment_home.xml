@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingTop="56dp"
     android:paddingBottom="56dp"
+    android:id="@+id/container_home"
     android:gravity="center"
     tools:context=".Fragment.homeFragment"
     android:orientation="vertical">
@@ -24,5 +25,4 @@
         android:layout_marginTop="20dp"
         android:background="@color/purple_500"
         android:text="upload" />
-
 </LinearLayout>

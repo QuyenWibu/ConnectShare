@@ -18,7 +18,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
-import com.example.save_food.Fragment.BlankFragment;
 import com.example.save_food.Fragment.ChangePasswordFragment;
 import com.example.save_food.Fragment.ChatListFragment;
 import com.example.save_food.Fragment.UsersFragment;
@@ -40,7 +39,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     Button showMap;
     FirebaseDatabase firebaseDatabase;
@@ -111,10 +110,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                if (itemId == R.id.hongcogihet) {
-                    openFragment(new BlankFragment());
-                    return true;
-                } else if (itemId == R.id.Users_nav) {
+//                if (itemId == R.id.hongcogihet) {
+//                    openFragment(new BlankFragment());
+//                    return true;
+//                } else
+                if (itemId == R.id.Users_nav) {
                     openFragment(new UsersFragment());
                     return true;
                 }
@@ -200,4 +200,5 @@ private void checkUserStatus(){
     }
 
 }
+
 }

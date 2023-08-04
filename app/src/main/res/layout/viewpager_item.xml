@@ -6,7 +6,7 @@
     android:layout_marginHorizontal="16dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,7 +20,8 @@
             android:layout_height="match_parent"
             android:layout_margin="8dp"
             android:elevation="10dp"
-            app:cardCornerRadius="16dp">
+            app:cardCornerRadius="16dp"
+            >
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -30,6 +31,7 @@
                     android:id="@+id/img_viewpager"
                     android:layout_width="wrap_content"
                     android:layout_height="390dp"
+                    android:foreground="@drawable/overlay_gradient"
                     android:scaleType="centerCrop"
                     android:src="@drawable/a" />
 
@@ -50,7 +52,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tvHeading"
-                    android:layout_margin="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="Hoa củ quả là một phần quan trọng trong tạo lập cảnh quan xanh, sạch, đẹp và trang trí cho ngôi nhà. Chúng mang lại vẻ tươi mới, nhiều màu sắc thú vị. Hoa củ quả có thể có mùi thơm dễ chịu.
 
 " />

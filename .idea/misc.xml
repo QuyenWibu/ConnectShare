@@ -9,14 +9,16 @@
         <entry key="..\:/Save_Food/app/src/main/res/drawable/custom_button.xml" value="0.163" />
         <entry key="..\:/Save_Food/app/src/main/res/drawable/ic_baseline_cancel_24.xml" value="0.1235" />
         <entry key="..\:/Save_Food/app/src/main/res/drawable/ic_launcher_background.xml" value="0.163" />
+        <entry key="..\:/Save_Food/app/src/main/res/drawable/overlay_gradient.xml" value="0.2105" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/activity_chat.xml" value="0.18206521739130435" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/activity_forget_password.xml" value="0.18206521739130435" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/activity_login.xml" value="0.33" />
-        <entry key="..\:/Save_Food/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Save_Food/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/activity_maps.xml" value="0.20416666666666666" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/activity_profile.xml" value="0.20416666666666666" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/activity_register.xml" value="0.13697916666666668" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/activity_upload.xml" value="0.22" />
+        <entry key="..\:/Save_Food/app/src/main/res/layout/container_fragment.xml" value="0.1" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/custom_dialog_image_zoom.xml" value="0.33" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/custom_single_image.xml" value="0.2" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/fragment_blank.xml" value="0.16" />
@@ -27,7 +29,7 @@
         <entry key="..\:/Save_Food/app/src/main/res/layout/layout_header_nav.xml" value="0.18206521739130435" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/row_chat_left.xml" value="0.18206521739130435" />
         <entry key="..\:/Save_Food/app/src/main/res/layout/row_chat_right.xml" value="0.18206521739130435" />
-        <entry key="..\:/Save_Food/app/src/main/res/layout/viewpager_item.xml" value="0.22" />
+        <entry key="..\:/Save_Food/app/src/main/res/layout/viewpager_item.xml" value="0.25" />
         <entry key="..\:/Save_Food/app/src/main/res/menu/menu_nav.xml" value="0.20416666666666666" />
         <entry key="..\:/Save_Food/app/src/main/res/menu/menu_nav2.xml" value="0.20416666666666666" />
         <entry key="..\:/Save_Food/app/src/main/res/menu/menu_nav3.xml" value="0.20416666666666666" />
