@@ -3,6 +3,7 @@ package com.example.save_food;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import com.example.save_food.Fragment.ChatListFragment;
 import com.example.save_food.Fragment.UsersFragment;
 import com.example.save_food.Fragment.homeFragment;
 import com.example.save_food.notification.Token;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -129,7 +132,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         openFragment(new homeFragment());
 
         checkUserStatus();
-        updateToken(String.valueOf(FirebaseMessaging.getInstance().getToken()));
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w("FCM Token", "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+
+                // Lấy token thành công
+                String token = task.getResult();
+                updateToken(token);
+            }
+        });
     }
 
     @Override
