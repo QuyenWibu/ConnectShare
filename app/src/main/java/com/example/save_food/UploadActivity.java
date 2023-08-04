@@ -273,6 +273,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
 
 
     private void uploadToFirebase(Uri imageUri) {
+
         final String randomName = UUID.randomUUID().toString();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Create a reference to "images_upload/"
@@ -283,13 +284,15 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         taskSnapshot.getStorage().getDownloadUrl()
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
+
                                     @Override
                                     public void onSuccess(Uri downloadUrl) {
                                         HinhAnh_Upload hinhAnh_upload = new HinhAnh_Upload(downloadUrl.toString());
+
                                         mData.child("ThongTin_UpLoad")
                                                 .child(uid)
                                                 .child(String.valueOf(childCount+1))
-                                                .child("Ảnh").push().setValue(hinhAnh_upload, new DatabaseReference.CompletionListener() {
+                                                .child("Ảnh" ).push().setValue(hinhAnh_upload, new DatabaseReference.CompletionListener() {
                                                     @Override
                                                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                                         if (error == null) {
@@ -300,7 +303,9 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                                     }
                                                 });
                                         Toast.makeText(UploadActivity.this, "Images Uploaded", Toast.LENGTH_SHORT).show();
+
                                     }
+
                                 });
                     }
                 })

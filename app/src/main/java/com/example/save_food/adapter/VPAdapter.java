@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.save_food.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -32,11 +33,11 @@ public class VPAdapter extends RecyclerView.Adapter<VPAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
         ViewPagerItem viewPagerItem = viewPagerItems.get(position);
-        holder.imageView.setImageResource(viewPagerItem.ImgaeId);
+        Picasso.get().load(viewPagerItem.getImgaeId()).into(holder.imageView);
         holder.tvHeading.setText(viewPagerItem.Heding);
         holder.tvHeading2.setText(viewPagerItem.Heding2);
+//        notifyDataSetChanged();
 
     }
 

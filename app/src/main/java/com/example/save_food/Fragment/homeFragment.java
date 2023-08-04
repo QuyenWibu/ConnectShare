@@ -9,14 +9,18 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.save_food.MapsActivity;
 import com.example.save_food.R;
@@ -27,6 +31,7 @@ import com.example.save_food.models.UserLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,13 +51,50 @@ public class homeFragment extends Fragment {
     UserLocation userLocation;
     ArrayList<UserLocation> userLocations = new ArrayList<>();
     Location currentLocation;
-    List<KhoangCachLocation> khoangCachLocationList = new ArrayList<>();
+    ArrayList<KhoangCachLocation> khoangCachLocationList = new ArrayList<>();
     public List<KhoangCachLocaitonSort> khoangCachLocaitonSorts = new ArrayList<>();
     FusedLocationProviderClient fusedLocationProviderClient;
     double latitude, longitude;
     FirebaseAuth firebaseAuth;
     Button showmap, post;
     ProgressDialog progressDialog;
+    BottomNavigationView bottomNavigationView;
+    FragmentManager fragmentManager;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        boolean k = true;
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.hongcogihet && k==true) {
+                    //openFragment(new BlankFragment());
+                    // Tạo ra Bundle để đính kèm vào Fragment
+                    k=false;
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("my_list", khoangCachLocationList);
+                    BlankFragment fragment = new BlankFragment();
+                    // Thiết lập Bundle cho BlankFragment
+                    fragment.setArguments(bundle);
+
+                    // Chuyển sang BlankFragment
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.add(R.id.content_frame, fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                    // Ẩn fragment_container
+                    View fragmentContainer = getView().findViewById(R.id.container_home);
+                    fragmentContainer.setVisibility(View.GONE);
+
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,26 +104,42 @@ public class homeFragment extends Fragment {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         showmap = view.findViewById(R.id.showMap);
         post = view.findViewById(R.id.upload);
-
+        bottomNavigationView = view.findViewById(R.id.bottom_navigation);
+//        bottomNavigationView.setBackground(null);
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+
+
+
+
         khoangCachLocationList.clear();
         userLocations.clear();
         GetSumUID();
-
+        for(int i=0;i<khoangCachLocationList.size();i++){
+            Log.d("khoangcach", khoangCachLocationList.get(i).getDistance() + " - " + khoangCachLocationList.get(i).getUid() );
+        }
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // sử dụng biến khoangCachLocationList ở đây
+                KetQua();
                 Intent intent = new Intent(getActivity(), UploadActivity.class);
                 startActivity(intent);
             }
         });
+
         return view;
 
 
+    }
+
+    private void KetQua() {
+        for(int i=0;i<khoangCachLocationList.size();i++){
+            Log.d("khoangcach", khoangCachLocationList.get(i).getDistance() + " - " + khoangCachLocationList.get(i).getUid() );
+        }
     }
 
     private void GetSumUID() {
@@ -187,6 +245,7 @@ public class homeFragment extends Fragment {
                                                 // Lấy được vị trí hiện tại của người dùng
                                                 currentLocation = location;
                                                 TinhKhoangCach(userLocations, currentLocation);
+
                                             }
                                         }
                                     });
@@ -206,7 +265,7 @@ public class homeFragment extends Fragment {
 
                 }
 
-                @Override
+//                @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                     // handle error
                     Log.d("BBB", "Lỗi!!!");
@@ -218,9 +277,6 @@ public class homeFragment extends Fragment {
 
     private void TinhKhoangCach(ArrayList<UserLocation> userLocations, Location currentLocation) {
             for(int i = 0; i < userLocations.size(); i++){
-//                    latitude = location.getLatitude();
-//                    longitude = location.getLongitude();
-
                     double khoangcach = Math.sqrt(Math.pow(userLocations.get(i).getLatitude() - currentLocation.getLatitude(), 2) + Math.pow(userLocations.get(i).getLongitude() - currentLocation.getLongitude(), 2));
                     khoangCachLocationList.add(new KhoangCachLocation(khoangcach, userLocations.get(i).getUid()));
 
@@ -231,16 +287,8 @@ public class homeFragment extends Fragment {
                     return Double.compare(o1.getDistance(), o2.getDistance());
                 }
             });
-            for (KhoangCachLocation khoangCachLocation : khoangCachLocationList) {
-                double distance = khoangCachLocation.getDistance();
-                String uid = khoangCachLocation.getUid();
-                Log.d("khoangcachsapxep", distance + " - " + uid);
-                KhoangCachLocaitonSort khoangCachLocaitonSort = new KhoangCachLocaitonSort(distance, uid);
-                khoangCachLocaitonSorts.add(khoangCachLocaitonSort);
-            }
-        for(int i=0;i<khoangCachLocaitonSorts.size();i++){
-            Log.d("khoangcach", khoangCachLocaitonSorts.get(i).getDistanceSort() + " - " + khoangCachLocaitonSorts.get(i).getUidSort() );
-        }
+
+
     }
 
     private void processUserLocations(Context context, ArrayList<UserLocation> userLocations) {
