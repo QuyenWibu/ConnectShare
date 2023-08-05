@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="Map_API_KEY">AIzaSyAacOO7yRwLHKGkPSoWri-5_rYdbagJTEA</string>
     <string name="app_name">Save_Food</string>
     <string name="facebook_app_id">987879095692992</string>
@@ -8,4 +8,13 @@
     <string name="navigation_draw_close">Close navigation drawer</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_to_yo">Login to your account</string>
+    <string name="email_title">Email Address</string>
+    <string name="hint_email">Enter email</string>
+    <string name="pass_title">Password</string>
+    <string name="hint_pass">Enter password</string>
+    <string name="create_an_a">LOGIN</string>
+    <string name="forgot_pass">Forgot password?</string>
+    <string name="or">Or</string>
+    <string name="signup">Sign Up</string>
 </resources>

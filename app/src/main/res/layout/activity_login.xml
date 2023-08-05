@@ -4,68 +4,164 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
-    android:gravity="center"
-    android:padding="40dp"
-    tools:context=".loginActivity">
+    android:padding="25dp">
+
+    <View
+        android:id="@+id/savefood_1"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="23dp"
+        android:background="@drawable/logo_savefood"
+        android:gravity="center" />
 
     <TextView
+        android:id="@+id/login_to_yo"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:text="@string/login_to_yo"
+        android:textAppearance="@style/login_to_yo" />
+
+    <TextView
+        android:id="@+id/email_title"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
+        android:gravity=""
+        android:lineSpacingExtra="0sp"
+        android:text="@string/email_title"
+        android:textAppearance="@style/title"
+        android:translationY="-1.02sp" />
+
+    <LinearLayout
+        android:id="@+id/shape_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="38sp"
-        android:layout_marginBottom="40dp"
-        android:textStyle="bold"/>
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/email"
-        android:hint="email"
-        android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        >
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/password"
-        android:hint="password"
-        android:layout_marginTop="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"/>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/shape"
+            android:hint="@string/hint_email"
+            android:padding="10dp"
+            android:textAppearance="@style/place_holde" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btnlog"
-        android:text="Login"
-        android:textSize="36sp"
-        android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <LinearLayout
+    <TextView
+        android:id="@+id/pass_title"
         android:layout_width="wrap_content"
+        android:layout_height="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"
-        android:id="@+id/linerlayoutforgetpass"
-        android:layout_height="wrap_content">
-        <TextView
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        android:gravity=""
+        android:lineSpacingExtra="2sp"
+        android:text="@string/pass_title"
+        android:textAppearance="@style/title"
+        android:translationY="-1.02sp" />
+
+    <LinearLayout
+        android:id="@+id/shape_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bạn quên mật khẩu?"/>
+            android:layout_height="50dp"
+            android:background="@drawable/shape"
+            android:hint="@string/hint_pass"
+            android:padding="10dp"
+            android:textAppearance="@style/place_holde" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linerlayoutforgetpass"
         android:layout_width="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:id="@+id/backSignup"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="0dp"
+        android:layout_gravity="end"
+        android:gravity="center">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bạn không có tài khoản?"/>
+            android:text="@string/forgot_pass"
+            android:textAppearance="@style/forgot_pass" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rectangle"
+        android:layout_width="214dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="35dp"
+        android:layout_gravity="center"
+        android:gravity="center">
+        <Button
+            android:id="@+id/btnlog"
+            android:layout_width="214dp"
+            android:layout_height="55dp"
+            android:background="@drawable/rectangle"
+            android:text="@string/create_an_a"
+            android:textAppearance="@style/create_an_a"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/or"
+        android:textAppearance="@style/or"
+        />
 
     <com.facebook.login.widget.LoginButton
+        android:id="@+id/btnfb"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnfb"/>
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"/>
+
     <com.google.android.gms.common.SignInButton
+        android:id="@+id/btngg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btngg"/>
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+    <LinearLayout
+            android:id="@+id/backSignup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/signup" />
+        </LinearLayout>
 </LinearLayout>
