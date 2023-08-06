@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    android:padding="25dp">
+    android:padding="25dp"
+    tools:context=".loginActivity">
 
     <View
         android:id="@+id/savefood_1"
@@ -21,7 +22,7 @@
     <TextView
         android:id="@+id/login_to_yo"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
         android:layout_marginBottom="0dp"
         android:gravity="center"
@@ -31,11 +32,11 @@
     <TextView
         android:id="@+id/email_title"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="10dp"
-        android:gravity=""
+        android:gravity="center"
         android:lineSpacingExtra="0sp"
         android:text="@string/email_title"
         android:textAppearance="@style/title"
@@ -64,11 +65,11 @@
     <TextView
         android:id="@+id/pass_title"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="10dp"
-        android:gravity=""
+        android:gravity="center"
         android:lineSpacingExtra="2sp"
         android:text="@string/pass_title"
         android:textAppearance="@style/title"
@@ -117,12 +118,13 @@
         android:layout_marginStart="0dp"
         android:layout_marginBottom="35dp"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@drawable/rectangle">
         <Button
             android:id="@+id/btnlog"
             android:layout_width="214dp"
             android:layout_height="55dp"
-            android:background="@drawable/rectangle"
+            android:background="@drawable/rectangle_1"
             android:text="@string/create_an_a"
             android:textAppearance="@style/create_an_a"/>
     </LinearLayout>
