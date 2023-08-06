@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,7 +30,7 @@ public class registerActivity extends AppCompatActivity {
     EditText edtemail, edtpass;
     FirebaseAuth auth;
     Button btnLog;
-    Button acc;
+    TextView acc;
     ProgressDialog dialog;
 
     @Override

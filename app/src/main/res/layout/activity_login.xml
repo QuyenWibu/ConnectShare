@@ -139,19 +139,21 @@
         android:textAppearance="@style/or"
         />
 
-    <com.facebook.login.widget.LoginButton
+    <Button
         android:id="@+id/btnfb"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:layout_marginTop="30dp"
+        android:background="@drawable/facebook"
         android:layout_marginBottom="10dp"/>
 
-    <com.google.android.gms.common.SignInButton
+    <Button
         android:id="@+id/btngg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:background="@drawable/google"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
         android:gravity="center"/>
 

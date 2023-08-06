@@ -63,8 +63,8 @@ public class loginActivity extends AppCompatActivity {
     Button btnLog;
     LinearLayout OpenForgetPass, backSignup;
 
-    LoginButton mfb;
-    SignInButton mgg;
+    Button mfb;
+    Button mgg;
     GoogleSignInClient gsc;
     GoogleSignInOptions gso;
     CallbackManager mCallbackManager;
