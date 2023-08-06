@@ -106,7 +106,7 @@
             android:id="@+id/btnlog"
             android:layout_width="wrap_content"
             android:layout_height="55dp"
-            android:background="@drawable/rectangle"
+            android:background="@drawable/rectangle_1"
             android:text="@string/create_an_a"
             android:textAppearance="@style/create_an_a"/>
     </LinearLayout>

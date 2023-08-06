@@ -124,7 +124,7 @@
             android:id="@+id/btnlog"
             android:layout_width="214dp"
             android:layout_height="55dp"
-            android:background="@drawable/rectangle"
+            android:background="@drawable/rectangle_1"
             android:text="@string/create_an_a"
             android:textAppearance="@style/create_an_a"/>
     </LinearLayout>
@@ -138,24 +138,6 @@
         android:text="@string/or"
         android:textAppearance="@style/or"
         />
-
-    <Button
-        android:id="@+id/btnfb"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/facebook"
-        android:layout_marginBottom="10dp"/>
-
-    <Button
-        android:id="@+id/btngg"
-        android:background="@drawable/google"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center"
-        android:gravity="center"/>
 
     <LinearLayout
             android:id="@+id/backSignup"
