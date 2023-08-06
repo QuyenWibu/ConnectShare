@@ -138,7 +138,25 @@
         android:text="@string/or"
         android:textAppearance="@style/or"
         />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center">
 
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/btnfb"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="100dp" android:contentDescription="This is a Facebook button" />
+
+        <Button
+            android:id="@+id/btngg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/google"
+            android:contentDescription="This is a GG button" />
+    </LinearLayout>
     <LinearLayout
             android:id="@+id/backSignup"
             android:layout_width="wrap_content"
