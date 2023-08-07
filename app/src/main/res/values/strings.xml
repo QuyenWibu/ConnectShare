@@ -18,8 +18,14 @@
     <string name="forgot_pass">Forgot password?</string>
     <string name="or">Or</string>
     <string name="signup"> Sign Up</string>
-    <string name="noaccount">Don't have an account? </string>
     <string name="haveaccount">You have an account? </string>
     <string name="buttonfb">Buton Facebook</string>
     <string name="buttongg">Buton Google</string>
+    <string name="stringacc">Dont have an account?</string>
+    <string name="newpas">New password</string>
+    <string name="changepas">Change password</string>
+    <string name="nameprofile">User Name</string>
+    <string name="youremail">Your Email</string>
+    <string name="yourphone">Your Phone</string>
+    <string name="changeprofile">Change Profile</string>
 </resources>

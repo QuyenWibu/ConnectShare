@@ -89,9 +89,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shape"
+            android:textAppearance="@style/place_holde"
             android:hint="@string/hint_pass"
+            android:inputType="textPassword"
             android:padding="10dp"
-            android:textAppearance="@style/place_holde" />
+             />
 
     </LinearLayout>
 
@@ -170,7 +172,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:text="@string/noaccount" />
+            android:text="@string/stringacc" />
 
             <TextView
                 android:layout_width="match_parent"

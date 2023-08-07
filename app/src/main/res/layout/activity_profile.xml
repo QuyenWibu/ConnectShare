@@ -2,36 +2,108 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:gravity="center"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="70dp"
-    tools:context=".profileActivity"
-    android:layout_height="match_parent">
+    android:padding="20dp"
+    tools:context=".profileActivity">
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/person"
-        android:id="@+id/img_avatar"
-        android:contentDescription="TODO" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/rectangle2">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_avatar"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:gravity="center"
+            android:contentDescription="TODO"
+            android:src="@drawable/avtconech" />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/name_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="@string/nameprofile"
+        android:textAppearance="@style/title" />
 
     <TextView
         android:id="@+id/name"
-        android:drawableLeft="@drawable/person"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:hint="Tên của bạn"
-        android:minHeight="48dp"
+        android:background="@drawable/shape"
+        android:gravity="center_vertical"
+        android:hint="@string/nameprofile"
         android:padding="10dp"
         android:textColor="@color/black" />
 
+    <TextView
+        android:id="@+id/email_title_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="@string/youremail"
+        android:textAppearance="@style/title" />
 
-    <Button
-        android:layout_marginTop="40dp"
-        android:text="Cập nhật Profile"
-        android:id="@+id/updateButton"
+    <TextView
+        android:id="@+id/user_email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape"
+        android:gravity="center_vertical"
+        android:hint="@string/youremail"
+        android:padding="10dp"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/phone_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="@string/yourphone"
+        android:textAppearance="@style/title" />
+
+    <TextView
+        android:id="@+id/user_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape"
+        android:gravity="center_vertical"
+        android:hint="@string/yourphone"
+        android:padding="10dp"
+        android:textColor="@color/black" />
+
+    <LinearLayout
+        android:layout_width="214dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/rectangle">
+
+        <Button
+            android:id="@+id/updateButton"
+            android:layout_width="214dp"
+            android:layout_height="55dp"
+            android:background="@drawable/rectangle_1"
+            android:text="@string/changeprofile"
+            android:textAppearance="@style/create_an_a" />
+    </LinearLayout>
+    </LinearLayout>
