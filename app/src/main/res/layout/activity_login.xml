@@ -44,22 +44,23 @@
 
     <LinearLayout
         android:id="@+id/shape_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="334dp"
+        android:layout_height="50dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
-        android:layout_gravity="center"
         android:gravity="center"
+        android:textColor="@android:color/black"
         >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/shape"
+            android:layout_height="match_parent"
+            android:textAppearance="@style/place_holde"
             android:hint="@string/hint_email"
-            android:padding="10dp"
-            android:textAppearance="@style/place_holde" />
+            android:background="@drawable/shape"
+            android:textColor="@android:color/black"
+            android:padding="10dp"/>
     </LinearLayout>
 
     <TextView
@@ -77,21 +78,21 @@
 
     <LinearLayout
         android:id="@+id/shape_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="334dp"
+        android:layout_height="50dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        >
+        android:gravity="center">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:background="@drawable/shape"
             android:hint="@string/hint_pass"
             android:padding="10dp"
             android:textAppearance="@style/place_holde" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -114,19 +115,20 @@
         android:id="@+id/rectangle"
         android:layout_width="214dp"
         android:layout_height="55dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="45dp"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="35dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="@drawable/rectangle">
+        android:background="@drawable/rectangle"
+        >
         <Button
             android:id="@+id/btnlog"
             android:layout_width="214dp"
             android:layout_height="55dp"
             android:background="@drawable/rectangle_1"
             android:text="@string/create_an_a"
-            android:textAppearance="@style/create_an_a"/>
+            android:textAppearance="@style/create_an_a" />
     </LinearLayout>
 
     <TextView
@@ -136,8 +138,8 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/or"
-        android:textAppearance="@style/or"
-        />
+        android:textAppearance="@style/or" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -148,21 +150,28 @@
             android:id="@+id/btnfb"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginEnd="100dp" android:contentDescription="This is a Facebook button" />
-
+            android:layout_marginEnd="100dp"
+            android:contentDescription="@string/buttonfb"/>
         <Button
             android:id="@+id/btngg"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/google"
-            android:contentDescription="This is a GG button" />
+            android:contentDescription="@string/buttongg" />
     </LinearLayout>
     <LinearLayout
             android:id="@+id/backSignup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="@string/noaccount" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
