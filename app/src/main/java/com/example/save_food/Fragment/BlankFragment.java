@@ -14,7 +14,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.save_food.R;
 import com.example.save_food.adapter.VPAdapter;
 import com.example.save_food.adapter.ViewPagerItem;
-import com.example.save_food.models.HinhAnh_Upload;
 import com.example.save_food.models.KhoangCachLocaitonSort;
 import com.example.save_food.models.KhoangCachLocation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -83,7 +82,7 @@ public class BlankFragment extends Fragment {
                                         @Override
                                         public void onChildAdded(@androidx.annotation.NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                                             String key = snapshot.getKey();
-                                            HinhAnh_Upload hinhAnh_upload = snapshot.getValue(HinhAnh_Upload.class);
+//                                            HinhAnh_Upload hinhAnh_upload = snapshot.getValue(HinhAnh_Upload.class);
 //                                            String value = dataSnapshot.getValue(String.class);
                                             String linkhinh = snapshot.child("LinkHinh").getValue(String.class);
 

@@ -70,7 +70,7 @@ public class homeFragment extends Fragment {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                if (itemId == R.id.hongcogihet && k==true) {
+                if (itemId == R.id.hongcogihet) {
                     //openFragment(new BlankFragment());
                     // Tạo ra Bundle để đính kèm vào Fragment
                     k=false;
@@ -82,18 +82,34 @@ public class homeFragment extends Fragment {
 
                     // Chuyển sang BlankFragment
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.add(R.id.content_frame, fragment);
+                    transaction.replace(R.id.content_frame, fragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
-                    // Ẩn fragment_container
-                    View fragmentContainer = getView().findViewById(R.id.container_home);
-                    fragmentContainer.setVisibility(View.GONE);
+//                    // Ẩn fragment_container
+//                    View fragmentContainer = getView().findViewById(R.id.container_home);
+//                    fragmentContainer.setVisibility(View.GONE);
 
+
+                    return true;
+                }
+                if (itemId == R.id.Users_nav) {
+                    openFragment(new UsersFragment());
+                    return true;
+                }
+                else if (itemId == R.id.chat_nav) {
+                    openFragment(new ChatListFragment());
                     return true;
                 }
                 return false;
             }
         });
+    }
+
+    private void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
