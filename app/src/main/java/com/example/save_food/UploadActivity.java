@@ -71,6 +71,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
     FragmentManager fragmentManager;
     ActivityResultLauncher<Intent> activityResultLauncher;
     DatabaseReference mData;
+    Button btn_mua;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,7 +269,6 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
 
             }
         });
-
     }
 
 

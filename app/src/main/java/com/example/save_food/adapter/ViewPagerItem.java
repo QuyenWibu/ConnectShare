@@ -10,6 +10,16 @@ public class ViewPagerItem {
         Heding2 = heding2;
     }
 
+    public String getHeding() {
+        return Heding;
+    }
+
+
+    public String getHeding2() {
+        return Heding2;
+    }
+
+
     public String getImgaeId() {
         return ImgaeId;
     }
