@@ -36,6 +36,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
         Token token1 = new Token(token);
+        assert user != null;
         reference.child(user.getUid()).setValue(token1);
     }
     @Override
@@ -64,13 +65,14 @@ public void onMessageReceived(@NonNull RemoteMessage messsage) {
         String body =message.getData().get("body");
 
         RemoteMessage.Notification notification = message.getNotification();
+        assert user != null;
         int i = Integer.parseInt(user.replaceAll("[\\D]", ""));
         Intent intent = new Intent(this, chat.class);
         Bundle bundle = new Bundle();
         bundle.putString("hisUid", user);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pIntent = PendingIntent.getActivity(this, i,intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pIntent = PendingIntent.getActivity(this, i,intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
         Uri defSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         OreoAndAboveNotification notification1 = new OreoAndAboveNotification(this);
@@ -94,7 +96,7 @@ public void onMessageReceived(@NonNull RemoteMessage messsage) {
         bundle.putString("hisUid", user);
         intent.putExtras(bundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pIntent = PendingIntent.getActivity(this, i,intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pIntent = PendingIntent.getActivity(this, i,intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
         Uri defSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         assert icon != null;
