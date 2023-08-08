@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     android:padding="25dp"
     tools:context=".registerActivity">
@@ -92,6 +93,7 @@
             android:padding="10dp"
             android:textAppearance="@style/place_holde" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/rectangle"
         android:layout_width="214dp"
@@ -101,20 +103,24 @@
         android:layout_marginBottom="35dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="@drawable/rectangle">
+        android:background="@drawable/rectangle"
+        >
         <Button
             android:id="@+id/btnlog"
-            android:layout_width="wrap_content"
+            android:layout_width="214dp"
             android:layout_height="55dp"
+            android:gravity="center"
             android:background="@drawable/rectangle_1"
             android:text="@string/create_an_a"
-            android:textAppearance="@style/create_an_a"/>
+            android:textAppearance="@style/create_an_a" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/acc"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:text="Bạn đã có tài khoản?"/>
+        android:text="@string/haveaccount" />
 
 </LinearLayout>

@@ -24,12 +24,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/purple_500"
+                android:fontFamily="cursive"
                 android:theme="@style/ThemeOverlay.AppCompat.Light"
                 app:title="SAVE_FOOD"
                 app:titleCentered="true"
                 app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
-                app:titleTextColor="#FFFFFF"
-                android:fontFamily="cursive" />
+                app:titleTextColor="#FFFFFF" />
 
             <!--                app:layout_constraintTop_toTopOf="@+id/Toolbar"-->
         </com.google.android.material.appbar.AppBarLayout>
