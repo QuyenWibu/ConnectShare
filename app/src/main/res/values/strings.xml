@@ -24,6 +24,7 @@
     <string name="stringacc">Dont have an account?</string>
     <string name="newpas">New password</string>
     <string name="changepas">Change password</string>
+    <string name="change">Change</string>
     <string name="nameprofile">User Name</string>
     <string name="youremail">Your Email</string>
     <string name="yourphone">Your Phone</string>

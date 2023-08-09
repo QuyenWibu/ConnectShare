@@ -38,10 +38,11 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape"
+        android:layout_width="334dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
         android:gravity="center_vertical"
+        android:background="@drawable/shape"
         android:hint="@string/nameprofile"
         android:padding="10dp"
         android:textColor="@color/black" />
@@ -59,10 +60,11 @@
 
     <TextView
         android:id="@+id/user_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape"
+        android:layout_width="334dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
         android:gravity="center_vertical"
+        android:background="@drawable/shape"
         android:hint="@string/youremail"
         android:padding="10dp"
         android:textColor="@color/black" />
@@ -80,10 +82,11 @@
 
     <TextView
         android:id="@+id/user_phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape"
+        android:layout_width="334dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
         android:gravity="center_vertical"
+        android:background="@drawable/shape"
         android:hint="@string/yourphone"
         android:padding="10dp"
         android:textColor="@color/black" />
@@ -106,4 +109,4 @@
             android:text="@string/changeprofile"
             android:textAppearance="@style/create_an_a" />
     </LinearLayout>
-    </LinearLayout>
+</LinearLayout>
