@@ -9,11 +9,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,14 +34,19 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.save_food.adapter.AdapterChat;
+import com.example.save_food.models.JsonObjectRequestWithHeaders;
 import com.example.save_food.models.ModelChat;
 import com.example.save_food.models.ModelUser;
-import com.example.save_food.notification.APIService;
-import com.example.save_food.notification.Client;
 import com.example.save_food.notification.Data;
-import com.example.save_food.notification.Response;
 import com.example.save_food.notification.Sender;
 import com.example.save_food.notification.Token;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -56,6 +63,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -63,6 +74,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,7 +92,7 @@ public class chat extends AppCompatActivity {
     ValueEventListener valueEventListener;
     List<ModelChat> chatList;
     AdapterChat adapterChat;
-    APIService apiService;
+    private RequestQueue requestQueue;
     private static final int IMAGEPICK_GALLERY_REQUEST = 300;
     private static final int IMAGE_PICKCAMERA_REQUEST = 400;
     private static final int CAMERA_REQUEST = 100;
@@ -90,7 +102,7 @@ public class chat extends AppCompatActivity {
     Uri imageuri;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
-    boolean notify = false;
+    private boolean notify = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,11 +119,10 @@ public class chat extends AppCompatActivity {
         attach = findViewById(R.id.attachbtn);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
-
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
         recyclerView = findViewById(R.id.chatrecycle);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
-        apiService = Client.getClient().create(APIService.class);
         Intent intent = getIntent();
         hisUid = getIntent().getStringExtra("hisUid");
 
@@ -543,20 +554,36 @@ public class chat extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds: snapshot.getChildren()){
                     Token token = ds.getValue(Token.class);
-                    Data data = new Data(myuid, name+":"+message,"tin nhắn mới",hisUid,R.drawable.person);
+                    Data data = new Data(myuid, name+": "+message,"tin nhắn mới",hisUid,R.drawable.person);
+                    assert token != null;
                     Sender sender = new Sender(data, token.getToken());
-                    apiService.sendNotification(sender)
-                            .enqueue(new Callback<Response>() {
-                                @Override
-                                public void onResponse(@NonNull Call<Response> call, retrofit2.Response<Response> response) {
-                                    Toast.makeText(chat.this, ""+response.message(), Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onFailure(@NonNull Call<Response> call, Throwable t) {
-
-                                }
-                            });
+                    try{
+                    JSONObject senderJsonObj = new JSONObject(new Gson().toJson(sender));
+                        JsonObjectRequestWithHeaders jsonObjectRequest = new JsonObjectRequestWithHeaders(Request.Method.POST, "https://fcm.googleapis.com/fcm/send", senderJsonObj,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        Log.d("JSON_RESPONSE", "onresponse: " + response.toString());
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d("JSON_RESPONSE", "onresponse: " + error.toString());
+                                    }
+                                }) {
+                            @Override
+                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                Map<String, String> headers = new HashMap<>();
+                                headers.put("Content-Type", "application/json");
+                                headers.put("Authorization", "key= AAAALLyDTbU:APA91bFbDR_hahSqDCp_9pzI3QtoJySnM5aKj2-LsddkrGioOKtVsxjAVf42gyhwO7r811wWeae9_2hwsKCNIStWxY1Q0mIPXbvDzzcZjm9mTJObsZHFY1fVPm9yiIs3QtP8x-omPTox");
+                                return headers;
+                            }
+                        };
+                        requestQueue.add(jsonObjectRequest);
+                    } catch (JSONException e){
+                        e.printStackTrace();
+                    }
                 }
             }
 

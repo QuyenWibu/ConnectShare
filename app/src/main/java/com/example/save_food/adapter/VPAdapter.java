@@ -1,6 +1,8 @@
 package com.example.save_food.adapter;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.save_food.R;
+import com.example.save_food.chat;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class VPAdapter extends RecyclerView.Adapter<VPAdapter.ViewHolder> {
-
+    Context context;
     ArrayList<ViewPagerItem> viewPagerItems;
 
-    public VPAdapter(ArrayList<ViewPagerItem> viewPagerItems) {
+    public VPAdapter(ArrayList<ViewPagerItem> viewPagerItems, Context context) {
         this.viewPagerItems = viewPagerItems;
+        this.context = context;
     }
 
     @NonNull
@@ -48,6 +52,7 @@ public class VPAdapter extends RecyclerView.Adapter<VPAdapter.ViewHolder> {
                 Log.d("Diachi", viewPagerItem.Heding2);
                 String tendonhang = viewPagerItem.Heding;
                 String Diachi = viewPagerItem.Heding2;
+                String hisUid = viewPagerItems.get(position).getUid();
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getRootView().getContext());
                 View dialogView = LayoutInflater.from(v.getRootView().getContext()).inflate(R.layout.custom_dialog_post, null);
                 ImageView imageViewDialog;
@@ -66,10 +71,19 @@ public class VPAdapter extends RecyclerView.Adapter<VPAdapter.ViewHolder> {
                 dialog.show();
 
                 Button closeButton = dialogView.findViewById(R.id.closeButton);
+                Button lienheBtn = dialogView.findViewById(R.id.lienheBtn);
                 closeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
+                    }
+                });
+                lienheBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, chat.class);
+                        intent.putExtra("hisUid", hisUid);
+                        context.startActivity(intent);
                     }
                 });
             }
