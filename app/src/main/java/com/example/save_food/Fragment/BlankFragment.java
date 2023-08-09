@@ -87,9 +87,9 @@ public class BlankFragment extends Fragment {
                                             String linkhinh = snapshot.child("LinkHinh").getValue(String.class);
 
                                             Log.d("Firebase", "Key: " + key + " " + "value: " + linkhinh);
-                                            ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, DiaChi);
+                                            ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, DiaChi,uid);
                                             viewPagerItemArrayList.add(viewPagerItem);
-                                            VPAdapter vpAdapter = new VPAdapter(viewPagerItemArrayList);
+                                            VPAdapter vpAdapter = new VPAdapter(viewPagerItemArrayList, getActivity());
                                             viewPager2.setAdapter(vpAdapter);
                                             viewPager2.setClipToPadding(false);
                                             viewPager2.setClipChildren(false);

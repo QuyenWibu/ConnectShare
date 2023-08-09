@@ -1,13 +1,14 @@
 package com.example.save_food.adapter;
 
 public class ViewPagerItem {
-    String ImgaeId;
+    String ImgaeId, uid;
     String Heding, Heding2;
 
-    public ViewPagerItem(String imgaeId, String heding, String heding2) {
+    public ViewPagerItem(String imgaeId, String heding, String heding2,String uid) {
         ImgaeId = imgaeId;
         Heding = heding;
         Heding2 = heding2;
+        this.uid = uid;
     }
 
     public String getHeding() {
@@ -23,4 +24,5 @@ public class ViewPagerItem {
     public String getImgaeId() {
         return ImgaeId;
     }
+    public String getUid(){return uid;}
 }
