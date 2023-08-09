@@ -32,12 +32,12 @@ public class FirebaseMessaging extends FirebaseMessagingService {
             updateToken(token);
         }
     }
-    private void updateToken(String token){
+    private void updateToken(String tokenRefresh){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
-        Token token1 = new Token(token);
+        Token token = new Token(tokenRefresh);
         assert user != null;
-        reference.child(user.getUid()).setValue(token1);
+        reference.child(user.getUid()).setValue(token);
     }
     @Override
 public void onMessageReceived(@NonNull RemoteMessage messsage) {
