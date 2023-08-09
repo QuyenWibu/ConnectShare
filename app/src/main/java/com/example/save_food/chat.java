@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -42,6 +43,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.save_food.adapter.AdapterChat;
+import com.example.save_food.models.JsonObjectRequestWithHeaders;
 import com.example.save_food.models.ModelChat;
 import com.example.save_food.models.ModelUser;
 import com.example.save_food.notification.Data;
@@ -557,23 +559,21 @@ public class chat extends AppCompatActivity {
                     Sender sender = new Sender(data, token.getToken());
                     try{
                     JSONObject senderJsonObj = new JSONObject(new Gson().toJson(sender));
-                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://fcm.googleapis.com/v1/projects/savefood-a697c/messages:send", senderJsonObj,
+                        JsonObjectRequestWithHeaders jsonObjectRequest = new JsonObjectRequestWithHeaders(Request.Method.POST, "https://fcm.googleapis.com/v1/projects/savefood-a697c/messages:send", senderJsonObj,
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
-                                        Log.d("JSON_RESPONSE", "onresponse: "+response.toString());
+                                        Log.d("JSON_RESPONSE", "onresponse: " + response.toString());
                                     }
-                                }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.d("JSON_RESPONSE", "onresponse: "+error.toString());
-
-                            }
-                        }){
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.d("JSON_RESPONSE", "onresponse: " + error.toString());
+                                    }
+                                }) {
                             @Override
                             public Map<String, String> getHeaders() throws AuthFailureError {
-
-
                                 Map<String, String> headers = new HashMap<>();
                                 headers.put("Content-Type", "application/json");
                                 headers.put("Authorization", "Bearer ya29.a0AfB_byAUAihFF_5NYdgmawpESzmd0MBhW9oDNDuGAayJ41fLtBdZlIRk74jehddbf0YrLVzXqE5IzRAFV5aqUcUffkZKAWS5OUGah_RlFxdXVpCzF-pPnAg46TWRhc2LW0PqWzlYkPhbBTnjc-F-baOOxUahaCgYKATgSARASFQHsvYlsSanQ1DFk_oYIfA-3BO6FZw0163");
