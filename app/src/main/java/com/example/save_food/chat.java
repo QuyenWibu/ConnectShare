@@ -559,7 +559,7 @@ public class chat extends AppCompatActivity {
                     Sender sender = new Sender(data, token.getToken());
                     try{
                     JSONObject senderJsonObj = new JSONObject(new Gson().toJson(sender));
-                        JsonObjectRequestWithHeaders jsonObjectRequest = new JsonObjectRequestWithHeaders(Request.Method.POST, "https://fcm.googleapis.com/v1/projects/savefood-a697c/messages:send", senderJsonObj,
+                        JsonObjectRequestWithHeaders jsonObjectRequest = new JsonObjectRequestWithHeaders(Request.Method.POST, "https://fcm.googleapis.com/fcm/send", senderJsonObj,
                                 new Response.Listener<JSONObject>() {
                                     @Override
                                     public void onResponse(JSONObject response) {
@@ -576,7 +576,7 @@ public class chat extends AppCompatActivity {
                             public Map<String, String> getHeaders() throws AuthFailureError {
                                 Map<String, String> headers = new HashMap<>();
                                 headers.put("Content-Type", "application/json");
-                                headers.put("Authorization", "Bearer ya29.a0AfB_byAUAihFF_5NYdgmawpESzmd0MBhW9oDNDuGAayJ41fLtBdZlIRk74jehddbf0YrLVzXqE5IzRAFV5aqUcUffkZKAWS5OUGah_RlFxdXVpCzF-pPnAg46TWRhc2LW0PqWzlYkPhbBTnjc-F-baOOxUahaCgYKATgSARASFQHsvYlsSanQ1DFk_oYIfA-3BO6FZw0163");
+                                headers.put("Authorization", "key= AAAALLyDTbU:APA91bFbDR_hahSqDCp_9pzI3QtoJySnM5aKj2-LsddkrGioOKtVsxjAVf42gyhwO7r811wWeae9_2hwsKCNIStWxY1Q0mIPXbvDzzcZjm9mTJObsZHFY1fVPm9yiIs3QtP8x-omPTox");
                                 return headers;
                             }
                         };
