@@ -84,18 +84,30 @@ public class BlankFragment extends Fragment {
                                             String key = snapshot.getKey();
 //                                            HinhAnh_Upload hinhAnh_upload = snapshot.getValue(HinhAnh_Upload.class);
 //                                            String value = dataSnapshot.getValue(String.class);
-                                            String linkhinh = snapshot.child("LinkHinh").getValue(String.class);
+                                            DatabaseReference imgref2 = imgRef.child(key);
+                                            imgref2.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                                                    String linkhinh = snapshot.child("linkHinh").getValue(String.class);
 
-                                            Log.d("Firebase", "Key: " + key + " " + "value: " + linkhinh);
-                                            ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, DiaChi,uid);
-                                            viewPagerItemArrayList.add(viewPagerItem);
-                                            VPAdapter vpAdapter = new VPAdapter(viewPagerItemArrayList, getActivity());
-                                            viewPager2.setAdapter(vpAdapter);
-                                            viewPager2.setClipToPadding(false);
-                                            viewPager2.setClipChildren(false);
-                                            viewPager2.setOffscreenPageLimit(2);
-                                            viewPager2.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
-                                            imgRef.removeEventListener(this);
+                                                    Log.d("Firebase", "Key: " + key + " " + "value: " + linkhinh);
+                                                    ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, DiaChi,uid);
+                                                    viewPagerItemArrayList.add(viewPagerItem);
+                                                    VPAdapter vpAdapter = new VPAdapter(viewPagerItemArrayList, getActivity());
+                                                    viewPager2.setAdapter(vpAdapter);
+                                                    viewPager2.setClipToPadding(false);
+                                                    viewPager2.setClipChildren(false);
+                                                    viewPager2.setOffscreenPageLimit(2);
+                                                    viewPager2.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
+                                                    imgref2.removeEventListener(this);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+                                                }
+                                            });
+
 
                                         }
 
