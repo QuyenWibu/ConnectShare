@@ -3,24 +3,56 @@
     android:layout_width="match_parent"
     android:layout_height="180dp"
     android:padding="20dp"
-    android:gravity="bottom"
-    android:background="@color/purple_500"
+    android:layout_gravity=""
+    android:background="@color/camcam"
     android:orientation="vertical">
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:layout_width="80dp"
-        android:src="@drawable/person"
-        android:layout_height="80dp"
-        android:id="@+id/img_avatar" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="0dp">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/img_avatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:src="@drawable/person" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="-15dp">
+
+            <TextView
+                android:id="@+id/welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"
+                android:text="Welcome, "
+                android:textAppearance="@style/login_to_yo" />
+        </LinearLayout>
+
+
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvName"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/white"/>
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="-38.3dp"
+        android:layout_marginBottom="0dp"
+        android:textAppearance="@style/forgot_pass"
+        />
 
 
 </LinearLayout>
