@@ -99,7 +99,7 @@ public class BlankFragment extends Fragment {
                                                     viewPager2.setClipChildren(false);
                                                     viewPager2.setOffscreenPageLimit(2);
                                                     viewPager2.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
-                                                    imgRef.removeEventListener(this);
+                                                    imgref2.removeEventListener(this);
                                                 }
 
                                                 @Override

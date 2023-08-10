@@ -98,9 +98,13 @@ public class profileActivity extends AppCompatActivity {
 
                     editname.setText(strname);
                     try {
-                        Glide.with(profileActivity.this).load(image).into(set);
+                        if (!isDestroyed()) {
+                            Glide.with(profileActivity.this).load(image).into(set);
+                        }
                     } catch (Exception e) {
-                        Glide.with(profileActivity.this).load(R.drawable.person).into(set);
+                        if (!isDestroyed()) {
+                            Glide.with(profileActivity.this).load(R.drawable.person).into(set);
+                        }
                     }
                 }
             }
