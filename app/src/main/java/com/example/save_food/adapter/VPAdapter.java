@@ -55,7 +55,7 @@ public class VPAdapter extends RecyclerView.Adapter<VPAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ViewPagerItem viewPagerItem = viewPagerItems.get(position);
         Picasso.get().load(viewPagerItem.getImgaeId()).into(holder.imageView);
-        String plikes = viewPagerItems.get(position).getpLike();
+        String plikes = viewPagerItems.get(position).getpLikes();
         String pUid = viewPagerItems.get(position).getUid();
         holder.tvHeading.setText(viewPagerItem.Heding);
         holder.tvHeading2.setText(viewPagerItem.Heding2);
@@ -65,7 +65,7 @@ public class VPAdapter extends RecyclerView.Adapter<VPAdapter.ViewHolder> {
         holder.likeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int plikes = Integer.parseInt(viewPagerItems.get(position).getpLike());
+                int plikes = Integer.parseInt(viewPagerItems.get(position).getpLikes());
                 mProcesslike = true ;
                 final  String postIde = viewPagerItems.get(position).getUid();
                 likesRef.addValueEventListener(new ValueEventListener() {
