@@ -179,7 +179,7 @@ public class chat extends AppCompatActivity {
 
                             }
                             String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-                            userstatus.setText("Nhìn thấy lần cuối:" + timedate);
+                            userstatus.setText(timedate);
                         }
                     }
                     name.setText(nameh);
