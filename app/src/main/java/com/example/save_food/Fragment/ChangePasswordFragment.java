@@ -2,6 +2,7 @@ package com.example.save_food.Fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +15,19 @@ import androidx.fragment.app.Fragment;
 
 import com.example.save_food.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class ChangePasswordFragment extends Fragment {
 
     private View mView;
-    private TextInputLayout edtNewPass;
+    private TextInputLayout edtNewPass, edtOldPass;
     private Button btnChangePass;
     ProgressDialog progressDialog;
     @Nullable
@@ -34,7 +39,15 @@ public class ChangePasswordFragment extends Fragment {
         btnChangePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickChangePassword();
+                String strNewPassword = edtNewPass.getEditText().getText().toString().trim();
+                String strOldPassword = edtOldPass.getEditText().getText().toString().trim();
+                if (TextUtils.isEmpty(strOldPassword)){
+                    Toast.makeText(getActivity(), "Hãy nhập password cũ!!!!", Toast.LENGTH_SHORT).show();
+                    return;
+                } if (strNewPassword.length()<6){
+                    Toast.makeText(getActivity(), "Mật khẩu mới phải trên 6 kí tự!!!!", Toast.LENGTH_SHORT).show();
+                }
+                onClickChangePassword(strOldPassword, strNewPassword);
             }
         });
         return mView;
@@ -42,25 +55,41 @@ public class ChangePasswordFragment extends Fragment {
 
     private void initUi(){
         progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading...");
         edtNewPass = mView.findViewById(R.id.edt_new_pass);
+        edtOldPass = mView.findViewById(R.id.edt_old_pass);
         btnChangePass = mView.findViewById(R.id.btnChangePass);
     }
 
-    private void onClickChangePassword() {
-            String strNewPassword = edtNewPass.getEditText().getText().toString().trim();
-            progressDialog.show();
+    private void onClickChangePassword(String strOldPassword, final String strNewPassword) {
+        progressDialog.show();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        user.updatePassword(strNewPassword)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Mật khẩu của bạn đã được thay đổi!!!!", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
+        AuthCredential authCredential = EmailAuthProvider.getCredential(user.getEmail(), strOldPassword);
+            user.reauthenticate(authCredential)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    user.updatePassword(strNewPassword)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                               progressDialog.dismiss();
+                                                    Toast.makeText(getActivity(), "Mật khẩu đã được thay đổi!!!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), "Không thể thay đổi mật khẩu", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
+                    });
+
     }
 
 //    private void reAuthenticate(){

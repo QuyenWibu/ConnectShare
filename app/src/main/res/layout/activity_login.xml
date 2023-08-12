@@ -87,6 +87,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
             android:layout_width="match_parent"
+            app:passwordToggleEnabled="true"
             android:layout_height="match_parent"
             android:background="@drawable/shape"
             android:textAppearance="@style/place_holde"
@@ -148,12 +149,13 @@
         android:layout_gravity="center"
         android:gravity="center">
 
-        <com.facebook.login.widget.LoginButton
+        <Button
             android:id="@+id/btnfb"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:background="@drawable/facebook"
             android:layout_marginEnd="100dp"
-            android:contentDescription="@string/buttonfb"/>
+            android:contentDescription="@string/buttonfb" />
         <Button
             android:id="@+id/btngg"
             android:layout_width="60dp"

@@ -23,6 +23,7 @@
     <string name="buttongg">Buton Google</string>
     <string name="stringacc">Dont have an account?</string>
     <string name="newpas">New password</string>
+    <string name="oldpass">Old password</string>
     <string name="changepas">Change password</string>
     <string name="change">Change</string>
     <string name="nameprofile">User Name</string>

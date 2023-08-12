@@ -26,6 +26,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -54,6 +55,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -81,29 +83,54 @@ public class loginActivity extends AppCompatActivity {
         mgg   = findViewById(R.id.btngg);
         backSignup   = findViewById(R.id.backSignup);
         OpenForgetPass = findViewById(R.id.linerlayoutforgetpass);
-        LoginButton loginButton = findViewById(R.id.btnfb);
+//        LoginButton loginButton = findViewById(R.id.btnfb);
+        mfb=findViewById(R.id.btnfb);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading....");
         checkbox();
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
 
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
+//        loginButton.setReadPermissions("email", "public_profile");
+//        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+//                handleFacebookAccessToken(loginResult.getAccessToken());
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                Log.d(TAG, "facebook:onCancel");
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error) {
+//                Log.d(TAG, "facebook:onError", error);
+//            }
+//        });
+        LoginManager.getInstance().registerCallback(mCallbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.d("Success", "Login");
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+                    }
 
-            @Override
-            public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
-            }
+                    @Override
+                    public void onCancel() {
+                        Toast.makeText(loginActivity.this, "Login Cancel", Toast.LENGTH_LONG).show();
+                    }
 
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Toast.makeText(loginActivity.this, exception.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+        mfb.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
+            public void onClick(View view) {
+                LoginManager.getInstance().logInWithReadPermissions(loginActivity.this, Arrays.asList("email", "public_profile"));
             }
         });
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
