@@ -136,7 +136,7 @@ public class VPAdapter extends RecyclerView.Adapter<VPAdapter.ViewHolder> {
             }
         });
     }
-private void setLikes(ViewHolder holder,String postKey ){
+    private void setLikes(ViewHolder holder,String postKey ){
         likesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -154,7 +154,7 @@ private void setLikes(ViewHolder holder,String postKey ){
 
             }
         });
-}
+    }
     @Override
     public int getItemCount() {
         return viewPagerItems.size();

@@ -79,6 +79,7 @@ public class ChangePasswordFragment extends Fragment {
                                             }).addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
+                                                    progressDialog.dismiss();
                                                     Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
@@ -86,6 +87,7 @@ public class ChangePasswordFragment extends Fragment {
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
                             Toast.makeText(getActivity(), "Không thể thay đổi mật khẩu", Toast.LENGTH_SHORT).show();
                         }
                     });

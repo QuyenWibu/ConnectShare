@@ -145,13 +145,13 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                         && !TextUtils.isEmpty(DonGia_Upload.getText().toString())
                                         && !DiaChi_Upload.getText().toString().isEmpty()
                                         && !ThoiGianHetHan_Upload.getText().toString().isEmpty() ){
-                                            ThongTin_UpLoadClass thongTin_upLoadClass = new ThongTin_UpLoadClass(
-                                                    TenDonHang_Upload.getText().toString(),
-                                                    Integer.parseInt(DonGia_Upload.getText().toString()),
-                                                    DiaChi_Upload.getText().toString(),
-                                                    valueFromSpinner,
-                                                    ThoiGianHetHan_Upload.getText().toString(), valueFromSpinner2);
-                                            mData.child("ThongTin_UpLoad").child(uid).child(childCount+1+"").setValue(thongTin_upLoadClass);
+                                    ThongTin_UpLoadClass thongTin_upLoadClass = new ThongTin_UpLoadClass(
+                                            TenDonHang_Upload.getText().toString(),
+                                            Integer.parseInt(DonGia_Upload.getText().toString()),
+                                            DiaChi_Upload.getText().toString(),
+                                            valueFromSpinner,
+                                            ThoiGianHetHan_Upload.getText().toString(), valueFromSpinner2);
+                                    mData.child("ThongTin_UpLoad").child(uid).child(childCount+1+"").setValue(thongTin_upLoadClass);
                                     for(int i=0;i<uri.size();i++){
                                         uploadToFirebase(uri.get(i));
                                     }
@@ -163,7 +163,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                 else{
                                     Toast.makeText(UploadActivity.this, "Vui lòng thêm 1 ảnh và điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
                                 }
-                                    //  tv_post.setText(thongTin_upLoadClass.getTenDonHang());
+                                //  tv_post.setText(thongTin_upLoadClass.getTenDonHang());
 
                                 //truyền dữ liệu sang fragment_blank
 //                                fragmentManager = getSupportFragmentManager();
