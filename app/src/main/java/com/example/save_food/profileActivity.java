@@ -56,7 +56,7 @@ public class profileActivity extends AppCompatActivity {
     String storagepath = "Users_Profile_Cover_image/";
     String uid;
     CircleImageView set;
-    TextView editname;
+    TextView editname,user_email,user_phone;
     ProgressDialog pd;
     private static final int CAMERA_REQUEST = 100;
     private static final int STORAGE_REQUEST = 200;
@@ -77,6 +77,8 @@ public class profileActivity extends AppCompatActivity {
 
         editname = findViewById(R.id.name);
         set = findViewById(R.id.img_avatar);
+        user_email = findViewById(R.id.user_email);
+        user_phone = findViewById(R.id.user_phone);
         updateProfile = findViewById(R.id.updateButton);
         pd = new ProgressDialog(this);
         pd.setCanceledOnTouchOutside(false);
@@ -94,9 +96,13 @@ public class profileActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     String strname = "" + dataSnapshot1.child("name").getValue();
                     String image = "" + dataSnapshot1.child("image").getValue();
+                    String email = "" + dataSnapshot1.child("email").getValue();
+                    String phone = "" + dataSnapshot1.child("phone").getValue();
 
 
                     editname.setText(strname);
+                    user_email.setText(email);
+                    user_phone.setText(phone);
                     try {
                         if (!isDestroyed()) {
                             Glide.with(profileActivity.this).load(image).into(set);
@@ -129,7 +135,7 @@ public class profileActivity extends AppCompatActivity {
     }
 
     private void showEditProfileDialog() {
-        String options[] = {"Chỉnh sửa ảnh", "Chỉnh sửa tên"};
+        String options[] = {"Chỉnh sửa ảnh", "Chỉnh sửa tên","Số điện thoại"};
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setTitle("Chọn sự thay đổi");
         b.setItems(options, new DialogInterface.OnClickListener() {
@@ -142,7 +148,9 @@ public class profileActivity extends AppCompatActivity {
                 } else if (i == 1){
                     pd.setMessage("Cập nhật tên của bạn");
                     showNamephoneupdate("name");
-                }
+                } else if (i == 2){
+                    pd.setMessage("Cập nhật tên của bạn");
+                    showNamephoneupdate("phone");}
             }
         });
         b.create().show();

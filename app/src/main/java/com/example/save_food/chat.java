@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.nfc.Tag;
@@ -16,6 +17,8 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -27,10 +30,13 @@ import android.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,6 +58,7 @@ import com.example.save_food.notification.Token;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -64,6 +71,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,17 +84,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class chat extends AppCompatActivity {
-    Toolbar toolbar;
+public class chat extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+Toolbar toolbar;
     RecyclerView recyclerView;
     ImageView profile, block;
     TextView name, userstatus;
+    CircularImageView imgAvatar;
+    TextView tvname,tvPhone;
     EditText msg;
     ActionBar actionBar;
     ImageButton send, attach;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
     FirebaseAuth firebaseAuth;
     String hisUid, myuid, image;
     ValueEventListener valueEventListener;
@@ -102,6 +116,7 @@ public class chat extends AppCompatActivity {
     Uri imageuri;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
+    ImageButton more;
     private boolean notify = false;
 
     @Override
@@ -117,6 +132,13 @@ public class chat extends AppCompatActivity {
         msg = findViewById(R.id.messaget);
         send = findViewById(R.id.sendmsg);
         attach = findViewById(R.id.attachbtn);
+        more = findViewById(R.id.more);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        imgAvatar = navigationView.getHeaderView(0).findViewById(R.id.img_avatar);
+        tvname = navigationView.getHeaderView(0).findViewById(R.id.tvName);
+        tvPhone = navigationView.getHeaderView(0).findViewById(R.id.tvPhone);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -154,6 +176,14 @@ public class chat extends AppCompatActivity {
                 msg.setText("");
             }
         });
+        more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+                    drawerLayout.isDrawerOpen(GravityCompat.START);
+                }
+            }
+        });
 
         Query userquery = users.orderByChild("uid").equalTo(hisUid);
         userquery.addValueEventListener(new ValueEventListener() {
@@ -163,6 +193,7 @@ public class chat extends AppCompatActivity {
                 // retrieve user data
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     String nameh = "" + dataSnapshot1.child("name").getValue();
+                    String phone = "" + dataSnapshot1.child("phone").getValue();
                     image = "" + dataSnapshot1.child("image").getValue();
                     String onlinestatus = "" + dataSnapshot1.child("onlineStatus").getValue();
                     String typingto = "" + dataSnapshot1.child("typingTo").getValue();
@@ -183,8 +214,15 @@ public class chat extends AppCompatActivity {
                         }
                     }
                     name.setText(nameh);
+                    tvname.setText(nameh);
+                    tvPhone.setText(phone);
                     try {
                         Glide.with(chat.this).load(image).placeholder(R.drawable.person).into(profile);
+                    } catch (Exception ignored) {
+
+                    }
+                    try {
+                        Glide.with(chat.this).load(image).placeholder(R.drawable.person).into(imgAvatar);
                     } catch (Exception ignored) {
 
                     }
@@ -221,6 +259,12 @@ public class chat extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
