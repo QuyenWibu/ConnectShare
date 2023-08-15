@@ -33,9 +33,13 @@
         android:theme="@style/Theme.Save_Food"
         tools:targetApi="31">
         <activity
-            android:name=".loginActivity"
+            android:name=".SplashActivity"
             android:theme="@style/ThemeNo"
             android:exported="false" />
+        <activity
+            android:name=".loginActivity"
+            android:exported="false"
+            android:theme="@style/ThemeNo" />
         <activity
             android:name=".chat"
             android:exported="false"
@@ -84,7 +88,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".OnboardingActivity"
             android:exported="true"
             android:theme="@style/ThemeNo">
             <intent-filter>
