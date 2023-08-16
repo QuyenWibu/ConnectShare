@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -26,6 +28,16 @@ private ViewPagerAdapter viewPagerAdapter;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("PREFERENCE", MODE_PRIVATE);
+        String FirstTime = sharedPreferences.getString("FirstTimeInstall", "");
+        if(FirstTime.equals("Yes")){
+            startActivity(new Intent(OnboardingActivity.this, SplashActivity.class));
+
+        } else {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("FirstTimeInstall","Yes");
+            editor.apply();
+        }
         tvskip = findViewById(R.id.tv_skip);
         viewPager = findViewById(R.id.view_paper);
         layoutBottom = findViewById(R.id.layout_bottom);
