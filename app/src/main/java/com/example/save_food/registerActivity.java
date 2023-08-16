@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class registerActivity extends AppCompatActivity {
@@ -31,7 +33,7 @@ public class registerActivity extends AppCompatActivity {
     FirebaseAuth auth;
     Button btnLog;
     TextView acc;
-    ProgressDialog dialog;
+    BeautifulProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,11 @@ public class registerActivity extends AppCompatActivity {
         edtemail   = findViewById(R.id.email);
         edtpass   = findViewById(R.id.password);
         btnLog   = findViewById(R.id.btnlog);
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Loading....");
+        dialog = new BeautifulProgressDialog(registerActivity.this, BeautifulProgressDialog.withGIF, "Please wait");
+        Uri myUri = Uri.fromFile(new File("//android_asset/gif_food_and_smile.gif"));
+        dialog.setGifLocation(myUri);
+        dialog.setLayoutColor(getResources().getColor(R.color.BeautifulProgressDialogBg));
+        dialog.setMessageColor(getResources().getColor(R.color.white));
         acc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

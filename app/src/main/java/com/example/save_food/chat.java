@@ -77,6 +77,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -441,8 +442,11 @@ Toolbar toolbar;
 
     private void sendImageMessage(Uri imageuri) throws IOException {
         notify = true;
-        final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("Đang gửi hình ảnh");
+        final BeautifulProgressDialog dialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, "Please wait");
+        Uri myUri = Uri.fromFile(new File("//android_asset/gif_food_and_smile.gif"));
+        dialog.setGifLocation(myUri);
+        dialog.setLayoutColor(getResources().getColor(R.color.BeautifulProgressDialogBg));
+        dialog.setMessageColor(getResources().getColor(R.color.white));
         dialog.show();
 
         // If we are sending image as a message

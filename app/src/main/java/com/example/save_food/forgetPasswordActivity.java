@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,13 +16,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.File;
+
 public class forgetPasswordActivity extends AppCompatActivity {
 
     private Button btnForgetpass,Opensignup;
     private String email;
     private EditText Foremail;
     private FirebaseAuth mAuth;
-    ProgressDialog progressDialog;
+    BeautifulProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +36,11 @@ public class forgetPasswordActivity extends AppCompatActivity {
         Foremail = findViewById(R.id.Foremail);
         btnForgetpass = findViewById(R.id.btnForgetpass);
         Opensignup = findViewById(R.id.Opensignup);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading....");
+        progressDialog = new BeautifulProgressDialog(forgetPasswordActivity.this, BeautifulProgressDialog.withGIF, "Please wait");
+        Uri myUri = Uri.fromFile(new File("//android_asset/gif_food_and_smile.gif"));
+        progressDialog.setGifLocation(myUri);
+        progressDialog.setLayoutColor(getResources().getColor(R.color.BeautifulProgressDialogBg));
+        progressDialog.setMessageColor(getResources().getColor(R.color.white));
         Opensignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

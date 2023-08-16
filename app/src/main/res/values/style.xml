@@ -37,5 +37,8 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#A6263A29</item>
     </style>
+    <style name="RoundedCornersDialog_Mid" parent="@style/Theme.MaterialComponents.Dialog">
+    <item name="dialogCornerRadius">15dp</item>
+    </style>
 
 </resources>
