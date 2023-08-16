@@ -247,6 +247,10 @@ public class loginActivity extends AppCompatActivity {
                     DatabaseReference reference = database.getReference("Users");
 
                     reference.child(uid).setValue(hashMap);
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("email", "true");
+                    editor.apply();
                     Toast.makeText(loginActivity.this, "Login",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(loginActivity.this, MainActivity.class));
                 } else {
@@ -288,6 +292,10 @@ public class loginActivity extends AppCompatActivity {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference reference = database.getReference("Users");
                             reference.child(uid).setValue(hashMap);
+                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("email", "true");
+                            editor.apply();
                             startActivity(new Intent(loginActivity.this, MainActivity.class));
 
                         } else {
