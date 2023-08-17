@@ -247,6 +247,8 @@ public class loginActivity extends AppCompatActivity {
                     hashMap.put("uid", uid);
                     hashMap.put("name", name);
                     hashMap.put("phone", "");
+                    hashMap.put("typingTo", "noOne");
+                    hashMap.put("onlineStatus", "online");
                     hashMap.put("image", "https://firebasestorage.googleapis.com/v0/b/savefood-a697c.appspot.com/o/imagedef%2Fimage.png?alt=media");
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -293,8 +295,10 @@ public class loginActivity extends AppCompatActivity {
                             HashMap<Object, String> hashMap = new HashMap<>();
                             hashMap.put("email", email);
                             hashMap.put("uid", uid);
+                            hashMap.put("typingTo", "noOne");
                             hashMap.put("name", name);
                             hashMap.put("phone", "");
+                            hashMap.put("onlineStatus", "online");
                             hashMap.put("image", "https://firebasestorage.googleapis.com/v0/b/savefood-a697c.appspot.com/o/imagedef%2Fimage.png?alt=media");
 
                             FirebaseDatabase database = FirebaseDatabase.getInstance();

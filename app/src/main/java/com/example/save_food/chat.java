@@ -14,7 +14,9 @@ import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -93,6 +95,8 @@ public class chat extends AppCompatActivity implements NavigationView.OnNavigati
 Toolbar toolbar;
     RecyclerView recyclerView;
     ImageView profile, block;
+    ValueEventListener seenListener;
+    DatabaseReference userRefForSeen;
     TextView name, userstatus;
     CircularImageView imgAvatar;
     TextView tvname,tvPhone;
@@ -177,6 +181,26 @@ Toolbar toolbar;
                 msg.setText("");
             }
         });
+        msg.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(s.toString().trim().length() == 0){
+                        checkTypingStatus("noOne");
+                    } else {
+                        checkTypingStatus(hisUid);
+                    }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -236,9 +260,32 @@ Toolbar toolbar;
             }
         });
         readMessages();
+        seenMessage();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkPermissions();
         }
+    }
+
+    private void seenMessage() {
+        userRefForSeen = FirebaseDatabase.getInstance().getReference("Chats");
+        seenListener = userRefForSeen.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    ModelChat chat = dataSnapshot.getValue(ModelChat.class);
+                    if(chat.getReceiver().equals(myuid) && chat.getSender().equals(hisUid)){
+                        HashMap<String, Object> hasSeenHashMap = new HashMap<>();
+                        hasSeenHashMap.put("dilihat", true);
+                        dataSnapshot.getRef().updateChildren(hasSeenHashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void checkPermissions(){
@@ -272,6 +319,7 @@ Toolbar toolbar;
         String timestamp = String.valueOf(System.currentTimeMillis());
         checkOnlineStatus(timestamp);
         checkTypingStatus("noOne");
+        userRefForSeen.removeEventListener(seenListener);
     }
 
     @Override

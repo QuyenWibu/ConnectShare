@@ -88,6 +88,8 @@ public class registerActivity extends AppCompatActivity {
                             hashMap.put("email", email);
                             hashMap.put("uid", uid);
                             hashMap.put("name", "");
+                            hashMap.put("onlineStatus", "online");
+                            hashMap.put("typingTo", "noOne");
                             hashMap.put("phone", "");
                             hashMap.put("image", "https://firebasestorage.googleapis.com/v0/b/savefood-a697c.appspot.com/o/imagedef%2Fimage.png?alt=media");
 
