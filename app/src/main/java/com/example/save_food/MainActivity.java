@@ -1,5 +1,6 @@
 package com.example.save_food;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -200,7 +202,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         super.onBackPressed();
     }
-
     private void openFragment(Fragment fragment) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.content_frame, fragment);

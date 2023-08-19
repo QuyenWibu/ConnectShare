@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -71,10 +72,17 @@ public class profileActivity extends AppCompatActivity {
     Uri imageuri;
     String profileOrCoverPhoto;
     Button updateProfile;
+    ActionBar actionBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("");
+
 
         editname = findViewById(R.id.name);
         set = findViewById(R.id.img_avatar);

@@ -121,13 +121,14 @@ Toolbar toolbar;
     Uri imageuri;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
-    ImageButton more;
+    ImageButton more, back;
     private boolean notify = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
         firebaseAuth = FirebaseAuth.getInstance();
 
         // initialise the text views and layouts
@@ -138,6 +139,7 @@ Toolbar toolbar;
         send = findViewById(R.id.sendmsg);
         attach = findViewById(R.id.attachbtn);
         more = findViewById(R.id.more);
+        back = findViewById(R.id.back);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -207,6 +209,12 @@ Toolbar toolbar;
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)){
                     drawerLayout.isDrawerOpen(GravityCompat.START);
                 }
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 
