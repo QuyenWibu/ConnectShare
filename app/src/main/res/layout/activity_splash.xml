@@ -4,11 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/anhraucuqua"
     android:gravity="center"
     android:layout_height="match_parent"
     tools:context=".SplashActivity">
-
     <View
         android:layout_width="300dp"
         android:layout_height="40dp"
@@ -17,10 +15,4 @@
         android:layout_marginBottom="23dp"
         android:background="@drawable/logo_savefood"
         android:gravity="center" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:text="App như con cc"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:layout_height="wrap_content"/>
 </LinearLayout>
