@@ -14,7 +14,9 @@ import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -77,6 +79,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -92,6 +95,8 @@ public class chat extends AppCompatActivity implements NavigationView.OnNavigati
 Toolbar toolbar;
     RecyclerView recyclerView;
     ImageView profile, block;
+    ValueEventListener seenListener;
+    DatabaseReference userRefForSeen;
     TextView name, userstatus;
     CircularImageView imgAvatar;
     TextView tvname,tvPhone;
@@ -116,13 +121,14 @@ Toolbar toolbar;
     Uri imageuri;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
-    ImageButton more;
+    ImageButton more, back;
     private boolean notify = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
         firebaseAuth = FirebaseAuth.getInstance();
 
         // initialise the text views and layouts
@@ -133,6 +139,7 @@ Toolbar toolbar;
         send = findViewById(R.id.sendmsg);
         attach = findViewById(R.id.attachbtn);
         more = findViewById(R.id.more);
+        back = findViewById(R.id.back);
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -176,12 +183,38 @@ Toolbar toolbar;
                 msg.setText("");
             }
         });
+        msg.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(s.toString().trim().length() == 0){
+                        checkTypingStatus("noOne");
+                    } else {
+                        checkTypingStatus(hisUid);
+                    }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)){
                     drawerLayout.isDrawerOpen(GravityCompat.START);
                 }
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 
@@ -235,9 +268,32 @@ Toolbar toolbar;
             }
         });
         readMessages();
+        seenMessage();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkPermissions();
         }
+    }
+
+    private void seenMessage() {
+        userRefForSeen = FirebaseDatabase.getInstance().getReference("Chats");
+        seenListener = userRefForSeen.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    ModelChat chat = dataSnapshot.getValue(ModelChat.class);
+                    if(chat.getReceiver().equals(myuid) && chat.getSender().equals(hisUid)){
+                        HashMap<String, Object> hasSeenHashMap = new HashMap<>();
+                        hasSeenHashMap.put("dilihat", true);
+                        dataSnapshot.getRef().updateChildren(hasSeenHashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void checkPermissions(){
@@ -271,6 +327,7 @@ Toolbar toolbar;
         String timestamp = String.valueOf(System.currentTimeMillis());
         checkOnlineStatus(timestamp);
         checkTypingStatus("noOne");
+        userRefForSeen.removeEventListener(seenListener);
     }
 
     @Override
@@ -441,8 +498,11 @@ Toolbar toolbar;
 
     private void sendImageMessage(Uri imageuri) throws IOException {
         notify = true;
-        final ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("Đang gửi hình ảnh");
+        final BeautifulProgressDialog dialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withGIF, "Please wait");
+        Uri myUri = Uri.fromFile(new File("//android_asset/gif_food_and_smile.gif"));
+        dialog.setGifLocation(myUri);
+        dialog.setLayoutColor(getResources().getColor(R.color.BeautifulProgressDialogBg));
+        dialog.setMessageColor(getResources().getColor(R.color.white));
         dialog.show();
 
         // If we are sending image as a message

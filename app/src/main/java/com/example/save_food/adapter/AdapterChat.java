@@ -93,6 +93,15 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.Myholder> {
         } catch (Exception ignored) {
 
         }
+        if(i==list.size()-1){
+            if(list.get(i).isDilihat()){
+                holder.isSee.setText("đã xem");
+            } else {
+                holder.isSee.setText("đã gửi");
+            }
+        }else {
+            holder.isSee.setVisibility(View.GONE);
+        }
         if (type.equals("text")) {
             holder.message.setVisibility(View.VISIBLE);
             holder.mimage.setVisibility(View.GONE);

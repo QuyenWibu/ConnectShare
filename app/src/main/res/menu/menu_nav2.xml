@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/hongcogihet"
-        android:title="Favorites"
-        android:icon="@drawable/bag" />
-
     <item
         android:id="@+id/Users_nav"
         android:title="All user"
-        android:icon="@drawable/user" />
-
+        android:icon="@drawable/icon5"/>
+    <item
+        android:id="@+id/hongcogihet"
+        android:title="Favorites"
+        android:icon="@drawable/icon4"/>
     <item
         android:id="@+id/chat_nav"
         android:title="Messenger"
-        android:icon="@drawable/message" />
+        android:icon="@drawable/message"/>
 
 </menu>

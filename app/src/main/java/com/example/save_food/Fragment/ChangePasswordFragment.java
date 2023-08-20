@@ -1,6 +1,7 @@
 package com.example.save_food.Fragment;
 
 import android.app.ProgressDialog;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,7 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.save_food.BeautifulProgressDialog;
 import com.example.save_food.R;
+import com.example.save_food.profileActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,12 +27,14 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
+
 public class ChangePasswordFragment extends Fragment {
 
     private View mView;
     private TextInputLayout edtNewPass, edtOldPass;
     private Button btnChangePass;
-    ProgressDialog progressDialog;
+    BeautifulProgressDialog progressDialog;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,8 +59,11 @@ public class ChangePasswordFragment extends Fragment {
     }
 
     private void initUi(){
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Loading...");
+        progressDialog = new BeautifulProgressDialog(getActivity(), BeautifulProgressDialog.withGIF, "Please wait");
+        Uri myUri = Uri.fromFile(new File("//android_asset/gif_food_and_smile.gif"));
+        progressDialog.setGifLocation(myUri);
+        progressDialog.setLayoutColor(getResources().getColor(R.color.BeautifulProgressDialogBg));
+        progressDialog.setMessageColor(getResources().getColor(R.color.white));
         edtNewPass = mView.findViewById(R.id.edt_new_pass);
         edtOldPass = mView.findViewById(R.id.edt_old_pass);
         btnChangePass = mView.findViewById(R.id.btnChangePass);

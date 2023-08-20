@@ -76,6 +76,7 @@
         -->
         <activity
             android:name=".profileActivity"
+            android:theme="@style/AppThemeNo1"
             android:exported="false" />
         <activity
             android:name=".forgetPasswordActivity"

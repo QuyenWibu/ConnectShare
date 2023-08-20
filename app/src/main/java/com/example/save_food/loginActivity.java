@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -56,9 +57,11 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
+import com.example.save_food.BeautifulProgressDialog;
 
 public class loginActivity extends AppCompatActivity {
     EditText edtemail, edtpass;
@@ -71,7 +74,7 @@ public class loginActivity extends AppCompatActivity {
     GoogleSignInClient gsc;
     GoogleSignInOptions gso;
     CallbackManager mCallbackManager;
-    ProgressDialog progressDialog;
+    BeautifulProgressDialog progressDialog;
     public static String SHARED_PREFS = "sharedPrefs";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +89,14 @@ public class loginActivity extends AppCompatActivity {
         OpenForgetPass = findViewById(R.id.linerlayoutforgetpass);
 //        LoginButton loginButton = findViewById(R.id.btnfb);
         mfb=findViewById(R.id.btnfb);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading....");
         checkbox();
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
-
+        progressDialog = new BeautifulProgressDialog(loginActivity.this, BeautifulProgressDialog.withGIF, "Please wait");
+        Uri myUri = Uri.fromFile(new File("//android_asset/gif_food_and_smile.gif"));
+        progressDialog.setGifLocation(myUri);
+        progressDialog.setLayoutColor(getResources().getColor(R.color.BeautifulProgressDialogBg));
+        progressDialog.setMessageColor(getResources().getColor(R.color.white));
 //        loginButton.setReadPermissions("email", "public_profile");
 //        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
 //            @Override
@@ -242,6 +247,8 @@ public class loginActivity extends AppCompatActivity {
                     hashMap.put("uid", uid);
                     hashMap.put("name", name);
                     hashMap.put("phone", "");
+                    hashMap.put("typingTo", "noOne");
+                    hashMap.put("onlineStatus", "online");
                     hashMap.put("image", "https://firebasestorage.googleapis.com/v0/b/savefood-a697c.appspot.com/o/imagedef%2Fimage.png?alt=media");
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -262,6 +269,7 @@ public class loginActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
                 Toast.makeText(loginActivity.this, ""+e.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
@@ -287,8 +295,10 @@ public class loginActivity extends AppCompatActivity {
                             HashMap<Object, String> hashMap = new HashMap<>();
                             hashMap.put("email", email);
                             hashMap.put("uid", uid);
+                            hashMap.put("typingTo", "noOne");
                             hashMap.put("name", name);
                             hashMap.put("phone", "");
+                            hashMap.put("onlineStatus", "online");
                             hashMap.put("image", "https://firebasestorage.googleapis.com/v0/b/savefood-a697c.appspot.com/o/imagedef%2Fimage.png?alt=media");
 
                             FirebaseDatabase database = FirebaseDatabase.getInstance();

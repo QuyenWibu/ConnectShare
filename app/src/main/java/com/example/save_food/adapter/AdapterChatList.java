@@ -2,6 +2,7 @@ package com.example.save_food.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,12 @@ import com.example.save_food.models.ModelUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterChatList extends RecyclerView.Adapter<AdapterChatList.Myholder> {
 
@@ -56,9 +60,11 @@ public class AdapterChatList extends RecyclerView.Adapter<AdapterChatList.Myhold
 		String strName = usersList.get(position).getName();
 		String lastmess = lastMessageMap.get(hisuid);
 		holder.name.setText(strName);
-
-
-
+		if(usersList.get(position).getOnlineStatus().equals("online")){
+			holder.status.setImageResource(R.drawable.circle_online);
+		} else {
+			holder.status.setImageResource(R.drawable.circle_offline);
+		}
 		// if no last message then Hide the layout
 		if (lastmess == null || lastmess.equals("default")) {
 			holder.lastmessage.setVisibility(View.GONE);
@@ -97,7 +103,8 @@ public class AdapterChatList extends RecyclerView.Adapter<AdapterChatList.Myhold
 	}
 
 	static class Myholder extends RecyclerView.ViewHolder {
-		ImageView profile, status, seen;
+		ImageView profile, seen;
+		ImageView status;
 		TextView name, lastmessage;
 
 		public Myholder(@NonNull View itemView) {

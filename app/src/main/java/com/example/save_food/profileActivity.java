@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -42,6 +43,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -57,7 +59,7 @@ public class profileActivity extends AppCompatActivity {
     String uid;
     CircleImageView set;
     TextView editname,user_email,user_phone;
-    ProgressDialog pd;
+    BeautifulProgressDialog pd;
     private static final int CAMERA_REQUEST = 100;
     private static final int STORAGE_REQUEST = 200;
     private static final int IMAGEPICK_GALLERY_REQUEST = 300;
@@ -70,18 +72,28 @@ public class profileActivity extends AppCompatActivity {
     Uri imageuri;
     String profileOrCoverPhoto;
     Button updateProfile;
+    ActionBar actionBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("");
+
 
         editname = findViewById(R.id.name);
         set = findViewById(R.id.img_avatar);
         user_email = findViewById(R.id.user_email);
         user_phone = findViewById(R.id.user_phone);
         updateProfile = findViewById(R.id.updateButton);
-        pd = new ProgressDialog(this);
-        pd.setCanceledOnTouchOutside(false);
+        pd = new BeautifulProgressDialog(profileActivity.this, BeautifulProgressDialog.withGIF, "Please wait");
+        Uri myUri = Uri.fromFile(new File("//android_asset/gif_food_and_smile.gif"));
+        pd.setGifLocation(myUri);
+        pd.setLayoutColor(getResources().getColor(R.color.BeautifulProgressDialogBg));
+        pd.setMessageColor(getResources().getColor(R.color.white));
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -125,7 +137,6 @@ public class profileActivity extends AppCompatActivity {
         updateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pd.setMessage("Updating Profile");
                 showEditProfileDialog();
             }
         });
@@ -245,6 +256,7 @@ public class profileActivity extends AppCompatActivity {
 
     }
     private void showNamephoneupdate(String key) {
+        pd.show();
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setTitle("Cập nhật");
         LinearLayout linearLayout = new LinearLayout(this);
@@ -268,16 +280,19 @@ public class profileActivity extends AppCompatActivity {
                     databaseReference.child(firebaseUser.getUid()).updateChildren(r).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
+                            pd.dismiss();
                             Toast.makeText(getApplicationContext(), "Cập nhật....", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            pd.dismiss();
                             Toast.makeText(getApplicationContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
 
                         }
                     });
                 } else {
+                    pd.dismiss();
                     Toast.makeText(getApplicationContext(), "hãy nhập "+key, Toast.LENGTH_SHORT).show();
                 }
             }
