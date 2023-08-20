@@ -4,16 +4,16 @@
     <item
         android:id="@+id/hongcogihet"
         android:title="Favorites"
-        android:icon="@drawable/icon4"/>
+        android:icon="@drawable/bag" />
 
     <item
         android:id="@+id/Users_nav"
         android:title="All user"
-        android:icon="@drawable/icon5"/>
+        android:icon="@drawable/user" />
 
     <item
         android:id="@+id/chat_nav"
         android:title="Messenger"
-        android:icon="@drawable/message"/>
+        android:icon="@drawable/message" />
 
 </menu>

@@ -75,28 +75,22 @@
         android:text="@string/pass_title"
         android:textAppearance="@style/title"
         android:translationY="-1.02sp" />
-
     <LinearLayout
-        android:id="@+id/shape_2"
+        android:id="@+id/para_2"
         android:layout_width="334dp"
         android:layout_height="50dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
-        android:gravity="center">
-
+        >
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
-            android:layout_width="match_parent"
-            app:passwordToggleEnabled="true"
-            android:layout_height="match_parent"
-            android:background="@drawable/shape"
-            android:textAppearance="@style/place_holde"
-            android:hint="@string/hint_pass"
-            android:inputType="textPassword"
+            android:layout_width="334dp"
+            android:layout_height="50dp"
+            android:textColor="@color/black"
             android:padding="10dp"
-             />
-
+            android:hint="@string/hint_pass"
+            android:textAppearance="@style/place_holde"
+            android:background="@drawable/shape"/>
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/linerlayoutforgetpass"
@@ -123,8 +117,8 @@
         android:layout_marginBottom="35dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="@drawable/rectangle"
-        >
+        android:background="@drawable/rectangle">
+
         <Button
             android:id="@+id/btnlog"
             android:layout_width="214dp"
@@ -148,6 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center">
+
         <ImageButton
             android:id="@+id/btnfb"
             android:layout_width="60dp"
@@ -155,13 +150,16 @@
             android:background="@drawable/facebook"
             android:layout_marginEnd="100dp"
             android:contentDescription="@string/buttonfb" />
+
         <ImageButton
             android:id="@+id/btngg"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/google"
             android:contentDescription="@string/buttongg" />
+
     </LinearLayout>
+
     <LinearLayout
             android:id="@+id/backSignup"
             android:layout_width="wrap_content"
@@ -179,5 +177,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/signup" />
+
         </LinearLayout>
+
 </LinearLayout>

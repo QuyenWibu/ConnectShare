@@ -10,7 +10,11 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="welcom to my app"
+        android:text="Rescue the food around you"
         android:layout_height="wrap_content"/>
-
+    <View
+        android:layout_width="224dp"
+        android:layout_height="434dp"
+        android:background="@drawable/onboarding"
+        />
 </LinearLayout>

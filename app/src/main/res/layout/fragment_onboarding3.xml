@@ -10,15 +10,17 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="dô đi rồi bt"
+        android:text="Let's save food together"
         android:layout_height="wrap_content"/>
-
+    <View
+        android:layout_width="114.47dp"
+        android:layout_height="434dp"
+        android:background="@drawable/onboarding2" />
     <Button
         android:layout_width="200dp"
-        android:background="@color/blue"
+        android:background="@color/purple_500"
         android:textColor="@color/white"
-        android:text="Vô app"
-        android:layout_marginTop="30dp"
+        android:text="Login Now"
         android:id="@+id/btn_get_start"
         android:layout_height="wrap_content"/>
 

@@ -37,5 +37,4 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#A6263A29</item>
     </style>
-
 </resources>

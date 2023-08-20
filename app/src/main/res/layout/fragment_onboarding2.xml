@@ -10,7 +10,10 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="app toi co gi hot"
+        android:text="Stop wasting food"
         android:layout_height="wrap_content"/>
-
+    <View
+        android:layout_width="262dp"
+        android:layout_height="434dp"
+        android:background="@drawable/onboarding1" />
 </LinearLayout>
