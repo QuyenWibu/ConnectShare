@@ -208,6 +208,8 @@ Toolbar toolbar;
             public void onClick(View v) {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)){
                     drawerLayout.isDrawerOpen(GravityCompat.START);
+                }else {
+                    drawerLayout.openDrawer(GravityCompat.END);
                 }
             }
         });

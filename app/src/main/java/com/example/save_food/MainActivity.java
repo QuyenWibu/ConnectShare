@@ -115,26 +115,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
 
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.hongcogihet) {
-                    openFragment(new BlankFragment());
-                    return true;
-                }
-                else if(itemId != R.id.hongcogihet){
-                    Log.d("Fragment", "LỖI!!!");
-                }
-                else
-                if (itemId == R.id.Users_nav) {
-                    openFragment(new UsersFragment());
-                    return true;
-                }
-                else if (itemId == R.id.chat_nav) {
-                    openFragment(new ChatListFragment());
-                    return true;
+                switch (item.getItemId()) {
+                    case R.id.hongcogihet:
+                        openFragment(new BlankFragment());
+                        return true;
+                    case R.id.Users_nav:
+                        openFragment(new UsersFragment());
+                        return true;
+                    case R.id.chat_nav:
+                        openFragment(new ChatListFragment());
+                        return true;
                 }
                 return false;
             }
