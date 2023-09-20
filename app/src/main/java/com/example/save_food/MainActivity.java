@@ -1,9 +1,13 @@
 package com.example.save_food;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -11,7 +15,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -154,11 +157,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+    private boolean checkLocationPermission() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        return isGpsEnabled || isNetworkEnabled;
+    }
+    private void showLocationPermissionDialog() {
+        android.app.AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Yêu cầu bật vị trí");
+        builder.setMessage("Bạn cần bật vị trí để sử dụng ứng dụng. Vui lòng bật vị trí trong cài đặt.");
+
+        builder.setPositiveButton("Cài đặt", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton("Huỷ bỏ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
+    }
     @Override
     protected void onStart() {
         checkUserStatus();
         super.onStart();
+        if (!checkLocationPermission()) {
+            showLocationPermissionDialog();
+        } else {
+            // Tiếp tục xử lý hay hiển thị giao diện chính
+        }
     }
 
     @Override

@@ -77,7 +77,6 @@ public class BlankFragment extends Fragment {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 String name = snapshot.child("tenDonHang").getValue(String.class);
                                 String DiaChi = snapshot.child("diaChi").getValue(String.class);
-                                String plike = snapshot.child("plikes").getValue(String.class);
                                     DatabaseReference imgRef = chilref.child("Ảnh");
                                     imgRef.addChildEventListener(new ChildEventListener() {
                                         @Override
@@ -92,7 +91,7 @@ public class BlankFragment extends Fragment {
                                                     String linkhinh = snapshot.child("linkHinh").getValue(String.class);
 
                                                     Log.d("Firebase", "Key: " + key + " " + "value: " + linkhinh);
-                                                    ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, DiaChi,uid,plike);
+                                                    ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, DiaChi,uid);
                                                     viewPagerItemArrayList.add(viewPagerItem);
                                                     VPAdapter vpAdapter = new VPAdapter(viewPagerItemArrayList, getActivity());
                                                     viewPager2.setAdapter(vpAdapter);
