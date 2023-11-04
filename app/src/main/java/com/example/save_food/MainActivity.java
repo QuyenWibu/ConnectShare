@@ -212,6 +212,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(MainActivity.this, profileActivity.class));
         }else if (itemId == R.id.changepass) {
             openFragment(new ChangePasswordFragment());
+        }else if (itemId == R.id.report) {
+            startActivity(new Intent(MainActivity.this, reportActivity.class));
         }
         else if (itemId == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
