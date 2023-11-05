@@ -188,6 +188,7 @@ public class homeFragment extends Fragment {
                             // Kiểm tra xem nút con với ID của người dùng có tồn tại hay không
                             if (dataSnapshot.hasChild(uidList.get(userid))) {
                                 uidListupload.add(uidList.get(userid));
+                                    GetToaDo(uidListupload);
                                 Log.d("EEE", uidList.get(userid));
                                 // Thực hiện các thuật toán khác
                                 // ...
