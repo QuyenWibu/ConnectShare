@@ -84,6 +84,15 @@ public class loginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Get Firebase auth instance
+        auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() != null) {
+            startActivity(new Intent(loginActivity.this, MainActivity.class));
+            finish();
+        }else {
+            showAlertDialog();
+        }
         setContentView(R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
         edtemail   = findViewById(R.id.email);
@@ -94,7 +103,6 @@ public class loginActivity extends AppCompatActivity {
         OpenForgetPass = findViewById(R.id.linerlayoutforgetpass);
 //        LoginButton loginButton = findViewById(R.id.btnfb);
         mfb=findViewById(R.id.btnfb);
-        checkbox();
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         mCallbackManager = CallbackManager.Factory.create();
         progressDialog = new BeautifulProgressDialog(loginActivity.this, BeautifulProgressDialog.withGIF, "Please wait");
@@ -176,15 +184,6 @@ public class loginActivity extends AppCompatActivity {
         });
 
     }
-    private void checkbox(){
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        String check = sharedPreferences.getString("email", "");
-        if(check.equals("true")){
-            Toast.makeText(this, "Login succesfully", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
-        }
-    }
     private void log(){
         progressDialog.show();
         String email = edtemail.getText().toString().trim();
@@ -199,10 +198,6 @@ public class loginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
-                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("email", "true");
-                            editor.apply();
                             startActivity(new Intent(loginActivity.this, MainActivity.class));
                         } else {
                             progressDialog.dismiss();
@@ -232,7 +227,15 @@ public class loginActivity extends AppCompatActivity {
         }
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
+    private void showAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thông báo")
+                .setMessage("Tài khoản đã bị xóa hoặc không tồn tại.")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    Intent intent = new Intent(this, loginActivity.class);
+                })
+                .show();
+    }
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         progressDialog.show();
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -260,10 +263,6 @@ public class loginActivity extends AppCompatActivity {
                     DatabaseReference reference = database.getReference("Users");
 
                     reference.child(uid).setValue(hashMap);
-                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("email", "true");
-                    editor.apply();
                     Toast.makeText(loginActivity.this, "Login",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(loginActivity.this, MainActivity.class));
                 } else {
@@ -309,10 +308,6 @@ public class loginActivity extends AppCompatActivity {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference reference = database.getReference("Users");
                             reference.child(uid).setValue(hashMap);
-                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("email", "true");
-                            editor.apply();
                             startActivity(new Intent(loginActivity.this, MainActivity.class));
 
                         } else {
