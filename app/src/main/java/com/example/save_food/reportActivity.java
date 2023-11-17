@@ -1,5 +1,6 @@
 package com.example.save_food;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -16,6 +17,7 @@ public class reportActivity extends AppCompatActivity {
     // define objects for edit text and button
     Button button;
     String sendto;
+    ActionBar actionBar;
     EditText subject;
     EditText body;
 
@@ -28,7 +30,10 @@ public class reportActivity extends AppCompatActivity {
         subject = findViewById(R.id.editText2);
         body = findViewById(R.id.editText3);
         button = findViewById(R.id.button);
-
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("");
         sendto = "esavefood@gmail.com";
 
         // attach setOnClickListener to button with Intent object define in it
@@ -51,5 +56,10 @@ public class reportActivity extends AppCompatActivity {
             // startActivity with intent with chooser as Email client using createChooser function
             startActivity(Intent.createChooser(intent, "Choose an Email client :"));
         });
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
     }
 }

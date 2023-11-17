@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,6 +34,9 @@ public class registerActivity extends AppCompatActivity {
     EditText edtemail, edtpass;
     FirebaseAuth auth;
     Button btnLog;
+    Location currentLocation;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private final int FINE_PERMISSION_CODE = 1;
     TextView acc;
     BeautifulProgressDialog dialog;
 
@@ -82,7 +87,6 @@ public class registerActivity extends AppCompatActivity {
                             assert user != null;
                             String email = user.getEmail();
                             String uid = user.getUid();
-
 
                             HashMap<Object, String> hashMap = new HashMap<>();
                             hashMap.put("email", email);

@@ -2,17 +2,21 @@ package com.example.save_food;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Trace;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +30,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -42,6 +47,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -76,23 +84,18 @@ public class loginActivity extends AppCompatActivity {
 
     ImageButton mfb;
     ImageButton mgg;
+    Location currentLocation;
+    FusedLocationProviderClient fusedLocationProviderClient;
     GoogleSignInClient gsc;
     GoogleSignInOptions gso;
+    private final int FINE_PERMISSION_CODE = 1;
+    public static final String SHARED_PREFS = "sharedPrefs";
     CallbackManager mCallbackManager;
     BeautifulProgressDialog progressDialog;
-    public static String SHARED_PREFS = "sharedPrefs";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Get Firebase auth instance
-        auth = FirebaseAuth.getInstance();
 
-        if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(loginActivity.this, MainActivity.class));
-            finish();
-        }else {
-            showAlertDialog();
-        }
         setContentView(R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
         edtemail   = findViewById(R.id.email);
@@ -101,6 +104,9 @@ public class loginActivity extends AppCompatActivity {
         mgg   = findViewById(R.id.btngg);
         backSignup   = findViewById(R.id.backSignup);
         OpenForgetPass = findViewById(R.id.linerlayoutforgetpass);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        getLastLocation();
+        checkbox();
 //        LoginButton loginButton = findViewById(R.id.btnfb);
         mfb=findViewById(R.id.btnfb);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
@@ -184,6 +190,63 @@ public class loginActivity extends AppCompatActivity {
         });
 
     }
+    private void checkbox(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String check = sharedPreferences.getString("email", "");
+        if(check.equals("true")){
+            startActivity(new Intent(loginActivity.this, MainActivity.class));
+            finish();
+        } else{
+
+        }
+    }
+    private void getLastLocation(){
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_PERMISSION_CODE);
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location != null){
+                    currentLocation = location;
+
+                }
+            }
+        });
+    }
+    private void updateLocationOnLogin(FirebaseUser user) {
+        if (user != null) {
+            // Lấy vị trí hiện tại của thiết bị
+            // (Bạn cần xác định làm thế nào để lấy được vị trí, có thể sử dụng LocationManager hoặc FusedLocationProviderClient)
+            double latitude = currentLocation.getLatitude();  // Thay thế bằng giá trị thực tế
+            double longitude = currentLocation.getLongitude(); // Thay thế bằng giá trị thực tế
+
+            // Cập nhật thông tin vị trí lên Firebase Realtime Database
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
+
+            // Tạo một HashMap để chứa dữ liệu cần cập nhật
+            HashMap<String, Object> locationMap = new HashMap<>();
+            locationMap.put("Latitude", latitude);
+            locationMap.put("Longitude", longitude);
+
+            // Thực hiện cập nhật
+            userRef.updateChildren(locationMap)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                // Cập nhật thành công
+                                Log.d(TAG, "Location updated successfully");
+                            } else {
+                                // Cập nhật thất bại
+                                Log.w(TAG, "Error updating location", task.getException());
+                            }
+                        }
+                    });
+        }
+    }
     private void log(){
         progressDialog.show();
         String email = edtemail.getText().toString().trim();
@@ -195,9 +258,14 @@ public class loginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             progressDialog.dismiss();
+                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("email", "true");
+                            editor.apply();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
+                            updateLocationOnLogin(user);
                             startActivity(new Intent(loginActivity.this, MainActivity.class));
                         } else {
                             progressDialog.dismiss();
@@ -227,15 +295,7 @@ public class loginActivity extends AppCompatActivity {
         }
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
-    private void showAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thông báo")
-                .setMessage("Tài khoản đã bị xóa hoặc không tồn tại.")
-                .setPositiveButton("OK", (dialog, which) -> {
-                    Intent intent = new Intent(this, loginActivity.class);
-                })
-                .show();
-    }
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         progressDialog.show();
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -248,7 +308,7 @@ public class loginActivity extends AppCompatActivity {
                     String email = user.getEmail();
                     String uid = user.getUid();
                     String name = user.getDisplayName();
-
+                    updateLocationOnLogin(user);
 
                     HashMap<Object, String> hashMap = new HashMap<>();
                     hashMap.put("email", email);
@@ -263,6 +323,10 @@ public class loginActivity extends AppCompatActivity {
                     DatabaseReference reference = database.getReference("Users");
 
                     reference.child(uid).setValue(hashMap);
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("email", "true");
+                    editor.apply();
                     Toast.makeText(loginActivity.this, "Login",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(loginActivity.this, MainActivity.class));
                 } else {
@@ -294,7 +358,7 @@ public class loginActivity extends AppCompatActivity {
                             String email = user.getEmail();
                             String uid = user.getUid();
                             String name = user.getDisplayName();
-
+                            updateLocationOnLogin(user);
 
                             HashMap<Object, String> hashMap = new HashMap<>();
                             hashMap.put("email", email);
@@ -308,6 +372,10 @@ public class loginActivity extends AppCompatActivity {
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference reference = database.getReference("Users");
                             reference.child(uid).setValue(hashMap);
+                            SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("email", "true");
+                            editor.apply();
                             startActivity(new Intent(loginActivity.this, MainActivity.class));
 
                         } else {

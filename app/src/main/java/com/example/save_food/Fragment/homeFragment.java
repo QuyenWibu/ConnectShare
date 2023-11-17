@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 
 public class homeFragment extends Fragment {
@@ -56,6 +58,7 @@ public class homeFragment extends Fragment {
     FusedLocationProviderClient fusedLocationProviderClient;
     double latitude, longitude;
     FirebaseAuth firebaseAuth;
+    private final int FINE_PERMISSION_CODE = 1;
     Button showmap, post;
     ProgressDialog progressDialog;
     BottomNavigationView bottomNavigationView;
@@ -117,15 +120,17 @@ public class homeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getActivity()));
         showmap = view.findViewById(R.id.showMap);
         post = view.findViewById(R.id.upload);
         bottomNavigationView = view.findViewById(R.id.bottom_navigation);
 //        bottomNavigationView.setBackground(null);
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_PERMISSION_CODE);
+            // Thêm giá trị trả về ở đây nếu cần
+        } else {
+            // Code xử lý khi có quyền vị trí
         }
 
 
@@ -151,7 +156,16 @@ public class homeFragment extends Fragment {
 
 
     }
-
+    private boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Quyền vị trí đã được cấp phép
+            return true;
+        } else {
+            // Quyền vị trí chưa được cấp phép, yêu cầu người dùng cấp phép
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return false;
+        }
+    }
     private void KetQua() {
         for(int i=0;i<khoangCachLocationList.size();i++){
             Log.d("khoangcach", khoangCachLocationList.get(i).getDistance() + " - " + khoangCachLocationList.get(i).getUid() );
@@ -235,13 +249,18 @@ public class homeFragment extends Fragment {
                             showmap.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-
-                                    processUserLocations(getActivity(), userLocations);
-
-
+                                    // Kiểm tra quyền vị trí trước khi thực hiện hoạt động
+                                    if (checkLocationPermission()) {
+                                        // Quyền vị trí đã được cấp phép, thực hiện các hoạt động liên quan đến vị trí
+                                        processUserLocations(getActivity(), userLocations);
+                                    } else {
+                                        // Người dùng chưa cấp phép quyền vị trí
+                                        // Có thể hiển thị thông báo hoặc thực hiện các hành động khác tùy thuộc vào yêu cầu của bạn
+                                        Toast.makeText(getActivity(), "Vui lòng cấp phép quyền vị trí để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             });
-                            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                 // TODO: Consider calling
                                 //    ActivityCompat#requestPermissions
                                 // here to request the missing permissions, and then overriding
