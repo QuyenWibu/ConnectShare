@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,12 +24,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.save_food.BeautifulProgressDialog;
 import com.example.save_food.MapsActivity;
 import com.example.save_food.R;
 import com.example.save_food.UploadActivity;
 import com.example.save_food.models.KhoangCachLocaitonSort;
 import com.example.save_food.models.KhoangCachLocation;
 import com.example.save_food.models.UserLocation;
+import com.example.save_food.registerActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,6 +44,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,6 +55,7 @@ import java.util.Objects;
 public class homeFragment extends Fragment {
     Location location;
     UserLocation userLocation;
+    BeautifulProgressDialog dialog;
     ArrayList<UserLocation> userLocations = new ArrayList<>();
     Location currentLocation;
     ArrayList<KhoangCachLocation> khoangCachLocationList = new ArrayList<>();
@@ -67,6 +72,11 @@ public class homeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dialog = new BeautifulProgressDialog(getActivity(), BeautifulProgressDialog.withGIF, "Please wait");
+        Uri myUri = Uri.fromFile(new File("//android_asset/gif_food_and_smile.gif"));
+        dialog.setGifLocation(myUri);
+        dialog.setLayoutColor(getResources().getColor(R.color.BeautifulProgressDialogBg));
+        dialog.setMessageColor(getResources().getColor(R.color.white));
         bottomNavigationView = getActivity().findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
         boolean k = true;
@@ -260,7 +270,7 @@ public class homeFragment extends Fragment {
                                     }
                                 }
                             });
-                            if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                 // TODO: Consider calling
                                 //    ActivityCompat#requestPermissions
                                 // here to request the missing permissions, and then overriding

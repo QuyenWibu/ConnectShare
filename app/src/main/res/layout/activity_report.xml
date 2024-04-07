@@ -1,76 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:padding="25dp"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".reportActivity">
-    <!-- Edit text for email id -->
-    <TextView
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="esavefood@gmail.com"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="18dp"
-        android:layout_marginRight="150dp" />
-
-    <!-- Edit text for email subject -->
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText1"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_marginTop="20dp" />
-
-    <!-- Edit text for email body -->
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText2"
-        android:layout_alignLeft="@+id/editText2"
-        android:layout_marginTop="30dp" />
-
-    <!-- text Views for label -->
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editText1"
-        android:layout_alignBottom="@+id/editText1"
-        android:layout_alignParentLeft="true"
-        android:text="Send To:"
-        android:textColor="#0F9D58" />
 
     <TextView
-        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editText2"
-        android:layout_alignBottom="@+id/editText2"
-        android:layout_alignParentLeft="true"
-        android:text="Email Subject:"
-        android:textColor="#0F9D58" />
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:layout_alignBaseline="@+id/email"
+        android:lineSpacingExtra="0sp"
+        android:text="Email subject:"
+        android:textAppearance="@style/title"
+        android:translationY="-1.02sp" />
 
+    <LinearLayout
+        android:id="@+id/shape_1"
+        android:layout_width="334dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="@style/place_holde"
+            android:hint="Email subject"
+            android:background="@drawable/shape"
+            android:textColor="@android:color/black"
+            android:padding="10dp"/>
+    </LinearLayout>
     <TextView
-        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editText3"
-        android:layout_alignBottom="@+id/editText3"
-        android:text="Email Body:"
-        android:textColor="#0F9D58" />
-
-    <!-- Button to send email -->
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:lineSpacingExtra="2sp"
+        android:text="Body Email:"
+        android:textAppearance="@style/title"
+        android:translationY="-1.02sp" />
+    <LinearLayout
+        android:id="@+id/para_2"
+        android:layout_width="334dp"
+        android:layout_height="50dp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText3"
+            android:layout_width="334dp"
+            android:layout_height="50dp"
+            android:textColor="@color/black"
+            android:padding="10dp"
+            android:hint="Body Email"
+            android:textAppearance="@style/place_holde"
+            android:background="@drawable/shape"/>
+    </LinearLayout>
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText3"
-        android:layout_alignLeft="@+id/editText3"
-        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="163dp"
+        android:background="@drawable/rectangle"
+        android:gravity="center"
         android:text="Send email" />
-</RelativeLayout>
+</LinearLayout>
