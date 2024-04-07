@@ -15,7 +15,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:layout_alignBaseline="@+id/email"
         android:lineSpacingExtra="0sp"
         android:text="Email subject:"
         android:textAppearance="@style/title"

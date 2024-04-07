@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,22 +11,77 @@
     android:paddingBottom="56dp"
     tools:context=".Fragment.homeFragment">
 
-    <Button
+    <androidx.cardview.widget.CardView
+        android:layout_width="340dp"
+        android:layout_height="300dp"
         android:id="@+id/showMap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="showMap" />
+        app:cardCornerRadius="11dp"
+        app:cardElevation="11dp"
+        app:cardUseCompatPadding="true" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@drawable/gradient_map">
 
-    <Button
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/google_maps"
+                    android:layout_marginTop="20dp"/>
+
+                <TextView
+                    android:layout_width="190dp"
+                    android:layout_height="90dp"
+                    android:gravity="center"
+                    android:text="Google Maps"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="340dp"
+        android:layout_height="300dp"
+        app:cardElevation="11dp"
+        app:cardCornerRadius="11dp"
         android:id="@+id/upload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@color/purple_500"
-        android:text="upload" />
+        app:cardUseCompatPadding="true" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@drawable/gradient_post">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:background="@drawable/posting"
+                android:layout_marginTop="20dp"/>
 
+            <TextView
+                android:layout_width="190dp"
+                android:layout_height="90dp"
+                android:gravity="center"
+                android:text="Upload Post"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"/>
+        </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>
