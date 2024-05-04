@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -64,7 +65,7 @@ public class homeFragment extends Fragment {
     double latitude, longitude;
     FirebaseAuth firebaseAuth;
     private final int FINE_PERMISSION_CODE = 1;
-    Button showmap, post;
+    CardView showmap, post;
     ProgressDialog progressDialog;
     BottomNavigationView bottomNavigationView;
     FragmentManager fragmentManager;
