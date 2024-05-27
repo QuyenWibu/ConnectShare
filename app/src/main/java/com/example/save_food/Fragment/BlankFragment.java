@@ -41,126 +41,72 @@ public class BlankFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_blank, container, false);
-        viewPager2  = view.findViewById(R.id.viewPager2);
+        viewPager2 = view.findViewById(R.id.viewPager2);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
             // Get the list of objects from the Bundle
             ArrayList<KhoangCachLocation> myList = bundle.getParcelableArrayList("my_list");
 
-            for (KhoangCachLocation obj : myList) {
-                khoangCachLocationList.add(obj);
-                double doubleValue = obj.getDistance();
-                String stringValue = obj.getUid();
-                // Use the data here
-                Log.d("OOO", doubleValue + " - " + stringValue);
+            if (myList != null) {
+                for (KhoangCachLocation obj : myList) {
+                    khoangCachLocationList.add(obj);
+                    double doubleValue = obj.getDistance();
+                    String stringValue = obj.getUid();
+                    // Use the data here
+                    Log.d("OOO", doubleValue + " - " + stringValue);
+                }
+            } else {
+                Log.d("bundle", "myList is null");
             }
-
         } else {
             // Handle the case when Bundle object is null
             Log.d("bundle", "bundle is null");
         }
-        viewPagerItemArrayList = new ArrayList<>();
 
-        for (int i=0;i<khoangCachLocationList.size();i++){
+        viewPagerItemArrayList = new ArrayList<>();
+        VPAdapter vpAdapter = new VPAdapter(viewPagerItemArrayList, getActivity());
+        viewPager2.setAdapter(vpAdapter);
+        viewPager2.setClipToPadding(false);
+        viewPager2.setClipChildren(false);
+        viewPager2.setOffscreenPageLimit(2);
+        viewPager2.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
+
+        for (int i = 0; i < khoangCachLocationList.size(); i++) {
             String uid = khoangCachLocationList.get(i).getUid();
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference("ThongTin_UpLoad/" + uid);
             myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    childCount = task.getResult().getChildrenCount();
-                    for (int i=1;i<=childCount;i++){
-                        DatabaseReference chilref = myRef.child(String.valueOf(i));
-                        chilref.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String name = snapshot.child("tenDonHang").getValue(String.class);
-                                String DiaChi = snapshot.child("diaChi").getValue(String.class);
-                                    DatabaseReference imgRef = chilref.child("Ảnh");
-                                    imgRef.addChildEventListener(new ChildEventListener() {
-                                        @Override
-                                        public void onChildAdded(@androidx.annotation.NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                                            String key = snapshot.getKey();
-//                                            HinhAnh_Upload hinhAnh_upload = snapshot.getValue(HinhAnh_Upload.class);
-//                                            String value = dataSnapshot.getValue(String.class);
-                                            DatabaseReference imgref2 = imgRef.child(key);
-                                            imgref2.addValueEventListener(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
-                                                    String linkhinh = snapshot.child("linkHinh").getValue(String.class);
+                    if (task.isSuccessful()) {
+                        for (DataSnapshot postSnapshot : task.getResult().getChildren()) {
+                            String name = postSnapshot.child("tenDonHang").getValue(String.class);
+                            String DiaChi = postSnapshot.child("diaChi").getValue(String.class);
+                            DataSnapshot imgSnapshot = postSnapshot.child("Ảnh");
+                            for (DataSnapshot imgChild : imgSnapshot.getChildren()) {
+                                String linkhinh = imgChild.child("linkHinh").getValue(String.class);
+                                Log.d("Firebase", "value: " + linkhinh);
+                                ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, DiaChi, uid);
 
-                                                    Log.d("Firebase", "Key: " + key + " " + "value: " + linkhinh);
-                                                    ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, DiaChi,uid);
-                                                    viewPagerItemArrayList.add(viewPagerItem);
-                                                    VPAdapter vpAdapter = new VPAdapter(viewPagerItemArrayList, getActivity());
-                                                    viewPager2.setAdapter(vpAdapter);
-                                                    viewPager2.setClipToPadding(false);
-                                                    viewPager2.setClipChildren(false);
-                                                    viewPager2.setOffscreenPageLimit(2);
-                                                    viewPager2.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
-                                                    imgref2.removeEventListener(this);
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
-
-                                                }
-                                            });
-
-
-                                        }
-
-                                        @Override
-                                        public void onChildChanged(@androidx.annotation.NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                                        }
-
-                                        @Override
-                                        public void onChildRemoved(@androidx.annotation.NonNull DataSnapshot snapshot) {
-
-                                        }
-
-                                        @Override
-                                        public void onChildMoved(@androidx.annotation.NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
-
-                                        }
-                                    });
-
-
+                                // Sử dụng HashSet để loại bỏ mục trùng lặp
+                                if (!viewPagerItemArrayList.contains(viewPagerItem)) {
+                                    viewPagerItemArrayList.add(viewPagerItem);
+                                    vpAdapter.notifyItemInserted(viewPagerItemArrayList.size() - 1);
+                                }
                             }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-//                        DatabaseReference imgRef = chilref.child("Ảnh");
-//                        imgRef.addValueEventListener(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-//                                    HinhAnh_Upload hinhAnh_upload = snapshot.getValue(HinhAnh_Upload.class);
-//                                    hinhAnh_upload.getLinkHinh();
-//
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error) {
-//
-//                            }
-//                        });
+                        }
                     }
                 }
             });
-            Log.d("ppp", khoangCachLocationList.get(i).getDistance() + " - " + khoangCachLocationList.get(i).getUid());
         }
+
+
+
+
+
+
+
 
 
         String[] images = {"https://firebasestorage.googleapis.com/v0/b/savefood-a697c.appspot.com/o/images_upload%2Fdb1a40b7-0fd2-4040-b742-bb495691c652?alt=media&token=c926166d-87e0-45a3-8b99-2c92da893813", "https://firebasestorage.googleapis.com/v0/b/savefood-a697c.appspot.com/o/images_upload%2FviIyekcOkqXWFUxPUlJKL4sSoRf2?alt=media&token=56135fbb-9045-4c6c-84d7-4adcfd552b6a"};
@@ -176,5 +122,12 @@ public class BlankFragment extends Fragment {
 
         return view;
     }
-
-}
+    private void updateViewPager() {
+        VPAdapter vpAdapter = new VPAdapter(viewPagerItemArrayList, getActivity());
+        viewPager2.setAdapter(vpAdapter);
+        viewPager2.setClipToPadding(false);
+        viewPager2.setClipChildren(false);
+        viewPager2.setOffscreenPageLimit(2);
+        viewPager2.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
+    }
+    }

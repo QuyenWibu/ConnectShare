@@ -21,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -70,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     BottomNavigationView bottomNavigationView;
     String mUID;
     public static String SHARED_PREFS = "sharedPrefs";
-    public static int RC_NOTIFICATIONS = 99 ;
+    public static int RC_NOTIFICATIONS = 99;
+    public static int LOCATIONS = 991;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 updateToken(token);
             }
         });
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.TIRAMISU){
-                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, RC_NOTIFICATIONS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, RC_NOTIFICATIONS);
         }
 
     }
@@ -163,46 +166,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == RC_NOTIFICATIONS){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == RC_NOTIFICATIONS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "Cho phép", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Không cho phép", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if (requestCode == LOCATIONS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent i = getIntent();
+                finish();
+                startActivity(i);
             } else {
                 Toast.makeText(this, "Không cho phép", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private boolean checkLocationPermission() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                new AlertDialog.Builder(this).
+                        setTitle("Bạn cần cấp quyền vị trí để sử dụng ứng dụng")
+                        .setMessage("chúng tôi cần vị trí hiện tại của bạn để chạy ứng dụng")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                                        Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATIONS);
+                            }
+                        }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                finishAffinity();
+                            }
+                        });
+            } else {
 
-        boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        return isGpsEnabled || isNetworkEnabled;
-    }
-    private void showLocationPermissionDialog() {
-        android.app.AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Yêu cầu bật vị trí");
-        builder.setMessage("Bạn cần bật vị trí để sử dụng ứng dụng. Vui lòng bật vị trí trong cài đặt.");
-
-        builder.setPositiveButton("Cài đặt", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
             }
-        });
-        builder.create().show();
-    }
+        }
+        }
     @Override
     protected void onStart() {
         checkUserStatus();
         super.onStart();
-        if (!checkLocationPermission()) {
-            showLocationPermissionDialog();
-        } else {
-            // Tiếp tục xử lý hay hiển thị giao diện chính
-        }
+        checkLocationPermission();
     }
 
     @Override
