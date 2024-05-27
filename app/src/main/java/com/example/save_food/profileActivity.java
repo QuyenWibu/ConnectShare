@@ -160,7 +160,7 @@ public class profileActivity extends AppCompatActivity {
                     pd.setMessage("Cập nhật tên của bạn");
                     showNamephoneupdate("name");
                 } else if (i == 2){
-                    pd.setMessage("Cập nhật tên của bạn");
+                    pd.setMessage("Cập nhật số điện thoại của bạn");
                     showNamephoneupdate("phone");}
             }
         });

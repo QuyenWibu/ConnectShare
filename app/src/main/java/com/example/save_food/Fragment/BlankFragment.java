@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -48,22 +49,18 @@ public class BlankFragment extends Fragment {
             // Get the list of objects from the Bundle
             ArrayList<KhoangCachLocation> myList = bundle.getParcelableArrayList("my_list");
 
-            if (myList != null) {
-                for (KhoangCachLocation obj : myList) {
-                    khoangCachLocationList.add(obj);
-                    double doubleValue = obj.getDistance();
-                    String stringValue = obj.getUid();
-                    // Use the data here
-                    Log.d("OOO", doubleValue + " - " + stringValue);
-                }
-            } else {
-                Log.d("bundle", "myList is null");
+            for (KhoangCachLocation obj : myList) {
+                khoangCachLocationList.add(obj);
+                double doubleValue = obj.getDistance();
+                String stringValue = obj.getUid();
+                // Use the data here
+                Log.d("OOO", doubleValue + " - " + stringValue);
             }
+
         } else {
             // Handle the case when Bundle object is null
             Log.d("bundle", "bundle is null");
         }
-
         viewPagerItemArrayList = new ArrayList<>();
         VPAdapter vpAdapter = new VPAdapter(viewPagerItemArrayList, getActivity());
         viewPager2.setAdapter(vpAdapter);
@@ -72,38 +69,8 @@ public class BlankFragment extends Fragment {
         viewPager2.setOffscreenPageLimit(2);
         viewPager2.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
 
-        for (int i = 0; i < khoangCachLocationList.size(); i++) {
-            String uid = khoangCachLocationList.get(i).getUid();
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("ThongTin_UpLoad/" + uid);
-            myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (DataSnapshot postSnapshot : task.getResult().getChildren()) {
-                            String name = postSnapshot.child("tenDonHang").getValue(String.class);
-                            String DiaChi = postSnapshot.child("diaChi").getValue(String.class);
-                            DataSnapshot imgSnapshot = postSnapshot.child("Ảnh");
-                            for (DataSnapshot imgChild : imgSnapshot.getChildren()) {
-                                String linkhinh = imgChild.child("linkHinh").getValue(String.class);
-                                Log.d("Firebase", "value: " + linkhinh);
-                                ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, DiaChi, uid);
-
-                                // Sử dụng HashSet để loại bỏ mục trùng lặp
-                                if (!viewPagerItemArrayList.contains(viewPagerItem)) {
-                                    viewPagerItemArrayList.add(viewPagerItem);
-                                    vpAdapter.notifyItemInserted(viewPagerItemArrayList.size() - 1);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-
-
-
+        HashSet<String> uniqueImageLinks = new HashSet<>();
+        loadData(vpAdapter, uniqueImageLinks);
 
 
 
@@ -122,12 +89,49 @@ public class BlankFragment extends Fragment {
 
         return view;
     }
-    private void updateViewPager() {
-        VPAdapter vpAdapter = new VPAdapter(viewPagerItemArrayList, getActivity());
-        viewPager2.setAdapter(vpAdapter);
-        viewPager2.setClipToPadding(false);
-        viewPager2.setClipChildren(false);
-        viewPager2.setOffscreenPageLimit(2);
-        viewPager2.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
+    private void loadData(VPAdapter vpAdapter, HashSet<String> uniqueImageLinks) {
+        for (KhoangCachLocation location : khoangCachLocationList) {
+            String uid = location.getUid();
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("ThongTin_UpLoad/" + uid);
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                        String name = postSnapshot.child("tenDonHang").getValue(String.class);
+                        String diaChi = postSnapshot.child("diaChi").getValue(String.class);
+                        DataSnapshot imgSnapshot = postSnapshot.child("Ảnh");
+                        for (DataSnapshot imgChild : imgSnapshot.getChildren()) {
+                            String linkhinh = imgChild.child("linkHinh").getValue(String.class);
+                            Log.d("Firebase", "value: " + linkhinh);
+                            ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, diaChi, uid);
+
+                            // Kiểm tra xem ảnh đã tồn tại trong tập hợp chưa
+                            if (!uniqueImageLinks.contains(linkhinh)) {
+                                uniqueImageLinks.add(linkhinh);
+                                viewPagerItemArrayList.add(viewPagerItem);
+                            }
+                        }
+                    }
+                    vpAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("Firebase", "Error loading data", error.toException());
+                }
+            });
+        }
     }
+    private boolean containsViewPagerItem(List<ViewPagerItem> list, ViewPagerItem item) {
+        for (ViewPagerItem viewPagerItem : list) {
+            if (viewPagerItem.getImgaeId().equals(item.getImgaeId()) &&
+                    viewPagerItem.getHeding().equals(item.getHeding()) &&
+                    viewPagerItem.getHeding2().equals(item.getHeding2()) &&
+                    viewPagerItem.getUid().equals(item.getUid())) {
+                return true;
+            }
+        }
+        return false;
     }
+}
