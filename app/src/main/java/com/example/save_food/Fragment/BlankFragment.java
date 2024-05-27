@@ -43,7 +43,6 @@ public class BlankFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_blank, container, false);
         viewPager2 = view.findViewById(R.id.viewPager2);
-
         Bundle bundle = getArguments();
         if (bundle != null) {
             // Get the list of objects from the Bundle
@@ -69,10 +68,41 @@ public class BlankFragment extends Fragment {
         viewPager2.setOffscreenPageLimit(2);
         viewPager2.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
 
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         HashSet<String> uniqueImageLinks = new HashSet<>();
-        loadData(vpAdapter, uniqueImageLinks);
 
+        for (KhoangCachLocation location : khoangCachLocationList) {
+            String uid = location.getUid();
+            DatabaseReference myRef = database.getReference("ThongTin_UpLoad/" + uid);
 
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                        String name = postSnapshot.child("tenDonHang").getValue(String.class);
+                        String diaChi = postSnapshot.child("diaChi").getValue(String.class);
+                        DataSnapshot imgSnapshot = postSnapshot.child("Ảnh");
+
+                        for (DataSnapshot imgChild : imgSnapshot.getChildren()) {
+                            String linkhinh = imgChild.child("linkHinh").getValue(String.class);
+
+                            if (linkhinh != null && uniqueImageLinks.add(linkhinh)) {
+                                Log.d("Firebase", "value: " + linkhinh);
+                                ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, diaChi, uid);
+                                viewPagerItemArrayList.add(viewPagerItem);
+                                vpAdapter.notifyItemInserted(viewPagerItemArrayList.size() - 1);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("Firebase", "Error loading data", error.toException());
+                }
+            });
+        }
 
 
 
@@ -89,49 +119,6 @@ public class BlankFragment extends Fragment {
 
         return view;
     }
-    private void loadData(VPAdapter vpAdapter, HashSet<String> uniqueImageLinks) {
-        for (KhoangCachLocation location : khoangCachLocationList) {
-            String uid = location.getUid();
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("ThongTin_UpLoad/" + uid);
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                        String name = postSnapshot.child("tenDonHang").getValue(String.class);
-                        String diaChi = postSnapshot.child("diaChi").getValue(String.class);
-                        DataSnapshot imgSnapshot = postSnapshot.child("Ảnh");
-                        for (DataSnapshot imgChild : imgSnapshot.getChildren()) {
-                            String linkhinh = imgChild.child("linkHinh").getValue(String.class);
-                            Log.d("Firebase", "value: " + linkhinh);
-                            ViewPagerItem viewPagerItem = new ViewPagerItem(linkhinh, name, diaChi, uid);
 
-                            // Kiểm tra xem ảnh đã tồn tại trong tập hợp chưa
-                            if (!uniqueImageLinks.contains(linkhinh)) {
-                                uniqueImageLinks.add(linkhinh);
-                                viewPagerItemArrayList.add(viewPagerItem);
-                            }
-                        }
-                    }
-                    vpAdapter.notifyDataSetChanged();
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("Firebase", "Error loading data", error.toException());
-                }
-            });
-        }
-    }
-    private boolean containsViewPagerItem(List<ViewPagerItem> list, ViewPagerItem item) {
-        for (ViewPagerItem viewPagerItem : list) {
-            if (viewPagerItem.getImgaeId().equals(item.getImgaeId()) &&
-                    viewPagerItem.getHeding().equals(item.getHeding()) &&
-                    viewPagerItem.getHeding2().equals(item.getHeding2()) &&
-                    viewPagerItem.getUid().equals(item.getUid())) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

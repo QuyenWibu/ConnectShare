@@ -277,22 +277,21 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
         final String randomName = UUID.randomUUID().toString();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Create a reference to "images_upload/"
-        storageReference = FirebaseStorage.getInstance().getReference().child("images_upload/" + uid);
+        storageReference = FirebaseStorage.getInstance().getReference().child("images_upload/" + uid + "/" + randomName);
         storageReference.putFile(imageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         taskSnapshot.getStorage().getDownloadUrl()
                                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
-
                                     @Override
                                     public void onSuccess(Uri downloadUrl) {
                                         HinhAnh_Upload hinhAnh_upload = new HinhAnh_Upload(downloadUrl.toString());
 
                                         mData.child("ThongTin_UpLoad")
                                                 .child(uid)
-                                                .child(String.valueOf(childCount+1))
-                                                .child("Ảnh" ).push().setValue(hinhAnh_upload, new DatabaseReference.CompletionListener() {
+                                                .child(String.valueOf(childCount + 1))
+                                                .child("Ảnh").push().setValue(hinhAnh_upload, new DatabaseReference.CompletionListener() {
                                                     @Override
                                                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                                         if (error == null) {
@@ -303,20 +302,16 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                                     }
                                                 });
                                         Toast.makeText(UploadActivity.this, "Images Uploaded", Toast.LENGTH_SHORT).show();
-
                                     }
-
                                 });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(UploadActivity.this, "Uploading failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UploadActivity.this, "Uploading failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-        Toast.makeText(UploadActivity.this, "Đã đăng tải thành công!", Toast.LENGTH_SHORT).show();
     }
 
 //    private void GetUrlImageUpload(String randomName){
