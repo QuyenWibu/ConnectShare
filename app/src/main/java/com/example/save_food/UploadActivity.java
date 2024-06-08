@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -80,7 +79,7 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
         tv_post = findViewById(R.id.tv_posttt);
         EditText TenDonHang_Upload, DonGia_Upload, ThoiGianHetHan_Upload, DiaChi_Upload;
         TenDonHang_Upload = findViewById(R.id.Ten_Don_Hang_Upload);
-        DonGia_Upload = findViewById(R.id.Don_Gia_Upload);
+//        DonGia_Upload = findViewById(R.id.Don_Gia_Upload);
         ThoiGianHetHan_Upload = findViewById(R.id.ThoiGianHetHan_Upload);
         DiaChi_Upload = findViewById(R.id.DiaChi_Upload);
 
@@ -142,12 +141,12 @@ public class UploadActivity extends AppCompatActivity implements RecyclerApdapte
                                 //đưa dữ liệu lên firebase khi upload
                                 if(!valueFromSpinner2.isEmpty() && !valueFromSpinner.isEmpty()
                                         && !TenDonHang_Upload.getText().toString().isEmpty()
-                                        && !TextUtils.isEmpty(DonGia_Upload.getText().toString())
+//                                        && !TextUtils.isEmpty(DonGia_Upload.getText().toString())
                                         && !DiaChi_Upload.getText().toString().isEmpty()
                                         && !ThoiGianHetHan_Upload.getText().toString().isEmpty() ){
                                     ThongTin_UpLoadClass thongTin_upLoadClass = new ThongTin_UpLoadClass(
                                             TenDonHang_Upload.getText().toString(),
-                                            Integer.parseInt(DonGia_Upload.getText().toString()),
+//                                            Integer.parseInt(DonGia_Upload.getText().toString()),
                                             DiaChi_Upload.getText().toString(),
                                             valueFromSpinner,
                                             ThoiGianHetHan_Upload.getText().toString(), valueFromSpinner2);

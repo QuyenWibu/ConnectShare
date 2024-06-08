@@ -11,12 +11,12 @@
 
     <View
         android:id="@+id/savefood_1"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_width="350dp"
+        android:layout_height="45dp"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="23dp"
-        android:background="@drawable/logo_savefood"
+        android:background="@drawable/logo_connectshare"
         android:gravity="center" />
 
     <TextView
