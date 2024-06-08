@@ -1,5 +1,6 @@
 package com.example.save_food.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,11 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.save_food.R;
 import com.example.save_food.chat;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -51,7 +49,7 @@ public class VPAdapter extends RecyclerView.Adapter<VPAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ViewPagerItem viewPagerItem = viewPagerItems.get(position);
         Picasso.get().load(viewPagerItem.getImgaeId()).into(holder.imageView);
         String pUid = viewPagerItems.get(position).getUid();
