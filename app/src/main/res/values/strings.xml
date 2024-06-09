@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="Map_API_KEY">AIzaSyAacOO7yRwLHKGkPSoWri-5_rYdbagJTEA</string>
-    <string name="app_name">Save Food</string>
+    <string name="app_name">Connect Share</string>
     <string name="facebook_app_id">987879095692992</string>
     <string name="fb_login_protocol_scheme">fb987879095692992</string>
     <string name="facebook_client_token">56789</string>
