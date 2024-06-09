@@ -37,7 +37,7 @@
             android:exported="false"
             android:theme="@style/ThemeNo" />
         <activity
-            android:name=".loginActivity"
+            android:name=".OnboardingActivity"
             android:exported="false"
             android:theme="@style/ThemeNo" />
         <activity
@@ -89,7 +89,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".OnboardingActivity"
+            android:name=".loginActivity"
             android:exported="true"
             android:theme="@style/ThemeNo">
             <intent-filter>
